@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="description" content="Daftar Skim Khairat Kematian Masjid – yuran RM80 seorang, bayar melalui ToyyibPay atau QR Code." />
+  <title>Khairat Kematian | i@masjid</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="styles.css">
+
+  <style>
+    /* ─── Page-level overrides ─── */
+    body {
+      background: var(--bg-app, #F8F9FA);
+      color: var(--text-main, #111111);
+      font-family: 'Poppins', 'Inter', sans-serif;
+      padding-bottom: 5rem;
+      min-height: 100vh;
+    }
+
+    /* Page header */
+    .page-header {
+      background: #FFFFFF;
+      border-bottom: 1px solid #EFEFEF;
+      padding: 3rem 1.5rem 2.5rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .page-header::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-image: radial-gradient(var(--primary-yellow, #FEBC2F) 1px, transparent 1px);
+      background-size: 28px 28px;
+      opacity: 0.04;
+      pointer-events: none;
+    }
+
+    .btn-back {
+      position: absolute;
+      top: 1.5rem; left: 1.5rem;
+      background: #F8F9FA;
+      border: 1px solid #E0E0E0;
+      width: 42px; height: 42px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-main, #111); text-decoration: none;
+      transition: all 0.3s ease;
+      z-index: 10;
+      font-size: 1rem;
+    }
+    .btn-back:hover { background: var(--primary-yellow, #FEBC2F); color: #111111; }
+
+    .header-icon-wrap {
+      width: 72px; height: 72px;
+      background: #FFF0C2;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 1.25rem;
+      border: 3px solid var(--primary-yellow, #FEBC2F);
+    }
+    .header-icon-wrap i { font-size: 2.2rem; color: var(--primary-yellow, #FEBC2F); }
+    .page-header h1 { font-size: 2.2rem; font-weight: 800; color: #111111; margin-bottom: 0.5rem; }
+    .page-header p  { color: #555555; max-width: 600px; margin: 0 auto; font-size: 1rem; }
+
+    /* Main container */
+    .khairat-container {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    /* Info card */
+    .info-card {
+      background: #FFFFFF;
+      border: 1px solid #EFEFEF;
+      border-radius: 16px;
+      padding: 2rem;
+      margin-top: 2.5rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+    }
+    .info-card h2 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #111111;
+      margin-bottom: 1rem;
+      display: flex; align-items: center; gap: 0.6rem;
+    }
+    .info-card h2 i { color: var(--primary-yellow, #FEBC2F); }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .info-item {
+      background: #F8F9FA;
+      border: 1px solid #EFEFEF;
+      border-radius: 12px;
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+    .info-item .info-label { font-size: 0.78rem; color: #888; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+    .info-item .info-value { font-size: 1.3rem; font-weight: 700; color: #111111; }
+    .info-item .info-value.gold { color: var(--primary-yellow, #FEBC2F); }
+    .info-item i { font-size: 1.4rem; color: var(--primary-yellow, #FEBC2F); margin-bottom: 0.3rem; }
+
+    /* Calculator section */
+    .calc-card {
+      background: #FFFFFF;
+      border: 2px solid var(--primary-yellow, #FEBC2F);
+      border-radius: 16px;
+      padding: 2rem;
+      margin-top: 1.5rem;
+      box-shadow: 0 4px 20px rgba(254,188,47,0.12);
+    }
+    .calc-card h2 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #111111;
+      margin-bottom: 1.5rem;
+      display: flex; align-items: center; gap: 0.6rem;
+    }
+    .calc-card h2 i { color: var(--primary-yellow, #FEBC2F); }
+
+    .counter-wrap {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .counter-label {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #111111;
+      white-space: nowrap;
+    }
+
+    .counter-control {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      background: #F8F9FA;
+      border: 1px solid #E0E0E0;
+      border-radius: 50px;
+      overflow: hidden;
+    }
+
+    .counter-btn {
+      width: 42px; height: 42px;
+      border: none;
+      background: transparent;
+      font-size: 1.2rem;
+      font-weight: 700;
+      cursor: pointer;
+      color: #111111;
+      transition: background 0.2s;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .counter-btn:hover { background: var(--primary-yellow, #FEBC2F); color: #111111; }
+
+    #person-count {
+      min-width: 56px;
+      text-align: center;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #111111;
+      border: none;
+      background: transparent;
+      padding: 0 0.5rem;
+      outline: none;
+    }
+
+    .calc-total {
+      background: #FFF0C2;
+      border: 2px solid var(--primary-yellow, #FEBC2F);
+      border-radius: 12px;
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .calc-total .total-label { font-size: 1rem; font-weight: 600; color: #555; }
+    .calc-total .total-amount { font-size: 2rem; font-weight: 800; color: #111111; }
+    .calc-total .total-amount span { font-size: 1rem; font-weight: 600; margin-right: 4px; color: #555; }
+
+    .calc-breakdown {
+      margin-top: 1rem;
+      font-size: 0.88rem;
+      color: #888;
+      text-align: center;
+    }
+
+    /* Registration form */
+    .form-card {
+      background: #FFFFFF;
+      border: 1px solid #EFEFEF;
+      border-radius: 16px;
+      padding: 2rem;
+      margin-top: 1.5rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+    }
+    .form-card h2 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #111111;
+      margin-bottom: 1.5rem;
+      display: flex; align-items: center; gap: 0.6rem;
+    }
+    .form-card h2 i { color: var(--primary-yellow, #FEBC2F); }
+
+    .kform-group {
+      margin-bottom: 1.25rem;
+    }
+    .kform-group label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #555555;
+      margin-bottom: 0.5rem;
+    }
+    .kform-group input,
+    .kform-group select,
+    .kform-group textarea {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1.5px solid #E0E0E0;
+      border-radius: 10px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.95rem;
+      color: #111111;
+      background: #F8F9FA;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
+    }
+    .kform-group input:focus,
+    .kform-group select:focus,
+    .kform-group textarea:focus {
+      border-color: var(--primary-yellow, #FEBC2F);
+      box-shadow: 0 0 0 3px rgba(254, 188, 47, 0.15);
+      background: #FFFFFF;
+    }
+    .kform-group textarea { resize: vertical; min-height: 80px; }
+
+    .kform-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    @media (max-width: 580px) { .kform-row { grid-template-columns: 1fr; } }
+
+    /* Payment method section */
+    .payment-section {
+      background: #FFFFFF;
+      border: 1px solid #EFEFEF;
+      border-radius: 16px;
+      padding: 2rem;
+      margin-top: 1.5rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+    }
+    .payment-section h2 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #111111;
+      margin-bottom: 1.5rem;
+      display: flex; align-items: center; gap: 0.6rem;
+    }
+    .payment-section h2 i { color: var(--primary-yellow, #FEBC2F); }
+
+    .payment-tabs {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.75rem;
+      flex-wrap: wrap;
+    }
+
+    .pay-tab {
+      flex: 1;
+      min-width: 140px;
+      padding: 1rem;
+      border: 2px solid #E0E0E0;
+      border-radius: 12px;
+      background: #F8F9FA;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.25s ease;
+      font-family: 'Poppins', sans-serif;
+    }
+    .pay-tab i { font-size: 1.8rem; color: #CCCCCC; display: block; margin-bottom: 0.5rem; transition: color 0.25s; }
+    .pay-tab .pay-name { font-weight: 600; font-size: 0.9rem; color: #555; }
+    .pay-tab .pay-desc { font-size: 0.76rem; color: #888; margin-top: 2px; }
+
+    .pay-tab.active {
+      border-color: var(--primary-yellow, #FEBC2F);
+      background: #FFF0C2;
+    }
+    .pay-tab.active i { color: var(--primary-yellow, #FEBC2F); }
+    .pay-tab.active .pay-name { color: #111111; }
+    .pay-tab:hover { border-color: var(--primary-yellow, #FEBC2F); }
+
+    .pay-panel { display: none; animation: fadeIn 0.3s ease; }
+    .pay-panel.active { display: block; }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* ToyyibPay panel */
+    .toyyibpay-box {
+      background: #F8F9FA;
+      border: 1px solid #EFEFEF;
+      border-radius: 12px;
+      padding: 1.5rem;
+    }
+    .toyyibpay-box .tp-logo {
+      display: flex; align-items: center; gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+    .tp-logo-icon {
+      width: 48px; height: 48px;
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 1.4rem;
+    }
+    .tp-logo-text strong { display: block; font-size: 1rem; font-weight: 700; color: #111; }
+    .tp-logo-text span { font-size: 0.8rem; color: #888; }
+    .toyyibpay-box p { color: #555; font-size: 0.9rem; line-height: 1.6; margin-bottom: 1rem; }
+    .tp-features { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.25rem; }
+    .tp-feat {
+      background: #E8F5E9; color: #2E7D32;
+      font-size: 0.76rem; font-weight: 600;
+      padding: 3px 10px; border-radius: 50px;
+      border: 1px solid #C8E6C9;
+      display: flex; align-items: center; gap: 4px;
+    }
+
+    /* QR panel */
+    .qr-box {
+      display: flex;
+      gap: 2rem;
+      align-items: flex-start;
+      flex-wrap: wrap;
+    }
+    .qr-code-wrap {
+      background: #FFFFFF;
+      border: 3px solid var(--primary-yellow, #FEBC2F);
+      border-radius: 16px;
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+      min-width: 180px;
+      box-shadow: 0 4px 20px rgba(254,188,47,0.15);
+    }
+    .qr-placeholder {
+      width: 150px; height: 150px;
+      background: repeating-conic-gradient(#111111 0% 25%, transparent 0% 50%) 0 0 / 10px 10px;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .qr-placeholder i { position: absolute; font-size: 2.5rem; color: rgba(255,255,255,0.9); }
+    .qr-label { font-size: 0.8rem; font-weight: 600; color: #555; text-align: center; }
+    .qr-code-amount { font-size: 1.1rem; font-weight: 700; color: #111111; }
+
+    .qr-info { flex: 1; min-width: 200px; }
+    .qr-info h3 { font-size: 1rem; font-weight: 700; color: #111; margin-bottom: 0.75rem; }
+    .qr-info p { font-size: 0.88rem; color: #555; line-height: 1.6; margin-bottom: 1rem; }
+    .qr-steps { list-style: none; display: flex; flex-direction: column; gap: 0.75rem; }
+    .qr-steps li {
+      display: flex; align-items: flex-start; gap: 0.75rem;
+      font-size: 0.88rem; color: #555;
+    }
+    .step-num {
+      width: 26px; height: 26px; border-radius: 50%;
+      background: var(--primary-yellow, #FEBC2F);
+      color: #111111; font-weight: 700; font-size: 0.8rem;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+
+    /* Supported wallets badges */
+    .wallet-badges {
+      display: flex; flex-wrap: wrap; gap: 0.5rem;
+      margin-top: 1rem;
+    }
+    .wallet-badge {
+      background: #F0F0F0; border: 1px solid #E0E0E0;
+      border-radius: 8px; padding: 4px 10px;
+      font-size: 0.75rem; font-weight: 600; color: #555;
+      display: flex; align-items: center; gap: 4px;
+    }
+
+    /* Submit button */
+    .btn-submit-khairat {
+      width: 100%;
+      background: var(--primary-yellow, #FEBC2F);
+      color: #111111;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 700;
+      font-size: 1.05rem;
+      padding: 1rem;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      margin-top: 2rem;
+      transition: all 0.25s ease;
+      display: flex; align-items: center; justify-content: center; gap: 0.6rem;
+      box-shadow: 0 4px 16px rgba(254,188,47,0.3);
+    }
+    .btn-submit-khairat:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(254,188,47,0.45);
+    }
+    .btn-submit-khairat:active { transform: translateY(0); }
+
+    /* Success state */
+    .success-box {
+      display: none;
+      background: #FFFFFF;
+      border: 2px solid var(--primary-yellow, #FEBC2F);
+      border-radius: 16px;
+      padding: 3rem 2rem;
+      text-align: center;
+      margin-top: 2rem;
+      animation: fadeIn 0.4s ease;
+    }
+    .success-box .success-icon { font-size: 4rem; color: #22c55e; margin-bottom: 1rem; }
+    .success-box h2 { font-size: 1.6rem; font-weight: 800; color: #111; margin-bottom: 0.5rem; }
+    .success-box p { color: #555; margin-bottom: 1.5rem; font-size: 0.95rem; }
+    .success-ref {
+      background: #FFF0C2;
+      border: 1px solid var(--primary-yellow, #FEBC2F);
+      border-radius: 10px;
+      padding: 0.75rem 1.25rem;
+      font-weight: 700; font-size: 1rem; color: #111;
+      display: inline-block; margin-bottom: 1.5rem;
+    }
+
+    /* Footer spacing */
+    .khairat-footer { margin-top: 3rem; padding-bottom: 2rem; }
+
+    /* ── Dark mode support ── */
+    body.dark-mode .page-header        { background: #141414; border-color: #2a2a2a; }
+    body.dark-mode .page-header h1     { color: #f0f0f0; }
+    body.dark-mode .page-header p      { color: #b0b0b0; }
+    body.dark-mode .btn-back           { background: #222; border-color: #333; color: #f0f0f0; }
+    body.dark-mode .info-card,
+    body.dark-mode .calc-card,
+    body.dark-mode .form-card,
+    body.dark-mode .payment-section    { background: #1a1a1a; border-color: #2a2a2a; }
+    body.dark-mode .info-card h2,
+    body.dark-mode .calc-card h2,
+    body.dark-mode .form-card h2,
+    body.dark-mode .payment-section h2 { color: #f0f0f0; }
+    body.dark-mode .info-item          { background: #222; border-color: #333; }
+    body.dark-mode .info-item .info-label { color: #888; }
+    body.dark-mode .info-item .info-value { color: #f0f0f0; }
+    body.dark-mode .counter-control    { background: #222; border-color: #333; }
+    body.dark-mode .counter-label      { color: #f0f0f0; }
+    body.dark-mode #person-count       { color: #f0f0f0; }
+    body.dark-mode .counter-btn        { color: #f0f0f0; }
+    body.dark-mode .counter-btn:hover  { background: var(--primary-yellow, #FEBC2F); color: #111; }
+    body.dark-mode .calc-breakdown     { color: #888; }
+    body.dark-mode .kform-group label  { color: #b0b0b0; }
+    body.dark-mode .kform-group input,
+    body.dark-mode .kform-group select,
+    body.dark-mode .kform-group textarea { background: #222; border-color: #333; color: #f0f0f0; }
+    body.dark-mode .kform-group input:focus,
+    body.dark-mode .kform-group select:focus,
+    body.dark-mode .kform-group textarea:focus { border-color: var(--primary-yellow, #FEBC2F); background: #1a1a1a; }
+    body.dark-mode .pay-tab            { background: #222; border-color: #333; }
+    body.dark-mode .pay-tab .pay-name  { color: #b0b0b0; }
+    body.dark-mode .pay-tab .pay-desc  { color: #666; }
+    body.dark-mode .pay-tab.active     { background: rgba(254,188,47,0.15); border-color: var(--primary-yellow, #FEBC2F); }
+    body.dark-mode .pay-tab.active .pay-name { color: #f0f0f0; }
+    body.dark-mode .toyyibpay-box      { background: #222; border-color: #333; }
+    body.dark-mode .toyyibpay-box p    { color: #b0b0b0; }
+    body.dark-mode .tp-logo-text strong { color: #f0f0f0; }
+    body.dark-mode .qr-code-wrap       { background: #1a1a1a; }
+    body.dark-mode .qr-info h3         { color: #f0f0f0; }
+    body.dark-mode .qr-info p          { color: #b0b0b0; }
+    body.dark-mode .qr-steps li        { color: #b0b0b0; }
+    body.dark-mode .qr-label           { color: #888; }
+    body.dark-mode .qr-code-amount     { color: #f0f0f0; }
+    body.dark-mode .wallet-badge       { background: #222; border-color: #333; color: #b0b0b0; }
+    body.dark-mode .success-box        { background: #1a1a1a; }
+    body.dark-mode .success-box h2     { color: #f0f0f0; }
+    body.dark-mode .success-box p      { color: #b0b0b0; }
+    body.dark-mode .header-icon-wrap   { background: rgba(254,188,47,0.12); }
+  </style>
+</head>
+<body>
+
+<!-- ═══ Dark Mode Toggle ═══ -->
+<button class="dark-mode-toggle" id="dark-mode-toggle" onclick="toggleDarkMode()" aria-label="Toggle dark mode">
+  <div class="dm-track"><div class="dm-thumb"></div></div>
+  <span class="dm-icon" id="dm-icon">🌙</span>
+  <span id="dm-label">Dark</span>
+</button>
+
+<!-- Page Header -->
+<div class="page-header">
+  <a href="index.html" class="btn-back" aria-label="Back to Home">
+    <i class="fa-solid fa-arrow-left"></i>
+  </a>
+  <div class="header-icon-wrap">
+    <i class="fa-solid fa-heart-pulse"></i>
+  </div>
+  <h1>Khairat Kematian</h1>
+  <p>Skim bantuan kematian yang disediakan oleh masjid untuk ahli-ahli komuniti. Bayaran yuran: <strong>RM80.00 seorang</strong>.</p>
+</div>
+
+<div class="khairat-container">
+
+  <!-- Info Section -->
+  <div class="info-card">
+    <h2><i class="fa-solid fa-circle-info"></i> Maklumat Skim</h2>
+    <div class="info-grid">
+      <div class="info-item">
+        <i class="fa-solid fa-coins"></i>
+        <span class="info-label">Yuran / Orang</span>
+        <span class="info-value gold">RM 80.00</span>
+      </div>
+      <div class="info-item">
+        <i class="fa-solid fa-hand-holding-heart"></i>
+        <span class="info-label">Bantuan Diberi</span>
+        <span class="info-value">RM 1,000 – 3,000</span>
+      </div>
+      <div class="info-item">
+        <i class="fa-solid fa-users"></i>
+        <span class="info-label">Kelayakan</span>
+        <span class="info-value" style="font-size:1rem;">Ahli Masjid</span>
+      </div>
+      <div class="info-item">
+        <i class="fa-solid fa-shield-halved"></i>
+        <span class="info-label">Perlindungan</span>
+        <span class="info-value" style="font-size:1rem;">12 Bulan</span>
+      </div>
+    </div>
+    <p style="font-size:0.88rem;color:#666;line-height:1.7;">
+      Skim Khairat Kematian ini adalah inisiatif masjid untuk membantu keluarga ahli yang meninggal dunia. 
+      Pendaftaran dibuka sepanjang tahun dan perlindungan bermula selepas pembayaran yuran disahkan.
+      Setiap ahli keluarga yang ingin dilindungi perlu mendaftar secara berasingan dengan yuran RM80 setiap seorang.
+    </p>
+  </div>
+
+  <!-- Calculator -->
+  <div class="calc-card">
+    <h2><i class="fa-solid fa-calculator"></i> Kira Jumlah Bayaran</h2>
+    <div class="counter-wrap">
+      <span class="counter-label">Bilangan Pendaftar:</span>
+      <div class="counter-control">
+        <button class="counter-btn" onclick="adjustCount(-1)" aria-label="Kurang">&#8722;</button>
+        <span id="person-count">1</span>
+        <button class="counter-btn" onclick="adjustCount(1)" aria-label="Tambah">&#43;</button>
+      </div>
+    </div>
+    <div class="calc-total">
+      <div class="total-label"><i class="fa-solid fa-receipt" style="color:var(--primary-yellow,#FEBC2F);margin-right:6px;"></i>Jumlah Perlu Dibayar</div>
+      <div class="total-amount"><span>RM</span><span id="total-amount">80.00</span></div>
+    </div>
+    <p class="calc-breakdown" id="calc-breakdown">1 orang × RM80.00 = <strong>RM80.00</strong></p>
+  </div>
+
+  <!-- Registration Form -->
+  <div class="form-card" id="registration-form-wrap">
+    <h2><i class="fa-solid fa-file-pen"></i> Borang Pendaftaran</h2>
+
+    <form id="khairat-form" onsubmit="submitKhairat(event)">
+      <!-- Applicant info -->
+      <div class="kform-row">
+        <div class="kform-group">
+          <label for="kh-name">Nama Penuh (Pemohon Utama) *</label>
+          <input type="text" id="kh-name" placeholder="cth: Ahmad bin Abu Bakar" required />
+        </div>
+        <div class="kform-group">
+          <label for="kh-ic">Nombor Kad Pengenalan *</label>
+          <input type="text" id="kh-ic" placeholder="cth: 900101-01-1234" maxlength="14" required
+                 oninput="formatIC(this)" />
+        </div>
+      </div>
+
+      <div class="kform-row">
+        <div class="kform-group">
+          <label for="kh-phone">Nombor Telefon *</label>
+          <input type="tel" id="kh-phone" placeholder="cth: 012-345 6789" required />
+        </div>
+        <div class="kform-group">
+          <label for="kh-email">E-mel</label>
+          <input type="email" id="kh-email" placeholder="cth: ahmad@email.com" />
+        </div>
+      </div>
+
+      <div class="kform-group">
+        <label for="kh-address">Alamat Rumah *</label>
+        <textarea id="kh-address" placeholder="Nombor, Jalan, Taman, Poskod, Negeri..." required></textarea>
+      </div>
+
+      <!-- Members -->
+      <div id="extra-members-wrap"></div>
+
+      <div class="kform-group">
+        <label for="kh-members">Jumlah Ahli yang Didaftarkan *</label>
+        <input type="number" id="kh-members" value="1" min="1" max="20" readonly
+               style="background:#F0F0F0;cursor:not-allowed;" />
+        <small style="color:#888;font-size:0.8rem;margin-top:4px;display:block;">
+          <i class="fa-solid fa-info-circle"></i> Ubah bilangan menggunakan kalkulator di atas.
+        </small>
+      </div>
+
+      <!-- Payment selection -->
+      <div class="payment-section" style="padding:0;border:none;box-shadow:none;margin-top:0;">
+        <h2><i class="fa-solid fa-credit-card"></i> Kaedah Pembayaran</h2>
+
+        <div class="payment-tabs">
+          <div class="pay-tab active" id="tab-toyyibpay" onclick="selectPayTab('toyyibpay')">
+            <i class="fa-solid fa-mobile-screen"></i>
+            <div class="pay-name">ToyyibPay</div>
+            <div class="pay-desc">Online Banking & e-Wallet</div>
+          </div>
+          <div class="pay-tab" id="tab-qr" onclick="selectPayTab('qr')">
+            <i class="fa-solid fa-qrcode"></i>
+            <div class="pay-name">QR Code</div>
+            <div class="pay-desc">Scan & Pay Terus</div>
+          </div>
+        </div>
+
+        <!-- ToyyibPay Panel -->
+        <div class="pay-panel active" id="panel-toyyibpay">
+          <div class="toyyibpay-box">
+            <div class="tp-logo">
+              <div class="tp-logo-icon"><i class="fa-solid fa-shield-halved"></i></div>
+              <div class="tp-logo-text">
+                <strong>ToyyibPay Gateway</strong>
+                <span>Pembayaran selamat & mudah</span>
+              </div>
+            </div>
+            <p>
+              Anda akan diarahkan ke halaman pembayaran <strong>ToyyibPay</strong> yang selamat. 
+              Semua kaedah pembayaran utama Malaysia diterima. Resit pembayaran akan dikirim ke e-mel anda secara automatik.
+            </p>
+            <div class="tp-features">
+              <span class="tp-feat"><i class="fa-solid fa-check"></i> FPX Online Banking</span>
+              <span class="tp-feat"><i class="fa-solid fa-check"></i> Touch 'n Go eWallet</span>
+              <span class="tp-feat"><i class="fa-solid fa-check"></i> GrabPay</span>
+              <span class="tp-feat"><i class="fa-solid fa-check"></i> Maybank QRPay</span>
+              <span class="tp-feat"><i class="fa-solid fa-check"></i> Shopee Pay</span>
+              <span class="tp-feat"><i class="fa-solid fa-check"></i> CIMB Clicks</span>
+            </div>
+            <p style="font-size:0.8rem;color:#888;margin-bottom:0;">
+              <i class="fa-solid fa-lock"></i> Pembayaran dilindungi dengan enkripsi SSL 256-bit. Maklumat kad anda tidak disimpan.
+            </p>
+          </div>
+        </div>
+
+        <!-- QR Code Panel -->
+        <div class="pay-panel" id="panel-qr">
+          <div class="qr-box">
+            <div class="qr-code-wrap">
+              <div class="qr-placeholder">
+                <!-- Simulated QR placeholder — replace src with actual QR image -->
+                <i class="fa-solid fa-qrcode" style="font-size:5rem;color:#111;"></i>
+              </div>
+              <div class="qr-label">DuitNow QR</div>
+              <div class="qr-code-amount" id="qr-amount-display">RM 80.00</div>
+            </div>
+            <div class="qr-info">
+              <h3><i class="fa-solid fa-mobile-screen" style="color:var(--primary-yellow,#FEBC2F);margin-right:6px;"></i>Cara Bayar dengan QR</h3>
+              <ol class="qr-steps">
+                <li><span class="step-num">1</span> <span>Buka aplikasi e-wallet anda (TnG, GrabPay, Boost, dll.)</span></li>
+                <li><span class="step-num">2</span> <span>Pilih <strong>Scan QR</strong> / <strong>Pay</strong></span></li>
+                <li><span class="step-num">3</span> <span>Imbas kod QR yang dipaparkan atau tangkap skrin dan muat naik</span></li>
+                <li><span class="step-num">4</span> <span>Masukkan jumlah <strong id="qr-steps-amount">RM 80.00</strong> dan sahkan bayaran</span></li>
+                <li><span class="step-num">5</span> <span>Hantar resit ke <strong>khairat@imasjid.my</strong> atau muat naik di bawah</span></li>
+              </ol>
+              <div class="wallet-badges" style="margin-top:1rem;">
+                <span class="wallet-badge"><i class="fa-solid fa-circle" style="color:#1da462;font-size:0.6rem;"></i> TnG eWallet</span>
+                <span class="wallet-badge"><i class="fa-solid fa-circle" style="color:#00b14f;font-size:0.6rem;"></i> GrabPay</span>
+                <span class="wallet-badge"><i class="fa-solid fa-circle" style="color:#ff6b00;font-size:0.6rem;"></i> Boost</span>
+                <span class="wallet-badge"><i class="fa-solid fa-circle" style="color:#5e2d91;font-size:0.6rem;"></i> ShopeePay</span>
+                <span class="wallet-badge"><i class="fa-solid fa-circle" style="color:#ffd700;font-size:0.6rem;"></i> MAE</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Receipt upload -->
+          <div class="kform-group" style="margin-top:1.5rem;">
+            <label for="kh-receipt">Muat Naik Resit Pembayaran (jika bayar QR)</label>
+            <input type="file" id="kh-receipt" accept="image/*,.pdf" style="padding:0.5rem;" />
+            <small style="color:#888;font-size:0.8rem;margin-top:4px;display:block;">
+              Format: JPG, PNG, PDF • Saiz maksimum: 5MB
+            </small>
+          </div>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-submit-khairat" id="btn-submit-khairat">
+        <i class="fa-solid fa-paper-plane"></i>
+        <span id="submit-label">Hantar & Bayar Sekarang – <span id="btn-total">RM80.00</span></span>
+      </button>
+
+    </form>
+  </div>
+
+  <!-- Success State -->
+  <div class="success-box" id="success-box">
+    <div class="success-icon"><i class="fa-solid fa-circle-check"></i></div>
+    <h2>Pendaftaran Berjaya! 🎉</h2>
+    <p>Terima kasih! Pendaftaran Khairat Kematian anda telah diterima. Sila lengkapkan pembayaran untuk mengaktifkan perlindungan.</p>
+    <div class="success-ref" id="success-ref">No. Rujukan: KK-2026-0001</div>
+    <p style="font-size:0.85rem;">Resit dan maklumat lanjut akan dihantar ke e-mel anda dalam masa 1–2 hari bekerja.</p>
+    <button class="btn-submit-khairat" style="max-width:280px;margin:1rem auto 0;" onclick="window.location.href='index.html'">
+      <i class="fa-solid fa-house"></i> Kembali ke Laman Utama
+    </button>
+  </div>
+
+  <div class="khairat-footer"></div>
+</div>
+
+<!-- ═══ Scripts ═══ -->
+<script>
+  /* ─── Dark mode ─── */
+  (function() {
+    if (localStorage.getItem('imasjid-dark-mode') === 'true') {
+      document.body.classList.add('dark-mode');
+      const icon  = document.getElementById('dm-icon');
+      const label = document.getElementById('dm-label');
+      if (icon)  icon.textContent  = '☀️';
+      if (label) label.textContent = 'Light';
+    }
+  })();
+
+  function toggleDarkMode() {
+    const isDark = document.body.classList.toggle('dark-mode');
+    localStorage.setItem('imasjid-dark-mode', isDark);
+    const icon  = document.getElementById('dm-icon');
+    const label = document.getElementById('dm-label');
+    if (icon)  icon.textContent  = isDark ? '☀️' : '🌙';
+    if (label) label.textContent = isDark ? 'Light' : 'Dark';
+  }
+
+  /* ─── Counter logic ─── */
+  const RATE = 80;
+  let personCount = 1;
+
+  function adjustCount(delta) {
+    personCount = Math.max(1, Math.min(20, personCount + delta));
+    updateCalc();
+  }
+
+  function updateCalc() {
+    const total = personCount * RATE;
+    document.getElementById('person-count').textContent = personCount;
+    document.getElementById('total-amount').textContent = total.toFixed(2);
+    document.getElementById('calc-breakdown').innerHTML =
+      `${personCount} orang × RM${RATE.toFixed(2)} = <strong>RM${total.toFixed(2)}</strong>`;
+    document.getElementById('kh-members').value = personCount;
+    document.getElementById('btn-total').textContent = 'RM' + total.toFixed(2);
+    document.getElementById('qr-amount-display').textContent = 'RM ' + total.toFixed(2);
+    document.getElementById('qr-steps-amount').textContent = 'RM ' + total.toFixed(2);
+  }
+
+  /* ─── Payment tab ─── */
+  let activePayTab = 'toyyibpay';
+
+  function selectPayTab(tab) {
+    activePayTab = tab;
+    document.querySelectorAll('.pay-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.pay-panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('tab-' + tab).classList.add('active');
+    document.getElementById('panel-' + tab).classList.add('active');
+  }
+
+  /* ─── IC formatter ─── */
+  function formatIC(input) {
+    let val = input.value.replace(/\D/g, '');
+    if (val.length > 6) val = val.slice(0,6) + '-' + val.slice(6);
+    if (val.length > 9) val = val.slice(0,9) + '-' + val.slice(9);
+    input.value = val.slice(0, 14);
+  }
+
+  /* ─── Form submit ─── */
+  function submitKhairat(e) {
+    e.preventDefault();
+    const total = personCount * RATE;
+    const btn   = document.getElementById('btn-submit-khairat');
+
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Memproses…';
+
+    setTimeout(() => {
+      if (activePayTab === 'toyyibpay') {
+        // Redirect to ToyyibPay — use your actual ToyyibPay bill code here
+        const ref  = 'KK-2026-' + String(Math.floor(Math.random() * 9000) + 1000);
+        const name = encodeURIComponent(document.getElementById('kh-name').value);
+        const email= encodeURIComponent(document.getElementById('kh-email').value || 'guest@imasjid.my');
+        const phone= encodeURIComponent(document.getElementById('kh-phone').value.replace(/\D/g,''));
+        // Replace BILL_CODE with your actual ToyyibPay bill code:
+        const toyyibUrl =
+          `https://toyyibpay.com/KHAIRAT_BILL_CODE?billExternalReferenceNo=${ref}` +
+          `&billTo=${name}&billEmail=${email}&billPhone=${phone}&billAmt=${(total * 100).toFixed(0)}`;
+        window.location.href = toyyibUrl;
+      } else {
+        // QR flow — show success (payment confirmed separately by admin)
+        const ref = 'KK-2026-' + String(Math.floor(Math.random() * 9000) + 1000);
+        document.getElementById('success-ref').textContent = 'No. Rujukan: ' + ref;
+        document.getElementById('registration-form-wrap').style.display = 'none';
+        document.getElementById('success-box').style.display = 'block';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }, 1500);
+  }
+</script>
+</body>
+</html>

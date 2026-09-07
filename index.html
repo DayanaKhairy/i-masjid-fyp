@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="i@masjid – Your digital mosque platform for prayer times, events, and community connection." />
+  <title>i@masjid – Digital Mosque Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+  <!-- ═══ Font Awesome 6 Free – Solid + Brands ═══ -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    /* ── Font Awesome icon sizing inside legacy emoji containers ── */
+    .feature-icon i   { font-size: 2rem;  color: var(--clr-primary, #ffffff); }
+    .about-icon  i    { font-size: 2rem;  color: var(--clr-primary, #ffffff); }
+    .qibla-icon  i    { font-size: 2rem;  color: var(--clr-primary, #ffffff); }
+    .adhan-icon  i    { font-size: 2rem;  color: var(--clr-secondary, #F59E0B); }
+    .uda-icon    i    { font-size: 1.8rem; color: var(--clr-primary, #ffffff); }
+    .sl-icon     i    { font-size: 1rem;  width: 1.2em; text-align: center; }
+    .input-icon  i    { font-size: 0.95rem; color: #cbd5e1; }
+    .contact-item > span:first-child i { font-size: 1rem; color: var(--clr-primary, #ffffff); }
+    .hero-badge  i    { margin-right: 6px; }
+    .ud-badge    i    { font-size: 0.75rem; margin-right: 4px; color: #ffffff; }
+    .success-icon i   { font-size: 3.5rem; color: #ffffff; }
+    .auth-features li i { color: #ffffff; margin-right: 8px; }
+    .social-btn  i    { margin-right: 6px; }
+    .modal-close i    { font-size: 1rem; }
+    .strip-label i    { margin-right: 6px; }
+    .footer-copy i    { color: #ef4444; }
+  </style>
+</head>
+<body>
+
+<!-- ═══ Dark Mode Toggle (fixed top-right) ═══ -->
+<button class="dark-mode-toggle" id="dark-mode-toggle" onclick="toggleDarkMode()" aria-label="Toggle dark mode">
+  <div class="dm-track"><div class="dm-thumb"></div></div>
+  <span class="dm-icon" id="dm-icon">🌙</span>
+  <span id="dm-label">Dark</span>
+</button>
+
+<!-- ═══════════════════════════════════════════════ LEFT SIDEBAR NAV (Figma Workshop 2) ═══ -->
+<!-- Clickable floating menu button for mobile / collapse -->
+<button class="menu-btn" id="menu-btn" aria-label="Toggle navigation menu" onclick="toggleSidebar(event)">
+  <span></span>
+  <span></span>
+  <span></span>
+</button>
+
+<!-- Floating back button -->
+<button class="page-back-btn" id="page-back-btn" aria-label="Back to Home" onclick="navClick(null,'home')" style="display:none;">
+  <i class="fa-solid fa-arrow-left"></i>
+  <span>Back</span>
+</button>
+
+<!-- Sidebar panel matching Figma Node 1251:3043 -->
+<aside class="sidebar w2-sidebar" id="sidebar" role="navigation" aria-label="Main navigation">
+  <div class="w2-sidebar-header">
+    <a href="#home" class="sidebar-logo" onclick="navClick(this,'home')">
+      <img src="logo.png" alt="i@masjid logo" class="sidebar-logo-img w2-sidebar-logo" />
+      <span class="sidebar-brand w2-sidebar-title">i<span class="brand-at" style="color:var(--primary-gold)">@</span>masjid</span>
+    </a>
+  </div>
+  <div class="sidebar-divider"></div>
+  <ul class="sidebar-links w2-nav-list" id="nav-links">
+    <li><a href="#home"   class="nav-link w2-nav-item active" onclick="navClick(this,'home')"><span class="sl-icon"><i class="fa-solid fa-house"></i></span> Home</a></li>
+    <li><a href="#prayer" class="nav-link w2-nav-item"        onclick="navClick(this,'prayer')"><span class="sl-icon"><i class="fa-solid fa-clock"></i></span> Prayer Times</a></li>
+    <li><a href="#events" class="nav-link w2-nav-item"        onclick="navClick(this,'events')"><span class="sl-icon"><i class="fa-solid fa-calendar-days"></i></span> Events</a></li>
+    <li><a href="korban.html" class="nav-link w2-nav-item"><span class="sl-icon"><i class="fa-solid fa-cow"></i></span> Ibadah Qurban</a></li>
+    <li><a href="khairat.html" class="nav-link w2-nav-item"><span class="sl-icon"><i class="fa-solid fa-heart-pulse"></i></span> Khairat Kematian</a></li>
+    <li><a href="announcements.html" class="nav-link w2-nav-item"><span class="sl-icon"><i class="fa-solid fa-tower-broadcast"></i></span> Announcements</a></li>
+    <li><a href="donate.html" class="nav-link w2-nav-item"><span class="sl-icon"><i class="fa-solid fa-hand-holding-dollar"></i></span> Infaq &amp; Donate</a></li>
+    <li><a href="#about"  class="nav-link w2-nav-item"        onclick="navClick(this,'about')"><span class="sl-icon"><i class="fa-solid fa-mosque"></i></span> About</a></li>
+  </ul>
+  <div class="sidebar-divider"></div>
+  <a href="#login" class="nav-link btn-gold-w2 sidebar-login" id="sidebar-login-btn" onclick="navClick(this,'login')" style="justify-content:center;">Login Portal</a>
+  <p class="sidebar-tagline" style="margin-top:0.5rem;">Figma Workshop 2 Design</p>
+</aside>
+
+<!-- ═══════════════════════════════════════════════ HOME ═══ -->
+<section class="page active" id="home" style="padding-top:0;">
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero-bg-pattern"></div>
+    <div class="hero-content">
+
+      <h1 class="hero-title">Welcome to <span class="gradient-text">i@masjid</span></h1>
+      <p class="hero-subtitle">Your all-in-one digital mosque platform — stay connected, informed, and spiritually engaged with your community.</p>
+      <div class="hero-cta">
+        <button class="btn-gold-w2" onclick="navClick(document.querySelector('.nav-link[href=\'#prayer\']'),'prayer')"><i class="fa-solid fa-clock"></i> View Prayer Times</button>
+        <button class="btn-outline-w2" onclick="navClick(document.querySelector('.nav-link[href=\'#events\']'),'events')"><i class="fa-solid fa-calendar-days"></i> Upcoming Events</button>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-card">
+          <span class="stat-num">5</span>
+          <span class="stat-lbl">Daily Prayers</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-num">12+</span>
+          <span class="stat-lbl">Monthly Events</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-num">500+</span>
+          <span class="stat-lbl">Community Members</span>
+        </div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="mosque-illustration">
+        <img src="logo.png" alt="i@masjid" class="hero-logo-img" />
+        <div class="orbit orbit-1"></div>
+        <div class="orbit orbit-2"></div>
+        <div class="orbit orbit-3"></div>
+        <div class="star s1">✦</div>
+        <div class="star s2">✦</div>
+        <div class="star s3">★</div>
+        <div class="star s4">✦</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- User Welcome Dashboard Banner (Dynamic) -->
+  <div class="section-container" id="user-dashboard" style="display: none;">
+    <div class="user-dashboard-banner">
+      <div class="ud-header">
+        <span class="ud-badge"><i class="fa-solid fa-circle-dot"></i> Member Portal Connected</span>
+        <h2 id="ud-greeting">Hello, User! <i class="fa-solid fa-moon"></i></h2>
+        <p>Welcome to your i@masjid dashboard. Enjoy complete access to all community features instantly.</p>
+      </div>
+      <div class="ud-quick-actions">
+        <div class="ud-action-card" onclick="navClick(null,'events')">
+          <span class="uda-icon"><i class="fa-solid fa-calendar-days"></i></span>
+          <h4>Register for Events</h4>
+          <p>Instant registrations, no form repeats</p>
+        </div>
+        <div class="ud-action-card" onclick="navClick(null,'prayer')">
+          <span class="uda-icon"><i class="fa-solid fa-clock"></i></span>
+          <h4>Prayer Times</h4>
+          <p>Live countdown and Melaka schedules</p>
+        </div>
+        <div class="ud-action-card" onclick="navClick(null,'about')">
+          <span class="uda-icon"><i class="fa-solid fa-mosque"></i></span>
+          <h4>About Mosque</h4>
+          <p>Mission, vision, and team details</p>
+        </div>
+        <div class="ud-action-card" onclick="window.open('korban.html','_self')">
+          <span class="uda-icon"><i class="fa-solid fa-cow"></i></span>
+          <h4>Qurban 2026</h4>
+          <p>Register for Ibadah Qurban</p>
+        </div>
+      </div>
+      
+      <!-- User Qurban History -->
+      <div id="ud-qurban-receipts" style="display:none; margin-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 1.5rem;">
+        <h3 style="margin-bottom: 1rem; font-size: 1.2rem; color: #fff;"><i class="fa-solid fa-file-invoice"></i> My Qurban Receipts</h3>
+        <div id="ud-qurban-list" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
+        </div>
+      </div>
+      
+    </div>
+  </div>
+
+  <!-- Admin Dashboard (Only visible to apekadmin) -->
+  <div class="section-container" id="admin-dashboard" style="display: none;">
+    <div class="user-dashboard-banner" style="background: linear-gradient(135deg, rgba(234, 179, 8, 0.2), rgba(15, 23, 42, 0.9)); border: 1px solid rgba(234, 179, 8, 0.3);">
+      <div class="ud-header" style="text-align:center;">
+        <span class="ud-badge" style="background: rgba(234, 179, 8, 0.2); color: #eab308;"><i class="fa-solid fa-shield-halved"></i> Admin Portal</span>
+        <h2 style="color:#fff;">Qurban Transactions Management</h2>
+        <p>Review and verify community Qurban payments below.</p>
+        <button onclick="loadAdminQurbanData()" class="btn-primary" style="margin-top: 1rem; background: #eab308; color: #000; border: none; padding: 0.5rem 1rem; border-radius: 6px; font-weight: bold; cursor: pointer;"><i class="fa-solid fa-rotate"></i> Refresh Data</button>
+      </div>
+      
+      <div style="margin-top: 2rem; background: rgba(0,0,0,0.4); border-radius: 12px; overflow-x: auto; overflow-y: auto; max-height: 500px; border: 1px solid rgba(255,255,255,0.05);">
+        <table style="width: 100%; border-collapse: collapse; text-align: left; color: #fff; min-width: 800px;">
+          <thead style="position: sticky; top: 0; z-index: 10;">
+            <tr>
+              <th style="padding: 1rem; background: #1a1a2e; border-bottom: 1px solid rgba(255,255,255,0.1);">ID/Ref</th>
+              <th style="padding: 1rem; background: #1a1a2e; border-bottom: 1px solid rgba(255,255,255,0.1);">Participant</th>
+              <th style="padding: 1rem; background: #1a1a2e; border-bottom: 1px solid rgba(255,255,255,0.1);">Animal / Qty</th>
+              <th style="padding: 1rem; background: #1a1a2e; border-bottom: 1px solid rgba(255,255,255,0.1);">Amount</th>
+              <th style="padding: 1rem; background: #1a1a2e; border-bottom: 1px solid rgba(255,255,255,0.1);">Payment Plan</th>
+              <th style="padding: 1rem; background: #1a1a2e; border-bottom: 1px solid rgba(255,255,255,0.1);">Status</th>
+              <th style="padding: 1rem; background: #1a1a2e; border-bottom: 1px solid rgba(255,255,255,0.1);">Action</th>
+            </tr>
+          </thead>
+          <tbody id="admin-qurban-tbody">
+            <tr><td colspan="7" style="padding: 1rem; text-align:center;">Loading...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Prayer Strip -->
+  <div class="quick-strip" id="quick-strip">
+    <div class="strip-label"><i class="fa-solid fa-mosque"></i> Today's Prayer Times</div>
+    <div class="strip-prayers" id="strip-prayers">Loading…</div>
+    <div class="strip-date" id="strip-date"></div>
+  </div>
+
+  <!-- Features Grid -->
+  <div class="section-container">
+    <div class="section-header">
+      <h2>Everything You Need</h2>
+      <p>One platform, complete mosque services</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card" onclick="navClick(document.querySelector('.nav-link[href=\'#prayer\']'),'prayer')">
+        <div class="feature-icon"><i class="fa-solid fa-clock"></i></div>
+        <h3>Prayer Times</h3>
+        <p>Accurate daily Solat schedules for Fajr, Dhuhr, Asr, Maghrib &amp; Isyak with live countdown.</p>
+        <span class="feature-link">View Schedule →</span>
+      </div>
+      <div class="feature-card" onclick="navClick(document.querySelector('.nav-link[href=\'#events\']'),'events')">
+        <div class="feature-icon"><i class="fa-solid fa-calendar-days"></i></div>
+        <h3>Events &amp; Programs</h3>
+        <p>Stay updated with the latest mosque programs, Tazkirah, Quran classes, and community activities.</p>
+        <span class="feature-link">Explore Events →</span>
+      </div>
+      <div class="feature-card" id="member-portal-card" onclick="navClick(document.querySelector('.nav-link[href=\'#login\']'),'login')">
+        <div class="feature-icon"><i class="fa-solid fa-user"></i></div>
+        <h3>Member Portal</h3>
+        <p>Register, manage your profile, receive notifications, and participate in mosque activities.</p>
+        <span class="feature-link">Join Now →</span>
+      </div>
+      <div class="feature-card" onclick="window.open('korban.html','_self')" style="cursor:pointer;">
+        <div class="feature-icon" style="background:#FFF0C2;border-color:#FEBC2F;">
+          <i class="fa-solid fa-cow" style="color:#FEBC2F;"></i>
+        </div>
+        <h3>Ibadah Qurban Registration</h3>
+        <p>Participate in the upcoming Qurban. Register for cow or goat portions directly through the portal.</p>
+        <span class="feature-link" style="color:#FEBC2F;font-weight:700;">Register Now →</span>
+      </div>
+      <div class="feature-card" onclick="window.open('khairat.html','_self')" style="cursor:pointer;">
+        <div class="feature-icon" style="background:#FFF0C2;border-color:#FEBC2F;">
+          <i class="fa-solid fa-heart-pulse" style="color:#FEBC2F;"></i>
+        </div>
+        <h3>Khairat Kematian</h3>
+        <p>Daftar untuk skim Khairat Kematian masjid. Yuran RM80 seorang. Pembayaran mudah melalui ToyyibPay atau QR Code.</p>
+        <span class="feature-link" style="color:#FEBC2F;font-weight:700;">Daftar Sekarang →</span>
+      </div>
+      <div class="feature-card" onclick="window.open('announcements.html','_self')" style="cursor:pointer;">
+        <div class="feature-icon" style="background:#FFF0C2;border-color:#FEBC2F;">
+          <i class="fa-solid fa-tower-broadcast" style="color:#FEBC2F;"></i>
+        </div>
+        <h3>Live Announcements</h3>
+        <p>Real-time updates and important announcements from the mosque committee directly to you.</p>
+        <span class="feature-link" style="color:#FEBC2F;font-weight:700;">View Updates →</span>
+      </div>
+      <div class="feature-card" onclick="window.open('donate.html','_self')" style="cursor:pointer;">
+        <div class="feature-icon" style="background:#FFF0C2;border-color:#FEBC2F;">
+          <i class="fa-solid fa-hand-holding-dollar" style="color:#FEBC2F;"></i>
+        </div>
+        <h3>Infaq &amp; Donations</h3>
+        <p style="margin-bottom:0.75rem;">Contribute to <strong style="color:#111111;">Tabung Masjid Abu Bakar</strong> via Malaysia National QR — quick, secure, open to everyone.</p>
+        <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.75rem;">
+          <img src="assets/images/qr-tabung-masjid.png" alt="QR Preview" style="width:48px;height:48px;object-fit:cover;border-radius:8px;border:2px solid #FEBC2F;" onerror="this.style.display='none'" />
+          <div style="font-size:0.78rem;color:#555555;line-height:1.4;">
+            <span style="color:#111111;font-weight:600;">Malaysia National QR</span><br>
+            DuitNow · All e-wallets supported
+          </div>
+        </div>
+        <span class="feature-link" style="color:#FEBC2F;font-weight:700;">Scan &amp; Donate →</span>
+      </div>
+      <div class="feature-card" onclick="window.open('quran.html','_self')" style="cursor:pointer;">
+        <div class="feature-icon" style="background:#FFF0C2;border-color:#FEBC2F;">
+          <i class="fa-solid fa-book-open" style="color:#FEBC2F;"></i>
+        </div>
+        <h3>Al-Quran (30 Juzuk)</h3>
+        <p>Access the complete Holy Quran with all 30 Juzuk. Read, reflect, and enrich your daily life anytime, anywhere.</p>
+        <span class="feature-link" style="color:#FEBC2F;font-weight:700;">Read Now →</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Upcoming Event Teaser -->
+  <div class="section-container section-alt">
+    <div class="section-header">
+      <h2>Upcoming Highlights</h2>
+      <p>Don't miss these important programs</p>
+    </div>
+    <div class="teaser-events" id="teaser-events"></div>
+    <div style="text-align:center;margin-top:2rem;">
+      <button class="btn-primary" onclick="navClick(document.querySelector('.nav-link[href=\'#events\']'),'events')">View All Events</button>
+    </div>
+  </div>
+
+</section>
+
+<!-- ═══════════════════════════════════════════════ PRAYER TIMES ═══ -->
+<section class="page" id="prayer">
+  <div class="page-hero">
+    <div class="page-hero-bg"></div>
+    <h1><i class="fa-solid fa-mosque"></i> Prayer Times</h1>
+    <p>Daily Solat schedule — <span id="prayer-location">Malaysia (WIB Zone)</span></p>
+  </div>
+
+  <div class="section-container">
+    <!-- Date & Hijri -->
+    <div class="prayer-date-card">
+      <div class="prayer-date-row">
+        <div class="prayer-date-item">
+          <span class="date-label">Date</span>
+          <span class="date-value" id="pt-gregorian"></span>
+        </div>
+        <div class="prayer-date-sep">|</div>
+        <div class="prayer-date-item">
+          <span class="date-label">Hijri</span>
+          <span class="date-value" id="pt-hijri"></span>
+        </div>
+        <div class="prayer-date-sep">|</div>
+        <div class="prayer-date-item">
+          <span class="date-label">Day</span>
+          <span class="date-value" id="pt-day"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Countdown -->
+    <div class="next-prayer-card">
+      <div class="np-label">Next Prayer</div>
+      <div class="np-name" id="np-name">—</div>
+      <div class="np-time" id="np-time">—</div>
+      <div class="np-countdown" id="np-countdown">--:--:--</div>
+      <div class="np-sublabel">Time remaining</div>
+    </div>
+
+    <!-- Prayer Cards -->
+    <div class="prayer-grid" id="prayer-grid">
+      <!-- filled by JS -->
+    </div>
+
+    <!-- Qibla & Notes -->
+    <div class="prayer-notes">
+      <div class="qibla-card">
+        <div class="qibla-icon"><i class="fa-solid fa-compass"></i></div>
+        <div>
+          <strong>Qibla Direction</strong>
+          <p>From Malaysia: approximately <strong>292°</strong> NW</p>
+        </div>
+      </div>
+      <div class="adhan-card">
+        <div class="adhan-icon"><i class="fa-solid fa-bullhorn"></i></div>
+        <div>
+          <strong>Azan Notification</strong>
+          <p>Login to enable browser notifications for each prayer time.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Weekly Schedule -->
+    <div class="section-header" style="margin-top:3rem;">
+      <h2>Weekly Schedule</h2>
+      <p>Prayer times for the current week</p>
+    </div>
+    <div class="weekly-table-wrap">
+      <table class="weekly-table" id="weekly-table">
+        <thead>
+          <tr>
+            <th>Day</th>
+            <th>Subuh</th>
+            <th>Syuruk</th>
+            <th>Zohor</th>
+            <th>Asar</th>
+            <th>Maghrib</th>
+            <th>Isyak</th>
+          </tr>
+        </thead>
+        <tbody id="weekly-tbody"><!-- filled by JS --></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════ EVENTS ═══ -->
+<section class="page" id="events">
+  <div class="page-hero">
+    <div class="page-hero-bg"></div>
+    <h1><i class="fa-solid fa-calendar-days"></i> Events &amp; Programs</h1>
+    <p>Stay connected with your mosque community</p>
+  </div>
+
+  <div class="section-container">
+    <!-- Filter Tabs -->
+    <div class="event-filters">
+      <button class="filter-btn active" id="filter-all"      onclick="filterEvents('all',this)">All</button>
+      <button class="filter-btn"       id="filter-religious" onclick="filterEvents('religious',this)">Religious</button>
+      <button class="filter-btn"       id="filter-education" onclick="filterEvents('education',this)">Education</button>
+      <button class="filter-btn"       id="filter-community" onclick="filterEvents('community',this)">Community</button>
+      <button class="filter-btn"       id="filter-charity"   onclick="filterEvents('charity',this)">Charity</button>
+    </div>
+
+    <!-- Events Grid -->
+    <div class="events-grid" id="events-grid"><!-- filled by JS --></div>
+
+    <!-- Register Modal -->
+    <div class="modal-overlay" id="event-modal" onclick="closeEventModal(event)">
+      <div class="modal-box" id="event-modal-box">
+        <button class="modal-close" onclick="closeEventModal()"><i class="fa-solid fa-xmark"></i></button>
+        <div id="modal-content"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════ ABOUT ═══ -->
+<section class="page" id="about">
+  <div class="page-hero">
+    <div class="page-hero-bg"></div>
+    <h1><i class="fa-solid fa-mosque"></i> About i@masjid</h1>
+    <p>Our mission, vision &amp; the team behind the platform</p>
+  </div>
+  <div class="section-container">
+    <div class="about-grid">
+      <div class="about-card">
+        <div class="about-icon"><i class="fa-solid fa-bullseye"></i></div>
+        <h3>Our Mission</h3>
+        <p>To digitally empower mosques across Malaysia by providing an accessible, intuitive platform that strengthens community bonds and facilitates Islamic learning and worship.</p>
+      </div>
+      <div class="about-card">
+        <div class="about-icon"><i class="fa-solid fa-eye"></i></div>
+        <h3>Our Vision</h3>
+        <p>To be the leading digital ecosystem for mosques in Malaysia — connecting every Muslim with their local masjid through modern technology while preserving Islamic values.</p>
+      </div>
+      <div class="about-card">
+        <div class="about-icon"><i class="fa-solid fa-gem"></i></div>
+        <h3>Our Values</h3>
+        <p>Built on the pillars of transparency, inclusivity, and service to the ummah. Every feature is designed with the needs of the Muslim community at heart.</p>
+      </div>
+    </div>
+    <div class="about-story">
+      <h2>The i@masjid Story</h2>
+      <p>i@masjid was born as a Final Year Project at <strong>Universiti Teknikal Malaysia Melaka (UTeM)</strong> with the goal of bridging the gap between mosques and their communities using modern web technology. Today, it serves as a comprehensive platform offering prayer schedules, event management, member registration, and more — all in one place.</p>
+      <p>The name <em>i@masjid</em> represents <strong>information at the mosque</strong> — fast, accessible, and always available, just like the masjid itself.</p>
+    </div>
+    <div class="contact-section">
+      <h2>Contact Us</h2>
+      <div class="contact-grid">
+        <div class="contact-item"><span><i class="fa-solid fa-location-dot"></i></span><span>Masjid Komuniti, Melaka, Malaysia</span></div>
+        <div class="contact-item"><span><i class="fa-solid fa-phone"></i></span><span>+60 6-XXX XXXX</span></div>
+        <div class="contact-item"><span><i class="fa-solid fa-envelope"></i></span><span>admin@imasjid.my</span></div>
+        <div class="contact-item"><span><i class="fa-solid fa-clock"></i></span><span>Open daily, all prayer times</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════ LOGIN / REGISTER ═══ -->
+<section class="page" id="login">
+  <div class="auth-wrapper">
+    <div class="auth-left">
+      <div class="auth-left-content">
+        <img src="logo.png" alt="i@masjid" class="auth-logo" />
+        <h2>i<span class="brand-at">@</span>masjid</h2>
+        <p class="auth-tagline">Your digital gateway to the mosque community</p>
+        <ul class="auth-features">
+          <li><i class="fa-solid fa-circle-check"></i> Real-time Prayer Notifications</li>
+          <li><i class="fa-solid fa-circle-check"></i> Event Registration &amp; Reminders</li>
+          <li><i class="fa-solid fa-circle-check"></i> Community Announcements</li>
+          <li><i class="fa-solid fa-circle-check"></i> Donation &amp; Infaq Tracking</li>
+          <li><i class="fa-solid fa-circle-check"></i> Islamic Learning Resources</li>
+        </ul>
+        <blockquote class="auth-hadith">"The mosque is the house of every pious person." <cite>— Hadith</cite></blockquote>
+      </div>
+    </div>
+    <div class="auth-right">
+      <!-- Tab Switch -->
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="tab-login"    onclick="switchAuthTab('login')">Login</button>
+        <button class="auth-tab"       id="tab-register"  onclick="switchAuthTab('register')">Sign Up</button>
+      </div>
+
+      <!-- LOGIN FORM -->
+      <form class="auth-form active" id="form-login" onsubmit="handleLogin(event)">
+        <h3>Welcome Back <i class="fa-solid fa-hand-wave"></i></h3>
+        <p class="form-subtitle">Login to your i@masjid account</p>
+        <div class="form-group">
+          <label for="login-email">Email Address</label>
+          <div class="input-wrap" style="position:relative;">
+            <span class="input-icon"><i class="fa-solid fa-envelope"></i></span>
+            <input type="email" id="login-email" placeholder="you@email.com" required
+              autocomplete="off"
+              onfocus="showLoginSuggestions()"
+              oninput="filterLoginSuggestions(this.value)"
+            />
+            <!-- Recent Login Suggestions Dropdown -->
+            <div id="login-suggestions" style="
+              display:none; position:absolute; top:calc(100% + 6px); left:0; right:0;
+              background:#0f2132; border:1px solid rgba(6,182,212,0.35);
+              border-radius:10px; overflow:hidden; z-index:999;
+              box-shadow: 0 8px 24px rgba(0,0,0,0.4);">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="login-password">Password</label>
+          <div class="input-wrap">
+            <span class="input-icon"><i class="fa-solid fa-lock"></i></span>
+            <input type="password" id="login-password" placeholder="••••••••" required />
+            <button type="button" class="toggle-pw" onclick="togglePw('login-password',this)"><i class="fa-solid fa-eye"></i></button>
+          </div>
+        </div>
+        <div class="form-row">
+          <label class="checkbox-label"><input type="checkbox" id="remember-me" /> Remember me</label>
+          <a href="#" class="forgot-link">Forgot password?</a>
+        </div>
+        <button type="submit" class="btn-auth" id="btn-login">Login</button>
+        <div class="auth-divider"><span>or continue with</span></div>
+        <div class="social-auth">
+          <button type="button" class="social-btn" id="btn-google-login"><i class="fa-brands fa-google"></i> Google</button>
+          <button type="button" class="social-btn" id="btn-fb-login"><i class="fa-brands fa-facebook"></i> Facebook</button>
+        </div>
+        <p class="auth-switch">Don't have an account? <a href="#" onclick="switchAuthTab('register')">Sign Up</a></p>
+      </form>
+
+      <!-- REGISTER FORM -->
+      <form class="auth-form" id="form-register" onsubmit="handleRegister(event)">
+        <h3>Join i@masjid <i class="fa-solid fa-moon"></i></h3>
+        <p class="form-subtitle">Create your free community account</p>
+        <div class="form-row-2">
+          <div class="form-group">
+            <label for="reg-first">First Name</label>
+            <div class="input-wrap">
+              <span class="input-icon"><i class="fa-solid fa-user"></i></span>
+              <input type="text" id="reg-first" placeholder="Ahmad" required />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="reg-last">Last Name</label>
+            <div class="input-wrap">
+              <span class="input-icon"><i class="fa-solid fa-user"></i></span>
+              <input type="text" id="reg-last" placeholder="bin Ali" required />
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="reg-email">Email Address</label>
+          <div class="input-wrap">
+            <span class="input-icon"><i class="fa-solid fa-envelope"></i></span>
+            <input type="email" id="reg-email" placeholder="you@email.com" required />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="reg-phone">Phone Number</label>
+          <div class="input-wrap">
+            <span class="input-icon"><i class="fa-solid fa-mobile-screen"></i></span>
+            <input type="tel" id="reg-phone" placeholder="+60 1X-XXX XXXX" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="reg-password">Password</label>
+          <div class="input-wrap">
+            <span class="input-icon"><i class="fa-solid fa-lock"></i></span>
+            <input type="password" id="reg-password" placeholder="Min. 8 characters" required minlength="8" />
+            <button type="button" class="toggle-pw" onclick="togglePw('reg-password',this)"><i class="fa-solid fa-eye"></i></button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="reg-confirm">Confirm Password</label>
+          <div class="input-wrap">
+            <span class="input-icon"><i class="fa-solid fa-lock"></i></span>
+            <input type="password" id="reg-confirm" placeholder="Re-enter password" required />
+          </div>
+        </div>
+        <label class="checkbox-label">
+          <input type="checkbox" id="reg-terms" required />
+          I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
+        </label>
+        <button type="submit" class="btn-auth" id="btn-register">Create Account</button>
+        <p class="auth-switch">Already have an account? <a href="#" onclick="switchAuthTab('login')">Login</a></p>
+      </form>
+
+      <!-- SUCCESS STATE -->
+      <div class="auth-success" id="auth-success" style="display:none;">
+        <div class="success-icon"><i class="fa-solid fa-circle-check"></i></div>
+        <h3 id="success-title">Welcome!</h3>
+        <p id="success-msg">You have successfully logged in.</p>
+        <button class="btn-primary" onclick="showSection('home')">Go to Home</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════ FOOTER ═══ -->
+<footer class="footer">
+  <div class="footer-content">
+    <div class="footer-brand">
+      <img src="logo.png" alt="i@masjid" class="footer-logo" />
+      <span>i<span class="brand-at">@</span>masjid</span>
+    </div>
+    <div class="footer-links">
+      <a href="#" onclick="navClick(document.querySelector('.nav-link[href=\'#home\']'),'home')">Home</a>
+      <a href="#" onclick="navClick(document.querySelector('.nav-link[href=\'#prayer\']'),'prayer')">Prayer Times</a>
+      <a href="#" onclick="navClick(document.querySelector('.nav-link[href=\'#events\']'),'events')">Events</a>
+      <a href="#" onclick="navClick(document.querySelector('.nav-link[href=\'#about\']'),'about')">About</a>
+    </div>
+
+  </div>
+</footer>
+
+<!-- Notification Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- ═══ Supabase JS (UMD – exposes window.supabase) ═══ -->
+<script src="js/supabase.js"></script>
+
+<!-- ═══ App Modules (order matters) ═══ -->
+<script src="js/supabase-client.js"></script>
+<script src="js/prayer-engine.js"></script>
+<script src="js/events.js"></script>
+<script src="js/auth.js"></script>
+
+<!-- ═══ Main coordinator ═══ -->
+<script src="app.js"></script>
+</body>
+</html>

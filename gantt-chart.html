@@ -1,0 +1,2270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Gantt Chart – i@masjid FYP</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #fff;
+      padding: 30px 24px;
+      color: #111;
+    }
+    .page-title {
+      text-align: center;
+      margin-bottom: 6px;
+    }
+    .page-title h1 {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      color: #1a1a2e;
+    }
+    .page-title p {
+      font-size: 12px;
+      color: #555;
+      margin-top: 3px;
+    }
+    .chart-wrap {
+      overflow-x: auto;
+      margin-top: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+      min-width: 960px;
+    }
+    /* Header */
+    thead tr th {
+      background: #1a1a2e;
+      color: #fff;
+      text-align: center;
+      padding: 8px 4px;
+      border: 1px solid #333;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    thead tr th.col-no    { width: 36px; }
+    thead tr th.col-task  { width: 220px; text-align: left; padding-left: 10px; }
+    thead tr th.col-week  { width: 48px; font-size: 11px; }
+
+    /* Body rows */
+    tbody tr:nth-child(odd)  td { background-color: #f8f9fb; }
+    tbody tr:nth-child(even) td { background-color: #fff; }
+
+    tbody tr td {
+      border: 1px solid #d0d0d8;
+      padding: 5px 4px;
+      text-align: center;
+      vertical-align: middle;
+      height: 32px;
+    }
+    tbody tr td.col-no   { font-weight: 700; color: #444; width: 36px; }
+    tbody tr td.col-task { text-align: left; padding-left: 10px; color: #1a1a2e; font-size: 11.5px; white-space: nowrap; }
+
+    /* Colored bar cells */
+    .bar { border-radius: 4px; height: 20px; display: block; margin: 0 2px; }
+    .planning   { background-color: #1a3a6e; }
+    .analysis   { background-color: #2e6da4; }
+    .design     { background-color: #2196A4; }
+    .dev        { background-color: #2e7d32; }
+    .integration{ background-color: #e65100; }
+    .testing    { background-color: #c62828; }
+    .docs       { background-color: #6a1b9a; }
+
+    /* Legend */
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-top: 18px;
+      justify-content: center;
+      font-size: 11.5px;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .legend-box {
+      width: 22px; height: 14px;
+      border-radius: 3px;
+      flex-shrink: 0;
+    }
+
+    @media print {
+      body { padding: 10px; }
+      .chart-wrap { overflow: visible; }
+      .architecture-section {
+        page-break-before: always;
+        border-top: none;
+        margin-top: 0;
+        padding-top: 10px;
+      }
+    }
+
+    /* System Architecture Diagram styling */
+    .architecture-section {
+      margin-top: 40px;
+      padding-top: 30px;
+      border-top: 2px dashed #e0e0e8;
+    }
+    .architecture-section h2 {
+      font-size: 16px;
+      font-weight: 700;
+      color: #1a1a2e;
+      text-align: center;
+      margin-bottom: 8px;
+    }
+    .architecture-section .section-desc {
+      font-size: 11.5px;
+      color: #555;
+      max-width: 800px;
+      margin: 0 auto 24px auto;
+      text-align: center;
+      line-height: 1.5;
+    }
+    .svg-container {
+      display: flex;
+      justify-content: center;
+      background: #fdfdfd;
+      border: 1px solid #e0e0e8;
+      border-radius: 8px;
+      padding: 24px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="page-title">
+    <h1>i@masjid — Mosque Management System</h1>
+    <p>Final Year Project Gantt Chart &nbsp;|&nbsp; Universiti Teknikal Malaysia Melaka (UTEM) &nbsp;|&nbsp; 14-Week Schedule</p>
+  </div>
+
+  <div class="chart-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th class="col-no">No.</th>
+          <th class="col-task">Activity / Task</th>
+          <th class="col-week">W1</th>
+          <th class="col-week">W2</th>
+          <th class="col-week">W3</th>
+          <th class="col-week">W4</th>
+          <th class="col-week">W5</th>
+          <th class="col-week">W6</th>
+          <th class="col-week">W7</th>
+          <th class="col-week">W8</th>
+          <th class="col-week">W9</th>
+          <th class="col-week">W10</th>
+          <th class="col-week">W11</th>
+          <th class="col-week">W12</th>
+          <th class="col-week">W13</th>
+          <th class="col-week">W14</th>
+        </tr>
+      </thead>
+      <tbody id="gantt-body"></tbody>
+    </table>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-box" style="background:#1a3a6e;"></div> Planning</div>
+    <div class="legend-item"><div class="legend-box" style="background:#2e6da4;"></div> Analysis</div>
+    <div class="legend-item"><div class="legend-box" style="background:#2196A4;"></div> Design</div>
+    <div class="legend-item"><div class="legend-box" style="background:#2e7d32;"></div> Development</div>
+    <div class="legend-item"><div class="legend-box" style="background:#e65100;"></div> Integration</div>
+    <div class="legend-item"><div class="legend-box" style="background:#c62828;"></div> Testing</div>
+    <div class="legend-item"><div class="legend-box" style="background:#6a1b9a;"></div> Documentation</div>
+  </div>
+
+  <div class="architecture-section">
+    <h2>System Architecture Diagram</h2>
+    <p class="section-desc">The i@masjid Mosque Management System is designed using a 3-Tier Architecture consisting of a Presentation Layer (Frontend Web Client), an Interface &amp; Application Logic Layer (Javascript Coordinators &amp; Gateways), and a Database Storage Layer (Supabase Cloud PostgreSQL Engine &amp; Row Level Security).</p>
+    <div class="svg-container">
+      <svg viewBox="0 0 960 660" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" style="font-family:'Segoe UI', Arial, sans-serif;">
+        <!-- Definitions for markers and filters -->
+        <defs>
+          <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1a1a2e"/>
+          </marker>
+          <marker id="arrow-blue" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#2e6da4"/>
+          </marker>
+          <marker id="arrow-teal" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#2196A4"/>
+          </marker>
+          <filter id="shadow" x="-2%" y="-2%" width="104%" height="108%">
+            <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.06"/>
+          </filter>
+        </defs>
+
+        <!-- Background Grid (subtle) -->
+        <rect width="960" height="660" fill="#fafafa" rx="10"/>
+
+        <!-- ================= TIER 1: PRESENTATION LAYER ================= -->
+        <g filter="url(#shadow)">
+          <!-- Main Box -->
+          <rect x="50" y="30" width="680" height="130" rx="8" fill="#ffffff" stroke="#1a1a2e" stroke-width="1.5"/>
+          <!-- Header Block -->
+          <rect x="50" y="30" width="680" height="32" rx="8" fill="#1a1a2e"/>
+          <!-- Prevent rounding at the bottom of header block -->
+          <rect x="50" y="54" width="680" height="8" fill="#1a1a2e"/>
+          <text x="390" y="51" fill="#ffffff" font-size="13" font-weight="bold" text-anchor="middle">TIER 1: PRESENTATION LAYER (USER &amp; ADMIN PORTALS)</text>
+          
+          <!-- Subcomponents -->
+          <!-- Pages Box -->
+          <rect x="70" y="74" width="460" height="74" rx="4" fill="#f1f3f7" stroke="#b0b7c3" stroke-width="1"/>
+          <text x="80" y="90" fill="#4a5568" font-size="10.5" font-weight="bold">Web Pages &amp; UI Sections (HTML5 SPA Layout)</text>
+          
+          <!-- Badges for Pages -->
+          <g transform="translate(80, 100)">
+            <rect width="64" height="20" rx="3" fill="#fff" stroke="#cbd5e0"/>
+            <text x="32" y="14" font-size="9.5" text-anchor="middle" fill="#2d3748" font-weight="600">index.html</text>
+          </g>
+          <g transform="translate(150, 100)">
+            <rect width="70" height="20" rx="3" fill="#fff" stroke="#cbd5e0"/>
+            <text x="35" y="14" font-size="9.5" text-anchor="middle" fill="#2d3748" font-weight="600">korban.html</text>
+          </g>
+          <g transform="translate(226, 100)">
+            <rect width="66" height="20" rx="3" fill="#fff" stroke="#cbd5e0"/>
+            <text x="33" y="14" font-size="9.5" text-anchor="middle" fill="#2d3748" font-weight="600">donate.html</text>
+          </g>
+          <g transform="translate(298, 100)">
+            <rect width="64" height="20" rx="3" fill="#fff" stroke="#cbd5e0"/>
+            <text x="32" y="14" font-size="9.5" text-anchor="middle" fill="#2d3748" font-weight="600">quran.html</text>
+          </g>
+          <g transform="translate(368, 100)">
+            <rect width="64" height="20" rx="3" fill="#fff" stroke="#cbd5e0"/>
+            <text x="32" y="14" font-size="9.5" text-anchor="middle" fill="#2d3748" font-weight="600">i@utem.html</text>
+          </g>
+          <g transform="translate(438, 100)">
+            <rect width="82" height="20" rx="3" fill="#fff" stroke="#cbd5e0"/>
+            <text x="41" y="14" font-size="9.5" text-anchor="middle" fill="#2d3748" font-weight="600">announcements</text>
+          </g>
+          
+          <!-- User/Admin role info in tier 1 -->
+          <g transform="translate(80, 126)">
+            <text x="0" y="12" fill="#718096" font-size="9.5" font-style="italic">Views: User Dashboard | Admin Panel (Approval Control) | Live Prayer widget</text>
+          </g>
+
+          <!-- Styles Box -->
+          <rect x="546" y="74" width="168" height="74" rx="4" fill="#f1f3f7" stroke="#b0b7c3" stroke-width="1"/>
+          <text x="556" y="90" fill="#4a5568" font-size="10.5" font-weight="bold">Design &amp; Styling System</text>
+          <rect x="556" y="100" width="70" height="20" rx="3" fill="#fff" stroke="#cbd5e0"/>
+          <text x="591" y="114" font-size="9.5" text-anchor="middle" fill="#2d3748" font-weight="600">styles.css</text>
+          <text x="556" y="136" fill="#718096" font-size="9">Variables / Responsive Layout</text>
+        </g>
+
+        <!-- ================= TIER 2: INTERFACE & APPLICATION LAYER ================= -->
+        <g filter="url(#shadow)">
+          <!-- Main Box -->
+          <rect x="50" y="210" width="680" height="200" rx="8" fill="#ffffff" stroke="#2e6da4" stroke-width="1.5"/>
+          <!-- Header Block -->
+          <rect x="50" y="210" width="680" height="32" rx="8" fill="#2e6da4"/>
+          <rect x="50" y="234" width="680" height="8" fill="#2e6da4"/>
+          <text x="390" y="231" fill="#ffffff" font-size="13" font-weight="bold" text-anchor="middle">TIER 2: INTERFACE &amp; APPLICATION LAYER (JAVASCRIPT SYSTEM)</text>
+
+          <!-- Navigation Coordinator -->
+          <rect x="70" y="254" width="130" height="144" rx="4" fill="#f0f7fc" stroke="#a4cae8" stroke-width="1"/>
+          <text x="80" y="272" fill="#2c5282" font-size="11" font-weight="bold">Main Coordinator</text>
+          <rect x="80" y="284" width="110" height="22" rx="3" fill="#fff" stroke="#a4cae8"/>
+          <text x="135" y="298" font-size="9.5" text-anchor="middle" fill="#2b6cb0" font-weight="600">app.js</text>
+          <text x="80" y="324" fill="#4a5568" font-size="9.5" font-weight="500">Functions:</text>
+          <text x="80" y="340" fill="#718096" font-size="9">• Hash Routing</text>
+          <text x="80" y="354" fill="#718096" font-size="9">• DOM Init Boot</text>
+          <text x="80" y="368" fill="#718096" font-size="9">• Toast Messages</text>
+          <text x="80" y="382" fill="#718096" font-size="9">• Navigation Link</text>
+
+          <!-- Logical Modules -->
+          <rect x="216" y="254" width="364" height="144" rx="4" fill="#f0f7fc" stroke="#a4cae8" stroke-width="1"/>
+          <text x="226" y="272" fill="#2c5282" font-size="11" font-weight="bold">System Controllers &amp; Functional Scripts (js/)</text>
+          
+          <!-- auth.js -->
+          <g transform="translate(226, 284)">
+            <rect width="104" height="42" rx="3" fill="#fff" stroke="#cbd5e0"/>
+            <text x="52" y="14" font-size="9.5" text-anchor="middle" fill="#2b6cb0" font-weight="bold">js/auth.js</text>
+            <text x="52" y="26" font-size="8.5" text-anchor="middle" fill="#4a5568">Session &amp; Dashboard</text>
+            <text x="52" y="36" font-size="8.5" text-anchor="middle" fill="#718096">Recent 3-user Suggest</text>
+          </g>
+
+          <!-- korban.js -->
+          <g transform="translate(346, 284)">
+            <rect width="104" height="42" rx="3" fill="#fff" stroke="#cbd5e0"/>
+            <text x="52" y="14" font-size="9.5" text-anchor="middle" fill="#2b6cb0" font-weight="bold">js/korban.js</text>
+            <text x="52" y="26" font-size="8.5" text-anchor="middle" fill="#4a5568">Qurban &amp; Installments</text>
+            <text x="52" y="36" font-size="8.5" text-anchor="middle" fill="#718096">Receipt &amp; Payment</text>
+          </g>
+
+          <!-- events.js -->
+          <g transform="translate(466, 284)">
+            <rect width="104" height="42" rx="3" fill="#fff" stroke="#cbd5e0"/>
+            <text x="52" y="14" font-size="9.5" text-anchor="middle" fill="#2b6cb0" font-weight="bold">js/events.js</text>
+            <text x="52" y="26" font-size="8.5" text-anchor="middle" fill="#4a5568">Events Registry</text>
+            <text x="52" y="36" font-size="8.5" text-anchor="middle" fill="#718096">Announcements Feed</text>
+          </g>
+
+          <!-- prayer-engine.js -->
+          <g transform="translate(226, 342)">
+            <rect width="164" height="44" rx="3" fill="#fff" stroke="#cbd5e0"/>
+            <text x="82" y="14" font-size="9.5" text-anchor="middle" fill="#2b6cb0" font-weight="bold">js/prayer-engine.js</text>
+            <text x="82" y="26" font-size="8.5" text-anchor="middle" fill="#4a5568">Prayer API Integration</text>
+            <text x="82" y="38" font-size="8.5" text-anchor="middle" fill="#718096">Offline Storage (Local Cache)</text>
+          </g>
+
+          <!-- mock-toyyibpay.html -->
+          <g transform="translate(406, 342)">
+            <rect width="164" height="44" rx="3" fill="#ffeeb2" stroke="#dcb22e"/>
+            <text x="82" y="14" font-size="9.5" text-anchor="middle" fill="#b7791f" font-weight="bold">mock-toyyibpay.html</text>
+            <text x="82" y="26" font-size="8.5" text-anchor="middle" fill="#744210">FPX Payment Simulator</text>
+            <text x="82" y="38" font-size="8.5" text-anchor="middle" fill="#744210">Full / 3M / 6M (1.5%) Flow</text>
+          </g>
+
+          <!-- API Client Gateway -->
+          <rect x="594" y="254" width="120" height="144" rx="4" fill="#f0f7fc" stroke="#a4cae8" stroke-width="1"/>
+          <text x="654" y="272" fill="#2c5282" font-size="11" font-weight="bold" text-anchor="middle">API Client Gateway</text>
+          <rect x="602" y="284" width="104" height="34" rx="3" fill="#fff" stroke="#a4cae8"/>
+          <text x="654" y="296" font-size="8.5" text-anchor="middle" fill="#2b6cb0" font-weight="bold">js/supabase-client.js</text>
+          <text x="654" y="308" font-size="8" text-anchor="middle" fill="#718096">Config &amp; Client Init</text>
+          <text x="654" y="334" fill="#4a5568" font-size="9" text-anchor="middle" font-weight="500">API Wrapper</text>
+          <text x="654" y="348" fill="#718096" font-size="8" text-anchor="middle">Supabase client initialization</text>
+          <text x="654" y="360" fill="#718096" font-size="8" text-anchor="middle">Handles POST/GET to DB</text>
+        </g>
+
+        <!-- ================= TIER 3: DATABASE STORAGE LAYER ================= -->
+        <g filter="url(#shadow)">
+          <!-- Main Box -->
+          <rect x="50" y="460" width="680" height="170" rx="8" fill="#ffffff" stroke="#2196A4" stroke-width="1.5"/>
+          <!-- Header Block -->
+          <rect x="50" y="460" width="680" height="32" rx="8" fill="#2196A4"/>
+          <rect x="50" y="484" width="680" height="8" fill="#2196A4"/>
+          <text x="390" y="481" fill="#ffffff" font-size="13" font-weight="bold" text-anchor="middle">TIER 3: DATABASE STORAGE LAYER (SUPABASE BACKEND-AS-A-SERVICE)</text>
+
+          <!-- Left DB info -->
+          <rect x="70" y="504" width="220" height="110" rx="4" fill="#e6f7f8" stroke="#a8dce2" stroke-width="1"/>
+          <text x="80" y="522" fill="#005d68" font-size="11" font-weight="bold">Supabase PostgreSQL Engine</text>
+          <text x="80" y="540" fill="#2d3748" font-size="9.5" font-weight="bold">Row Level Security (RLS)</text>
+          <text x="80" y="554" fill="#4a5568" font-size="9">Restricts tables to approved operations</text>
+          <text x="80" y="574" fill="#2d3748" font-size="9.5" font-weight="bold">PostgREST RESTful API</text>
+          <text x="80" y="588" fill="#4a5568" font-size="9">Dynamic HTTP CRUD mappings</text>
+          <text x="80" y="602" fill="#718096" font-size="8.5">supabase-schema.sql definitions</text>
+
+          <!-- Schema Tables list -->
+          <rect x="304" y="504" width="410" height="110" rx="4" fill="#e6f7f8" stroke="#a8dce2" stroke-width="1"/>
+          <text x="314" y="522" fill="#005d68" font-size="11" font-weight="bold">Relational Database Schemas &amp; Storage Entities</text>
+          
+          <!-- Table Grid -->
+          <g transform="translate(314, 532)">
+            <rect width="90" height="20" rx="3" fill="#fff" stroke="#cbd5e0"/>
+            <text x="45" y="13" font-size="8.5" text-anchor="middle" fill="#0d5a63" font-weight="bold">profiles</text>
+          </g>
+          <g transform="translate(412, 532)">
+            <rect width="90" height="20" rx="3" fill="#fff" stroke="#cbd5e0"/>
+            <text x="45" y="13" font-size="8.5" text-anchor="middle" fill="#0d5a63" font-weight="bold">admins</text>
+          </g>
+          <g transform="translate(510, 532)">
+            <rect width="90" height="20" rx="3" fill="#fff" stroke="#cbd5e0"/>
+            <text x="45" y="13" font-size="8.5" text-anchor="middle" fill="#0d5a63" font-weight="bold">mosques</text>
+          </g>
+          <g transform="translate(608, 532)">
+            <rect width="90" height="20" rx="3" fill="#fff" stroke="#cbd5e0"/>
+            <text x="45" y="13" font-size="8.5" text-anchor="middle" fill="#0d5a63" font-weight="bold">events</text>
+          </g>
+
+          <g transform="translate(314, 558)">
+            <rect width="90" height="20" rx="3" fill="#fff" stroke="#cbd5e0"/>
+            <text x="45" y="13" font-size="8.5" text-anchor="middle" fill="#0d5a63" font-weight="bold">registrations</text>
+          </g>
+          <g transform="translate(412, 558)">
+            <rect width="90" height="20" rx="3" fill="#fff" stroke="#cbd5e0"/>
+            <text x="45" y="13" font-size="8.5" text-anchor="middle" fill="#0d5a63" font-weight="bold">announcements</text>
+          </g>
+          <g transform="translate(510, 558)">
+            <rect width="98" height="20" rx="3" fill="#fff" stroke="#cbd5e0"/>
+            <text x="49" y="13" font-size="8.5" text-anchor="middle" fill="#0d5a63" font-weight="bold">korban_campaigns</text>
+          </g>
+          <g transform="translate(614, 558)">
+            <rect width="90" height="20" rx="3" fill="#fff" stroke="#cbd5e0"/>
+            <text x="45" y="13" font-size="8.5" text-anchor="middle" fill="#0d5a63" font-weight="bold">korban_participants</text>
+          </g>
+
+          <!-- korban_participants fields notice -->
+          <text x="314" y="598" fill="#718096" font-size="9" font-style="italic">korban_participants stores: payment_status (pending/paid/rejected/cancelled), method (full/installment_3/installment_6)</text>
+        </g>
+
+        <!-- ================= EXTERNAL CLOUD SERVICES ================= -->
+        <g filter="url(#shadow)">
+          <rect x="760" y="80" width="160" height="500" rx="8" fill="#ffffff" stroke="#cbd5e0" stroke-width="1.5" stroke-dasharray="4,4"/>
+          <text x="840" y="105" fill="#4a5568" font-size="12" font-weight="bold" text-anchor="middle">EXTERNAL API &amp; SERVICES</text>
+          <line x1="760" y1="120" x2="920" y2="120" stroke="#cbd5e0" stroke-width="1.5"/>
+
+          <!-- CDNs -->
+          <g transform="translate(775, 140)">
+            <rect width="130" height="56" rx="4" fill="#f7fafc" stroke="#e2e8f0"/>
+            <text x="65" y="16" font-size="10.5" font-weight="bold" text-anchor="middle" fill="#4a5568">Frontend CDNs</text>
+            <text x="65" y="32" font-size="9" text-anchor="middle" fill="#718096">• Font Awesome CSS</text>
+            <text x="65" y="46" font-size="9" text-anchor="middle" fill="#718096">• Google Fonts API</text>
+          </g>
+
+          <!-- ToyyibPay -->
+          <g transform="translate(775, 275)">
+            <rect width="130" height="80" rx="4" fill="#fffaf0" stroke="#fbd38d"/>
+            <text x="65" y="18" font-size="11" font-weight="bold" text-anchor="middle" fill="#dd6b20">ToyyibPay Gateway</text>
+            <text x="65" y="36" font-size="9" text-anchor="middle" fill="#718096">Simulated B2B</text>
+            <text x="65" y="48" font-size="9" text-anchor="middle" fill="#718096">Internet Banking</text>
+            <text x="65" y="60" font-size="9" text-anchor="middle" fill="#718096">(FPX Redirects &amp;</text>
+            <text x="65" y="72" font-size="9" text-anchor="middle" fill="#718096">Status Callbacks)</text>
+          </g>
+
+          <!-- Jakim Prayer Times -->
+          <g transform="translate(775, 435)">
+            <rect width="130" height="80" rx="4" fill="#ebf8ff" stroke="#bee3f8"/>
+            <text x="65" y="18" font-size="11" font-weight="bold" text-anchor="middle" fill="#3182ce">Prayer Times APIs</text>
+            <text x="65" y="36" font-size="9" text-anchor="middle" fill="#718096">• Jakim Malaysia e-Solat</text>
+            <text x="65" y="48" font-size="9" text-anchor="middle" fill="#718096">• Aladhan REST API</text>
+            <text x="65" y="62" font-size="9" text-anchor="middle" fill="#718096">Fallback design inside</text>
+            <text x="65" y="74" font-size="9" text-anchor="middle" fill="#718096">prayer-engine.js</text>
+          </g>
+        </g>
+
+        <!-- ================= CONNECTORS (ARROWS) ================= -->
+        <!-- Tier 1 to Tier 2 (Downward arrow in center) -->
+        <line x1="390" y1="160" x2="390" y2="204" stroke="#1a1a2e" stroke-width="2" marker-end="url(#arrow)"/>
+        <rect x="290" y="172" width="200" height="20" rx="3" fill="#1a1a2e"/>
+        <text x="390" y="186" fill="#ffffff" font-size="9.5" font-weight="600" text-anchor="middle">Asynchronous Event Promises</text>
+
+        <!-- Tier 2 to Tier 3 (Downward arrow in center) -->
+        <line x1="390" y1="410" x2="390" y2="454" stroke="#2e6da4" stroke-width="2" marker-end="url(#arrow-blue)"/>
+        <rect x="280" y="422" width="220" height="20" rx="3" fill="#2e6da4"/>
+        <text x="390" y="436" fill="#ffffff" font-size="9.5" font-weight="600" text-anchor="middle">HTTPS PostgREST API Gateway &amp; RLS Policies</text>
+
+        <!-- CDNs connector to Tier 1 -->
+        <path d="M 775,168 L 730,168" fill="none" stroke="#718096" stroke-dasharray="2,2" stroke-width="1.5" marker-end="url(#arrow)"/>
+        <text x="752" y="160" fill="#718096" font-size="8" text-anchor="middle">Static Resources</text>
+
+        <!-- ToyyibPay connector to Tier 2 -->
+        <path d="M 775,315 L 570,364" fill="none" stroke="#dd6b20" stroke-width="1.5" marker-end="url(#arrow-teal)"/>
+        <text x="682" y="328" fill="#dd6b20" font-size="8.5" font-weight="bold">Callback Webhook / Redirect</text>
+
+        <!-- Jakim Prayer API connector to prayer-engine.js -->
+        <path d="M 775,475 L 390,386" fill="none" stroke="#3182ce" stroke-width="1.5" marker-end="url(#arrow-blue)"/>
+        <text x="620" y="445" fill="#3182ce" font-size="8.5" font-weight="bold">REST JSON Payload</text>
+
+      </svg>
+    </div>
+  </div>
+
+  <script>
+    // [ No, Task Name, startWeek, endWeek (inclusive), cssClass ]
+    const tasks = [
+      [1,  'Project Title & Scope Definition',          1,  1,  'planning'],
+      [2,  'Literature Review',                         1,  3,  'planning'],
+      [3,  'System Requirements Analysis (SRS)',        3,  4,  'analysis'],
+      [4,  'System Architecture & Database Design',     4,  5,  'analysis'],
+      [5,  'UI/UX Prototyping & Wireframing',           5,  6,  'design'],
+      [6,  'Database Setup (Supabase)',                 5,  6,  'design'],
+      [7,  'Frontend Development – Core Pages',         6,  8,  'dev'],
+      [8,  'Authentication & User Portal',              7,  9,  'dev'],
+      [9,  'Events & Announcement Module',              8,  10, 'dev'],
+      [10, 'Qurban (Korban) Payment Module',            9,  11, 'integration'],
+      [11, 'Admin Dashboard & Approval System',         10, 11, 'integration'],
+      [12, 'ToyyibPay Payment Gateway Integration',     11, 12, 'integration'],
+      [13, 'System Testing & Bug Fixing',               12, 13, 'testing'],
+      [14, 'User Acceptance Testing (UAT)',             13, 13, 'testing'],
+      [15, 'Documentation & Report Writing',            12, 14, 'docs'],
+      [16, 'Final Presentation & Submission',           14, 14, 'docs'],
+    ];
+
+    const tbody = document.getElementById('gantt-body');
+
+    tasks.forEach(([no, name, start, end, cls]) => {
+      const tr = document.createElement('tr');
+
+      // No column
+      const tdNo = document.createElement('td');
+      tdNo.className = 'col-no';
+      tdNo.textContent = no;
+      tr.appendChild(tdNo);
+
+      // Task name column
+      const tdName = document.createElement('td');
+      tdName.className = 'col-task';
+      tdName.textContent = name;
+      tr.appendChild(tdName);
+
+      // 14 week columns
+      for (let w = 1; w <= 14; w++) {
+        const td = document.createElement('td');
+        if (w >= start && w <= end) {
+          const bar = document.createElement('span');
+          bar.className = `bar ${cls}`;
+          td.appendChild(bar);
+        }
+        tr.appendChild(td);
+      }
+
+      tbody.appendChild(tr);
+    });
+  </script>
+
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <!--                    ERD SECTION                                   -->
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+
+  <style>
+    .erd-section {
+      margin-top: 50px;
+      padding-top: 36px;
+      border-top: 2px dashed #e0e0e8;
+      page-break-before: always;
+    }
+    .erd-section h2 {
+      font-size: 16px;
+      font-weight: 700;
+      color: #1a1a2e;
+      text-align: center;
+      margin-bottom: 6px;
+    }
+    .erd-section .erd-desc {
+      font-size: 11.5px;
+      color: #555;
+      text-align: center;
+      margin-bottom: 22px;
+      line-height: 1.5;
+    }
+    .erd-wrap {
+      background: #f8f9fb;
+      border: 1px solid #dde1ea;
+      border-radius: 8px;
+      padding: 20px;
+      overflow-x: auto;
+    }
+    .erd-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+      margin-top: 16px;
+      justify-content: center;
+      font-size: 11px;
+      color: #555;
+    }
+    .erd-legend span {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .erd-legend span::before {
+      content: '';
+      display: inline-block;
+      width: 28px;
+      height: 3px;
+      border-radius: 2px;
+    }
+    .leg-pk::before  { background: #d4a017; }
+    .leg-fk::before  { background: #3182ce; }
+    .leg-one::before { background: #1a1a2e; }
+    .leg-rel::before { background: #888; border-top: 2px dashed #888; height: 0; }
+    @media print {
+      .erd-section { border-top: none; }
+    }
+  </style>
+
+  <div class="erd-section">
+    <h2>Entity Relationship Diagram (ERD)</h2>
+    <p class="erd-desc">i@masjid Mosque Management System — Supabase PostgreSQL Database Schema<br>
+      Showing all 8 entities, their attributes, primary keys (PK), foreign keys (FK), and relationships.</p>
+
+    <div class="erd-wrap">
+      <svg viewBox="0 0 1060 395" width="100%" xmlns="http://www.w3.org/2000/svg"
+           style="font-family:'Segoe UI',Arial,sans-serif; display:block;">
+        <defs>
+          <marker id="erd-arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+            <path d="M0,1.5 L8,5 L0,8.5" fill="none" stroke="#3182ce" stroke-width="1.6"/>
+          </marker>
+          <marker id="erd-one" viewBox="-2 -6 10 12" refX="0" refY="0" markerWidth="7" markerHeight="7" orient="auto">
+            <line x1="0" y1="-5" x2="0" y2="5" stroke="#3182ce" stroke-width="1.5"/>
+            <line x1="4" y1="-5" x2="4" y2="5" stroke="#3182ce" stroke-width="1.5"/>
+          </marker>
+          <marker id="erd-many" viewBox="-4 -6 14 12" refX="0" refY="0" markerWidth="7" markerHeight="7" orient="auto">
+            <line x1="0" y1="-5" x2="0" y2="5" stroke="#3182ce" stroke-width="1.5"/>
+            <line x1="-3" y1="-5" x2="6" y2="0" stroke="#3182ce" stroke-width="1.5"/>
+            <line x1="-3" y1="5"  x2="6" y2="0" stroke="#3182ce" stroke-width="1.5"/>
+          </marker>
+          <filter id="ts">
+            <feDropShadow dx="0" dy="1" stdDeviation="2" flood-color="#00000012"/>
+          </filter>
+        </defs>
+
+        <!-- Background -->
+        <rect width="1060" height="395" fill="#f8f9fb" rx="8"/>
+
+        <!-- ═══════════════ COLUMN 1 ═══════════════ -->
+        <g transform="translate(12, 0)">
+          <!-- profiles (y=8, h=120) -->
+          <g filter="url(#ts)">
+            <rect x="8" y="8" width="185" height="22" rx="4" fill="#2e7d32"/>
+            <rect x="8" y="24" width="185" height="6" fill="#2e7d32"/>
+            <text x="100" y="22" fill="#fff" font-size="10.5" font-weight="bold" text-anchor="middle">profiles</text>
+            <rect x="8" y="30" width="185" height="14" fill="#f0fff4"/>
+            <text x="15" y="41" font-size="8" font-weight="bold" fill="#276749">🔑 id</text>
+            <text x="188" y="41" font-size="7.5" fill="#a0aec0" text-anchor="end">serial PK</text>
+            <line x1="8" y1="44" x2="193" y2="44" stroke="#e2e8f0" stroke-width=".8"/>
+            <text x="15" y="55" font-size="8" fill="#2d3748">first_name</text><text x="188" y="55" font-size="7.5" fill="#a0aec0" text-anchor="end">text NN</text>
+            <line x1="8" y1="58" x2="193" y2="58" stroke="#e2e8f0" stroke-width=".8"/>
+            <text x="15" y="69" font-size="8" fill="#2d3748">last_name</text><text x="188" y="69" font-size="7.5" fill="#a0aec0" text-anchor="end">text NN</text>
+            <line x1="8" y1="72" x2="193" y2="72" stroke="#e2e8f0" stroke-width=".8"/>
+            <text x="15" y="83" font-size="8" fill="#2d3748">email</text><text x="188" y="83" font-size="7.5" fill="#a0aec0" text-anchor="end">text UNIQUE NN</text>
+            <line x1="8" y1="86" x2="193" y2="86" stroke="#e2e8f0" stroke-width=".8"/>
+            <text x="15" y="97" font-size="8" fill="#2d3748">phone_number</text><text x="188" y="97" font-size="7.5" fill="#a0aec0" text-anchor="end">text</text>
+            <line x1="8" y1="100" x2="193" y2="100" stroke="#e2e8f0" stroke-width=".8"/>
+            <text x="15" y="111" font-size="8" fill="#2d3748">password</text><text x="188" y="111" font-size="7.5" fill="#a0aec0" text-anchor="end">text NN</text>
+            <line x1="8" y1="114" x2="193" y2="114" stroke="#e2e8f0" stroke-width=".8"/>
+            <text x="15" y="125" font-size="8" fill="#2d3748">updated_at</text><text x="188" y="125" font-size="7.5" fill="#a0aec0" text-anchor="end">timestamptz</text>
+            <rect x="8" y="8" width="185" height="120" rx="4" fill="none" stroke="#2e7d32" stroke-width="1.2"/>
+          </g>
+
+          <!-- admins (y=138, h=78) -->
+          <g filter="url(#ts)">
+            <rect x="8" y="138" width="185" height="22" rx="4" fill="#c62828"/>
+            <rect x="8" y="154" width="185" height="6" fill="#c62828"/>
+            <text x="100" y="152" fill="#fff" font-size="10.5" font-weight="bold" text-anchor="middle">admins</text>
+            <rect x="8" y="160" width="185" height="14" fill="#fff5f5"/>
+            <text x="15" y="171" font-size="8" font-weight="bold" fill="#c53030">🔑 id</text>
+            <text x="188" y="171" font-size="7.5" fill="#a0aec0" text-anchor="end">serial PK</text>
+            <line x1="8" y1="174" x2="193" y2="174" stroke="#e2e8f0" stroke-width=".8"/>
+            <text x="15" y="185" font-size="8" fill="#2d3748">email</text><text x="188" y="185" font-size="7.5" fill="#a0aec0" text-anchor="end">text UNIQUE NN</text>
+            <line x1="8" y1="188" x2="193" y2="188" stroke="#e2e8f0" stroke-width=".8"/>
+            <text x="15" y="199" font-size="8" fill="#2d3748">password</text><text x="188" y="199" font-size="7.5" fill="#a0aec0" text-anchor="end">text NN</text>
+            <line x1="8" y1="202" x2="193" y2="202" stroke="#e2e8f0" stroke-width=".8"/>
+            <text x="15" y="213" font-size="8" fill="#2d3748">name</text><text x="188" y="213" font-size="7.5" fill="#a0aec0" text-anchor="end">text NN</text>
+            <rect x="8" y="138" width="185" height="78" rx="4" fill="none" stroke="#c62828" stroke-width="1.2"/>
+          </g>
+        </g>
+
+        <!-- ═══════════════ COLUMN 2 ═══════════════ -->
+        <g transform="translate(52, 0)">
+          <!-- mosques (y=8, h=106) -->
+          <g filter="url(#ts)">
+            <rect x="203" y="8" width="185" height="22" rx="4" fill="#1a1a2e"/>
+            <rect x="203" y="24" width="185" height="6" fill="#1a1a2e"/>
+            <text x="295" y="22" fill="#fff" font-size="10.5" font-weight="bold" text-anchor="middle">mosques</text>
+            <rect x="203" y="30" width="185" height="14" fill="#fef9e7"/>
+            <text x="210" y="41" font-size="8" font-weight="bold" fill="#b7791f">🔑 id</text>
+            <text x="383" y="41" font-size="7.5" fill="#a0aec0" text-anchor="end">uuid PK</text>
+            <line x1="203" y1="44" x2="388" y2="44" stroke="#e2e8f0" stroke-width=".8"/>
+            <text x="210" y="55" font-size="8" fill="#2d3748">name</text><text x="383" y="55" font-size="7.5" fill="#a0aec0" text-anchor="end">text NN</text>
+            <line x1="203" y1="58" x2="388" y2="58" stroke="#e2e8f0" stroke-width=".8"/>
+            <text x="210" y="69" font-size="8" fill="#2d3748">zone_code</text><text x="383" y="69" font-size="7.5" fill="#a0aec0" text-anchor="end">text</text>
+            <line x1="203" y1="72" x2="388" y2="72" stroke="#e2e8f0" stroke-width=".8"/>
+            <text x="210" y="83" font-size="8" fill="#2d3748">address</text><text x="383" y="83" font-size="7.5" fill="#a0aec0" text-anchor="end">text</text>
+            <line x1="203" y1="86" x2="388" y2="86" stroke="#e2e8f0" stroke-width=".8"/>
+            <text x="210" y="97" font-size="8" fill="#2d3748">state</text><text x="383" y="97" font-size="7.5" fill="#a0aec0" text-anchor="end">text</text>
+            <line x1="203" y1="100" x2="388" y2="100" stroke="#e2e8f0" stroke-width=".8"/>
+            <text x="210" y="111" font-size="8" fill="#2d3748">created_at</text><text x="383" y="111" font-size="7.5" fill="#a0aec0" text-anchor="end">timestamptz</text>
+            <rect x="203" y="8" width="185" height="106" rx="4" fill="none" stroke="#1a1a2e" stroke-width="1.2"/>
+          </g>
+
+          <!-- announcements (y=124, h=106) -->
+          <g filter="url(#ts)">
+            <rect x="203" y="124" width="185" height="22" rx="4" fill="#2196A4"/>
+            <rect x="203" y="140" width="185" height="6" fill="#2196A4"/>
+            <text x="295" y="138" fill="#fff" font-size="10.5" font-weight="bold" text-anchor="middle">announcements</text>
+            <rect x="203" y="146" width="185" height="14" fill="#e6f7f8"/>
+            <text x="210" y="157" font-size="8" font-weight="bold" fill="#0d5a63">🔑 id</text>
+            <text x="383" y="157" font-size="7.5" fill="#a0aec0" text-anchor="end">uuid PK</text>
+            <line x1="203" y1="160" x2="388" y2="160" stroke="#e2e8f0" stroke-width=".8"/>
+            <rect x="203" y="160" width="185" height="14" fill="#eff6ff"/>
+            <text x="210" y="171" font-size="8" font-weight="bold" fill="#3182ce">🔗 mosque_id</text>
+            <text x="383" y="171" font-size="7.5" fill="#3182ce" text-anchor="end">uuid FK→mosques</text>
+            <line x1="203" y1="174" x2="388" y2="174" stroke="#e2e8f0" stroke-width=".8"/>
+            <text x="210" y="185" font-size="8" fill="#2d3748">title</text><text x="383" y="185" font-size="7.5" fill="#a0aec0" text-anchor="end">text NN</text>
+            <line x1="203" y1="188" x2="388" y2="188" stroke="#e2e8f0" stroke-width=".8"/>
+            <text x="210" y="199" font-size="8" fill="#2d3748">content</text><text x="383" y="199" font-size="7.5" fill="#a0aec0" text-anchor="end">text</text>
+            <line x1="203" y1="202" x2="388" y2="202" stroke="#e2e8f0" stroke-width=".8"/>
+            <text x="210" y="213" font-size="8" fill="#2d3748">is_pinned</text><text x="383" y="213" font-size="7.5" fill="#a0aec0" text-anchor="end">bool default false</text>
+            <line x1="203" y1="216" x2="388" y2="216" stroke="#e2e8f0" stroke-width=".8"/>
+            <text x="210" y="227" font-size="8" fill="#2d3748">created_at</text><text x="383" y="227" font-size="7.5" fill="#a0aec0" text-anchor="end">timestamptz</text>
+            <rect x="203" y="124" width="185" height="106" rx="4" fill="none" stroke="#2196A4" stroke-width="1.2"/>
+          </g>
+
+          <!-- korban_campaigns (y=240, h=120) -->
+          <g filter="url(#ts)">
+            <rect x="203" y="240" width="185" height="22" rx="4" fill="#1a3a6e"/>
+            <rect x="203" y="256" width="185" height="6" fill="#1a3a6e"/>
+            <text x="295" y="254" fill="#fff" font-size="10.5" font-weight="bold" text-anchor="middle">korban_campaigns</text>
+            <rect x="203" y="262" width="185" height="14" fill="#edf2ff"/>
+            <text x="210" y="273" font-size="8" font-weight="bold" fill="#1a3a6e">🔑 id</text>
+            <text x="383" y="273" font-size="7.5" fill="#a0aec0" text-anchor="end">serial PK</text>
+            <line x1="203" y1="276" x2="388" y2="276" stroke="#e2e8f0" stroke-width=".8"/>
+            <rect x="203" y="276" width="185" height="14" fill="#eff6ff"/>
+            <text x="210" y="287" font-size="8" font-weight="bold" fill="#3182ce">🔗 mosque_id</text>
+            <text x="383" y="287" font-size="7.5" fill="#3182ce" text-anchor="end">uuid FK→mosques</text>
+            <line x1="203" y1="290" x2="388" y2="290" stroke="#e2e8f0" stroke-width=".8"/>
+            <text x="210" y="301" font-size="8" fill="#2d3748">year</text><text x="383" y="301" font-size="7.5" fill="#a0aec0" text-anchor="end">integer NN</text>
+            <line x1="203" y1="304" x2="388" y2="304" stroke="#e2e8f0" stroke-width=".8"/>
+            <text x="210" y="315" font-size="8" fill="#2d3748">animal_type</text><text x="383" y="315" font-size="7.5" fill="#a0aec0" text-anchor="end">text (Lembu/Kambing)</text>
+            <line x1="203" y1="318" x2="388" y2="318" stroke="#e2e8f0" stroke-width=".8"/>
+            <text x="210" y="329" font-size="8" fill="#2d3748">price_per_part</text><text x="383" y="329" font-size="7.5" fill="#a0aec0" text-anchor="end">numeric(10,2)</text>
+            <line x1="203" y1="332" x2="388" y2="332" stroke="#e2e8f0" stroke-width=".8"/>
+            <text x="210" y="343" font-size="8" fill="#2d3748">total_parts</text><text x="383" y="343" font-size="7.5" fill="#a0aec0" text-anchor="end">integer NN</text>
+            <line x1="203" y1="346" x2="388" y2="346" stroke="#e2e8f0" stroke-width=".8"/>
+            <text x="210" y="357" font-size="8" fill="#2d3748">created_at</text><text x="383" y="357" font-size="7.5" fill="#a0aec0" text-anchor="end">timestamptz</text>
+            <rect x="203" y="240" width="185" height="120" rx="4" fill="none" stroke="#1a3a6e" stroke-width="1.2"/>
+          </g>
+        </g>
+
+        <!-- ═══════════════ COLUMN 3 ═══════════════ -->
+        <g transform="translate(92, 0)">
+          <!-- events (y=8, h=196) -->
+          <g filter="url(#ts)">
+            <rect x="398" y="8" width="220" height="22" rx="4" fill="#6a1b9a"/>
+            <rect x="398" y="24" width="220" height="6" fill="#6a1b9a"/>
+            <text x="508" y="22" fill="#fff" font-size="10.5" font-weight="bold" text-anchor="middle">events</text>
+            <rect x="398" y="30" width="220" height="14" fill="#faf5ff"/>
+            <text x="405" y="41" font-size="8" font-weight="bold" fill="#6b21a8">🔑 id</text>
+            <text x="613" y="41" font-size="7.5" fill="#a0aec0" text-anchor="end">text PK</text>
+            <line x1="398" y1="44" x2="618" y2="44" stroke="#e2e8f0" stroke-width=".8"/>
+            <rect x="398" y="44" width="220" height="14" fill="#eff6ff"/>
+            <text x="405" y="55" font-size="8" font-weight="bold" fill="#3182ce">🔗 mosque_id</text>
+            <text x="613" y="55" font-size="7.5" fill="#3182ce" text-anchor="end">uuid FK→mosques</text>
+            <line x1="398" y1="58" x2="618" y2="58" stroke="#e2e8f0" stroke-width=".8"/>
+            <text x="405" y="69" font-size="8" fill="#2d3748">title</text><text x="613" y="69" font-size="7.5" fill="#a0aec0" text-anchor="end">text NN</text>
+            <line x1="398" y1="72" x2="618" y2="72" stroke="#e2e8f0" stroke-width=".8"/>
+            <text x="405" y="83" font-size="8" fill="#2d3748">description</text><text x="613" y="83" font-size="7.5" fill="#a0aec0" text-anchor="end">text</text>
+            <line x1="398" y1="86" x2="618" y2="86" stroke="#e2e8f0" stroke-width=".8"/>
+            <text x="405" y="97" font-size="8" fill="#2d3748">category</text><text x="613" y="97" font-size="7.5" fill="#a0aec0" text-anchor="end">text (religious/edu/comm/charity)</text>
+            <line x1="398" y1="100" x2="618" y2="100" stroke="#e2e8f0" stroke-width=".8"/>
+            <text x="405" y="111" font-size="8" fill="#2d3748">date</text><text x="613" y="111" font-size="7.5" fill="#a0aec0" text-anchor="end">date NN</text>
+            <line x1="398" y1="114" x2="618" y2="114" stroke="#e2e8f0" stroke-width=".8"/>
+            <text x="405" y="125" font-size="8" fill="#2d3748">time_range</text><text x="613" y="125" font-size="7.5" fill="#a0aec0" text-anchor="end">text</text>
+            <line x1="398" y1="128" x2="618" y2="128" stroke="#e2e8f0" stroke-width=".8"/>
+            <text x="405" y="139" font-size="8" fill="#2d3748">speaker</text><text x="613" y="139" font-size="7.5" fill="#a0aec0" text-anchor="end">text</text>
+            <line x1="398" y1="142" x2="618" y2="142" stroke="#e2e8f0" stroke-width=".8"/>
+            <text x="405" y="153" font-size="8" fill="#2d3748">location</text><text x="613" y="153" font-size="7.5" fill="#a0aec0" text-anchor="end">text</text>
+            <line x1="398" y1="156" x2="618" y2="156" stroke="#e2e8f0" stroke-width=".8"/>
+            <text x="405" y="167" font-size="8" fill="#2d3748">capacity</text><text x="613" y="167" font-size="7.5" fill="#a0aec0" text-anchor="end">int default 100</text>
+            <line x1="398" y1="170" x2="618" y2="170" stroke="#e2e8f0" stroke-width=".8"/>
+            <text x="405" y="181" font-size="8" fill="#2d3748">icon_fa / image_url</text><text x="613" y="181" font-size="7.5" fill="#a0aec0" text-anchor="end">text</text>
+            <line x1="398" y1="184" x2="618" y2="184" stroke="#e2e8f0" stroke-width=".8"/>
+            <text x="405" y="195" font-size="8" fill="#2d3748">created_at</text><text x="613" y="195" font-size="7.5" fill="#a0aec0" text-anchor="end">timestamptz</text>
+            <rect x="398" y="8" width="220" height="196" rx="4" fill="none" stroke="#6a1b9a" stroke-width="1.2"/>
+          </g>
+
+          <!-- registrations (y=214, h=106) -->
+          <g filter="url(#ts)">
+            <rect x="398" y="214" width="220" height="22" rx="4" fill="#e65100"/>
+            <rect x="398" y="230" width="220" height="6" fill="#e65100"/>
+            <text x="508" y="228" fill="#fff" font-size="10.5" font-weight="bold" text-anchor="middle">registrations</text>
+            <rect x="398" y="236" width="220" height="14" fill="#fff8f1"/>
+            <text x="405" y="247" font-size="8" font-weight="bold" fill="#c05621">🔑 id</text>
+            <text x="613" y="247" font-size="7.5" fill="#a0aec0" text-anchor="end">serial PK</text>
+            <line x1="398" y1="250" x2="618" y2="250" stroke="#e2e8f0" stroke-width=".8"/>
+            <rect x="398" y="250" width="220" height="14" fill="#eff6ff"/>
+            <text x="405" y="261" font-size="8" font-weight="bold" fill="#3182ce">🔗 event_id</text>
+            <text x="613" y="261" font-size="7.5" fill="#3182ce" text-anchor="end">text FK→events</text>
+            <line x1="398" y1="264" x2="618" y2="264" stroke="#e2e8f0" stroke-width=".8"/>
+            <text x="405" y="275" font-size="8" fill="#2d3748">name</text><text x="613" y="275" font-size="7.5" fill="#a0aec0" text-anchor="end">text NN</text>
+            <line x1="398" y1="278" x2="618" y2="278" stroke="#e2e8f0" stroke-width=".8"/>
+            <text x="405" y="289" font-size="8" fill="#2d3748">email</text><text x="613" y="289" font-size="7.5" fill="#a0aec0" text-anchor="end">text NN</text>
+            <line x1="398" y1="292" x2="618" y2="292" stroke="#e2e8f0" stroke-width=".8"/>
+            <text x="405" y="303" font-size="8" fill="#2d3748">phone_number</text><text x="613" y="303" font-size="7.5" fill="#a0aec0" text-anchor="end">text</text>
+            <line x1="398" y1="306" x2="618" y2="306" stroke="#e2e8f0" stroke-width=".8"/>
+            <text x="405" y="317" font-size="8" fill="#2d3748">registered_at</text><text x="613" y="317" font-size="7.5" fill="#a0aec0" text-anchor="end">timestamptz</text>
+            <line x1="398" y1="320" x2="618" y2="320" stroke="#e2e8f0" stroke-width=".8"/>
+            <text x="405" y="331" font-size="8" fill="#718096" font-style="italic">UNIQUE(email, event_id)</text>
+            <rect x="398" y="214" width="220" height="120" rx="4" fill="none" stroke="#e65100" stroke-width="1.2"/>
+          </g>
+        </g>
+
+        <!-- ═══════════════ COLUMN 4 ═══════════════ -->
+        <g transform="translate(132, 0)">
+          <!-- korban_participants (y=8, h=178) -->
+          <g filter="url(#ts)">
+            <rect x="628" y="8" width="262" height="22" rx="4" fill="#d4a017"/>
+            <rect x="628" y="24" width="262" height="6" fill="#d4a017"/>
+            <text x="759" y="22" fill="#fff" font-size="10.5" font-weight="bold" text-anchor="middle">korban_participants</text>
+            <rect x="628" y="30" width="262" height="14" fill="#fffbeb"/>
+            <text x="635" y="41" font-size="8" font-weight="bold" fill="#92400e">🔑 id</text>
+            <text x="885" y="41" font-size="7.5" fill="#a0aec0" text-anchor="end">uuid PK</text>
+            <line x1="628" y1="44" x2="890" y2="44" stroke="#e2e8f0" stroke-width=".8"/>
+            <rect x="628" y="44" width="262" height="14" fill="#eff6ff"/>
+            <text x="635" y="55" font-size="8" font-weight="bold" fill="#3182ce">🔗 campaign_id</text>
+            <text x="885" y="55" font-size="7.5" fill="#3182ce" text-anchor="end">int FK→korban_campaigns</text>
+            <line x1="628" y1="58" x2="890" y2="58" stroke="#e2e8f0" stroke-width=".8"/>
+            <text x="635" y="69" font-size="8" fill="#2d3748">name</text><text x="885" y="69" font-size="7.5" fill="#a0aec0" text-anchor="end">text NN</text>
+            <line x1="628" y1="72" x2="890" y2="72" stroke="#e2e8f0" stroke-width=".8"/>
+            <text x="635" y="83" font-size="8" fill="#2d3748">phone_number</text><text x="885" y="83" font-size="7.5" fill="#a0aec0" text-anchor="end">text NN</text>
+            <line x1="628" y1="86" x2="890" y2="86" stroke="#e2e8f0" stroke-width=".8"/>
+            <text x="635" y="97" font-size="8" fill="#2d3748">parts_qty</text><text x="885" y="97" font-size="7.5" fill="#a0aec0" text-anchor="end">integer NN</text>
+            <line x1="628" y1="100" x2="890" y2="100" stroke="#e2e8f0" stroke-width=".8"/>
+            <text x="635" y="111" font-size="8" fill="#2d3748">payment_status</text><text x="885" y="111" font-size="7.5" fill="#a0aec0" text-anchor="end">text (pending/paid/rejected/cancel)</text>
+            <line x1="628" y1="114" x2="890" y2="114" stroke="#e2e8f0" stroke-width=".8"/>
+            <text x="635" y="125" font-size="8" fill="#2d3748">payment_method</text><text x="885" y="125" font-size="7.5" fill="#a0aec0" text-anchor="end">text (full/install_3/install_6)</text>
+            <line x1="628" y1="128" x2="890" y2="128" stroke="#e2e8f0" stroke-width=".8"/>
+            <text x="635" y="139" font-size="8" fill="#2d3748">installment_months</text><text x="885" y="139" font-size="7.5" fill="#a0aec0" text-anchor="end">int (3 or 6, null=full)</text>
+            <line x1="628" y1="142" x2="890" y2="142" stroke="#e2e8f0" stroke-width=".8"/>
+            <text x="635" y="153" font-size="8" fill="#2d3748">charge_fee</text><text x="885" y="153" font-size="7.5" fill="#a0aec0" text-anchor="end">numeric(10,2) — 1.5% for 6M</text>
+            <line x1="628" y1="156" x2="890" y2="156" stroke="#e2e8f0" stroke-width=".8"/>
+            <text x="635" y="167" font-size="8" fill="#2d3748">registered_at</text><text x="885" y="167" font-size="7.5" fill="#a0aec0" text-anchor="end">timestamptz</text>
+            <rect x="628" y="8" width="262" height="168" rx="4" fill="none" stroke="#d4a017" stroke-width="1.2"/>
+          </g>
+        </g>
+
+        <!-- ═══════════ RELATIONSHIP LINES (crow-foot, 1:N) ═══════════ -->
+
+        <!-- 1) mosques → events (mosques right x=440, y=61 → events left x=490, y=51) -->
+        <line x1="440" y1="61" x2="490" y2="51" stroke="#3182ce" stroke-width="1.6"
+              marker-start="url(#erd-one)" marker-end="url(#erd-many)"/>
+        <text x="465" y="44" font-size="7" fill="#3182ce" font-weight="bold">1:N</text>
+
+        <!-- 2) mosques → announcements (mosques bottom x=347 y=114 → announcements top x=347 y=124) -->
+        <line x1="347" y1="114" x2="347" y2="124" stroke="#3182ce" stroke-width="1.6"
+              marker-start="url(#erd-one)" marker-end="url(#erd-many)"/>
+        <text x="350" y="122" font-size="7" fill="#3182ce" font-weight="bold">1:N</text>
+
+        <!-- 3) mosques → korban_campaigns (route via left of col2) -->
+        <!-- mosques left x=255, mid y≈61 → go left x=244 → down to y=300 → right x=255 -->
+        <polyline points="255,61 244,61 244,300 255,300"
+                  fill="none" stroke="#3182ce" stroke-width="1.6"
+                  marker-start="url(#erd-one)" marker-end="url(#erd-many)"/>
+        <text x="222" y="190" font-size="7" fill="#3182ce" font-weight="bold" transform="rotate(-90,222,190)">1:N</text>
+
+        <!-- 4) events → registrations (events bottom x=600 y=204 → registrations top x=600 y=214) -->
+        <line x1="600" y1="204" x2="600" y2="214" stroke="#3182ce" stroke-width="1.6"
+              marker-start="url(#erd-one)" marker-end="url(#erd-many)"/>
+        <text x="603" y="212" font-size="7" fill="#3182ce" font-weight="bold">1:N</text>
+
+        <!-- 5) korban_campaigns → korban_participants -->
+        <!-- korban_campaigns right x=440 y=350 → route right along y=350 → up to y=51 → right to x=760 -->
+        <polyline points="440,350 740,350 740,51 760,51"
+                  fill="none" stroke="#3182ce" stroke-width="1.6"
+                  marker-start="url(#erd-one)" marker-end="url(#erd-many)"/>
+        <text x="590" y="346" font-size="7" fill="#3182ce" font-weight="bold">1:N</text>
+
+        <!-- Footer bar -->
+        <rect x="8" y="375" width="1044" height="14" rx="4" fill="#1a1a2e" opacity="0.05"/>
+        <text x="530" y="385" font-size="8" text-anchor="middle" fill="#718096">
+          8 Entities · 5 FK Relationships · UUID &amp; Serial PKs · RLS Enabled · Supabase PostgreSQL · i@masjid UTEM FYP
+        </text>
+
+      </svg>
+    </div>
+
+    <!-- Legend -->
+    <div class="erd-legend">
+      <span class="leg-pk">Primary Key (PK) — Yellow highlight row</span>
+      <span class="leg-fk">Foreign Key (FK) — Blue highlight row</span>
+      <span class="leg-one" style="border-top:2px solid #1a1a2e; height:0; width:28px;"></span><span style="margin-left:4px">1 : N Relationship (One-to-Many)</span>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <!--                  DATA DICTIONARY SECTION                        -->
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+
+  <style>
+    .dd-section {
+      margin-top: 50px;
+      padding-top: 36px;
+      border-top: 2px dashed #e0e0e8;
+      page-break-before: always;
+    }
+    .dd-section h2 {
+      font-size: 16px;
+      font-weight: 700;
+      color: #1a1a2e;
+      text-align: center;
+      margin-bottom: 6px;
+    }
+    .dd-section .dd-intro {
+      font-size: 11px;
+      color: #555;
+      text-align: center;
+      margin-bottom: 28px;
+      line-height: 1.6;
+    }
+    .dd-table-block {
+      margin-bottom: 30px;
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .dd-table-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 9px 14px;
+      color: #fff;
+    }
+    .dd-table-header .tbl-name {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+    }
+    .dd-table-header .tbl-desc {
+      font-size: 10.5px;
+      opacity: 0.88;
+      font-style: italic;
+    }
+    .dd-table-block table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11px;
+      min-width: 600px;
+    }
+    .dd-table-block table thead tr th {
+      background: #f0f2f7;
+      color: #2d3748;
+      text-align: left;
+      padding: 7px 10px;
+      font-size: 10.5px;
+      font-weight: 700;
+      border-bottom: 2px solid #d0d5e0;
+      white-space: nowrap;
+    }
+    .dd-table-block table tbody tr td {
+      padding: 6px 10px;
+      border-bottom: 1px solid #edf0f7;
+      vertical-align: middle;
+      color: #2d3748;
+    }
+    .dd-table-block table tbody tr:nth-child(even) td {
+      background: #f8f9fb;
+    }
+    .dd-table-block table tbody tr:last-child td {
+      border-bottom: none;
+    }
+    .dd-table-block table tbody tr:hover td {
+      background: #eef2ff;
+    }
+    /* Key badges */
+    .badge {
+      display: inline-block;
+      padding: 1px 6px;
+      border-radius: 3px;
+      font-size: 9.5px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .badge-pk  { background: #fef3c7; color: #92400e; border: 1px solid #f59e0b; }
+    .badge-fk  { background: #dbeafe; color: #1e40af; border: 1px solid #93c5fd; }
+    .badge-none{ color: #a0aec0; font-size: 10px; }
+    /* Constraint tags */
+    .ct { display: inline-block; font-size: 9px; background: #f1f5f9; color: #4a5568; border-radius: 3px; padding: 1px 5px; margin: 1px 2px 1px 0; border: 1px solid #e2e8f0; }
+    .ct-nn  { background: #fff1f2; color: #9f1239; border-color: #fca5a5; }
+    .ct-uniq{ background: #eff6ff; color: #1d4ed8; border-color: #93c5fd; }
+    .ct-def { background: #f0fdf4; color: #166534; border-color: #86efac; }
+    /* Column widths */
+    .col-no   { width: 38px; text-align: center; }
+    .col-field { width: 160px; font-family: 'Courier New', monospace; font-size: 10.5px; font-weight: 600; color: #1a1a2e; }
+    .col-type  { width: 130px; font-family: 'Courier New', monospace; font-size: 10px; color: #6b46c1; }
+    .col-key   { width: 68px; text-align: center; }
+    .col-con   { width: 200px; }
+    .col-desc  { }
+    @media print {
+      .dd-section { border-top: none; }
+      .dd-table-block { break-inside: avoid; }
+    }
+  </style>
+
+  <div class="dd-section">
+    <h2>Data Dictionary</h2>
+    <p class="dd-intro">
+      i@masjid Mosque Management System — Database Field Reference<br>
+      Documents all 8 database tables, their fields, data types, keys, constraints and descriptions.
+      Database: Supabase PostgreSQL &nbsp;|&nbsp; Schema: public &nbsp;|&nbsp; RLS: Enabled on all tables
+    </p>
+
+    <!-- ══════════ 1. mosques ══════════ -->
+    <div class="dd-table-block">
+      <div class="dd-table-header" style="background:#1a1a2e;">
+        <span class="tbl-name">Table 1: mosques</span>
+        <span class="tbl-desc">Stores the mosque master record. Central entity referenced by most other tables.</span>
+      </div>
+      <div style="overflow-x:auto;">
+        <table>
+          <thead><tr>
+            <th class="col-no">No.</th><th class="col-field">Field Name</th>
+            <th class="col-type">Data Type</th><th class="col-key">Key</th>
+            <th class="col-con">Constraint / Default</th><th class="col-desc">Description</th>
+          </tr></thead>
+          <tbody>
+            <tr><td class="col-no">1</td><td class="col-field">id</td><td class="col-type">UUID</td><td class="col-key"><span class="badge badge-pk">PK</span></td><td><span class="ct ct-def">DEFAULT uuid_generate_v4()</span><span class="ct ct-nn">NOT NULL</span></td><td>Unique auto-generated identifier for each mosque record</td></tr>
+            <tr><td class="col-no">2</td><td class="col-field">name</td><td class="col-type">TEXT</td><td class="col-key"><span class="badge-none">—</span></td><td><span class="ct ct-nn">NOT NULL</span></td><td>Full official name of the mosque (e.g., Masjid Al-Rahman)</td></tr>
+            <tr><td class="col-no">3</td><td class="col-field">zone_code</td><td class="col-type">TEXT</td><td class="col-key"><span class="badge-none">—</span></td><td><span class="ct ct-def">DEFAULT 'MLK001'</span></td><td>Prayer zone code used to fetch accurate prayer times from JAKIM API</td></tr>
+            <tr><td class="col-no">4</td><td class="col-field">address</td><td class="col-type">TEXT</td><td class="col-key"><span class="badge-none">—</span></td><td><span class="ct">NULLABLE</span></td><td>Physical street address of the mosque premises</td></tr>
+            <tr><td class="col-no">5</td><td class="col-field">state</td><td class="col-type">TEXT</td><td class="col-key"><span class="badge-none">—</span></td><td><span class="ct ct-def">DEFAULT 'Melaka'</span></td><td>Malaysian state where the mosque is located</td></tr>
+            <tr><td class="col-no">6</td><td class="col-field">created_at</td><td class="col-type">TIMESTAMPTZ</td><td class="col-key"><span class="badge-none">—</span></td><td><span class="ct ct-def">DEFAULT now()</span></td><td>Timestamp of when the mosque record was created in the system</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ══════════ 2. profiles ══════════ -->
+    <div class="dd-table-block">
+      <div class="dd-table-header" style="background:#2e7d32;">
+        <span class="tbl-name">Table 2: profiles</span>
+        <span class="tbl-desc">Stores registered user accounts. Authentication is handled manually (no Supabase Auth).</span>
+      </div>
+      <div style="overflow-x:auto;">
+        <table>
+          <thead><tr>
+            <th class="col-no">No.</th><th class="col-field">Field Name</th>
+            <th class="col-type">Data Type</th><th class="col-key">Key</th>
+            <th class="col-con">Constraint / Default</th><th class="col-desc">Description</th>
+          </tr></thead>
+          <tbody>
+            <tr><td class="col-no">1</td><td class="col-field">id</td><td class="col-type">SERIAL</td><td class="col-key"><span class="badge badge-pk">PK</span></td><td><span class="ct ct-nn">NOT NULL</span><span class="ct ct-def">AUTO INCREMENT</span></td><td>Auto-incrementing unique identifier for each user account</td></tr>
+            <tr><td class="col-no">2</td><td class="col-field">first_name</td><td class="col-type">TEXT</td><td class="col-key"><span class="badge-none">—</span></td><td><span class="ct ct-nn">NOT NULL</span></td><td>User's first name as entered during registration</td></tr>
+            <tr><td class="col-no">3</td><td class="col-field">last_name</td><td class="col-type">TEXT</td><td class="col-key"><span class="badge-none">—</span></td><td><span class="ct ct-nn">NOT NULL</span></td><td>User's last name / family name as entered during registration</td></tr>
+            <tr><td class="col-no">4</td><td class="col-field">email</td><td class="col-type">TEXT</td><td class="col-key"><span class="badge-none">—</span></td><td><span class="ct ct-nn">NOT NULL</span><span class="ct ct-uniq">UNIQUE</span></td><td>User's email address; used as login identifier. Must be unique across all accounts.</td></tr>
+            <tr><td class="col-no">5</td><td class="col-field">phone_number</td><td class="col-type">TEXT</td><td class="col-key"><span class="badge-none">—</span></td><td><span class="ct">NULLABLE</span></td><td>User's Malaysian phone number (e.g., 0123456789) for contact purposes</td></tr>
+            <tr><td class="col-no">6</td><td class="col-field">password</td><td class="col-type">TEXT</td><td class="col-key"><span class="badge-none">—</span></td><td><span class="ct ct-nn">NOT NULL</span></td><td>User's password stored as plain text (custom auth system, no Supabase Auth)</td></tr>
+            <tr><td class="col-no">7</td><td class="col-field">updated_at</td><td class="col-type">TIMESTAMPTZ</td><td class="col-key"><span class="badge-none">—</span></td><td><span class="ct ct-def">DEFAULT now()</span></td><td>Timestamp of the last time the user's profile information was updated</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ══════════ 3. admins ══════════ -->
+    <div class="dd-table-block">
+      <div class="dd-table-header" style="background:#c62828;">
+        <span class="tbl-name">Table 3: admins</span>
+        <span class="tbl-desc">Stores administrator accounts. Admins have authority to approve/reject Korban payments.</span>
+      </div>
+      <div style="overflow-x:auto;">
+        <table>
+          <thead><tr>
+            <th class="col-no">No.</th><th class="col-field">Field Name</th>
+            <th class="col-type">Data Type</th><th class="col-key">Key</th>
+            <th class="col-con">Constraint / Default</th><th class="col-desc">Description</th>
+          </tr></thead>
+          <tbody>
+            <tr><td class="col-no">1</td><td class="col-field">id</td><td class="col-type">SERIAL</td><td class="col-key"><span class="badge badge-pk">PK</span></td><td><span class="ct ct-nn">NOT NULL</span><span class="ct ct-def">AUTO INCREMENT</span></td><td>Auto-incrementing unique identifier for each admin account</td></tr>
+            <tr><td class="col-no">2</td><td class="col-field">email</td><td class="col-type">TEXT</td><td class="col-key"><span class="badge-none">—</span></td><td><span class="ct ct-nn">NOT NULL</span><span class="ct ct-uniq">UNIQUE</span></td><td>Admin's login email address. Must be unique (e.g., apekadmin@gmail.com)</td></tr>
+            <tr><td class="col-no">3</td><td class="col-field">password</td><td class="col-type">TEXT</td><td class="col-key"><span class="badge-none">—</span></td><td><span class="ct ct-nn">NOT NULL</span></td><td>Admin's login password stored as plain text for the custom authentication system</td></tr>
+            <tr><td class="col-no">4</td><td class="col-field">name</td><td class="col-type">TEXT</td><td class="col-key"><span class="badge-none">—</span></td><td><span class="ct ct-nn">NOT NULL</span></td><td>Display name of the admin shown in the dashboard header (e.g., apekadmin)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ══════════ 4. events ══════════ -->
+    <div class="dd-table-block">
+      <div class="dd-table-header" style="background:#6a1b9a;">
+        <span class="tbl-name">Table 4: events</span>
+        <span class="tbl-desc">Stores all mosque events across four categories: Religious, Education, Community, and Charity.</span>
+      </div>
+      <div style="overflow-x:auto;">
+        <table>
+          <thead><tr>
+            <th class="col-no">No.</th><th class="col-field">Field Name</th>
+            <th class="col-type">Data Type</th><th class="col-key">Key</th>
+            <th class="col-con">Constraint / Default</th><th class="col-desc">Description</th>
+          </tr></thead>
+          <tbody>
+            <tr><td class="col-no">1</td><td class="col-field">id</td><td class="col-type">TEXT</td><td class="col-key"><span class="badge badge-pk">PK</span></td><td><span class="ct ct-nn">NOT NULL</span></td><td>Manually assigned text identifier for the event (e.g., A1, B2, C3, D4). Allows categorised event codes.</td></tr>
+            <tr><td class="col-no">2</td><td class="col-field">mosque_id</td><td class="col-type">UUID</td><td class="col-key"><span class="badge badge-fk">FK</span></td><td><span class="ct">NULLABLE</span></td><td>References mosques.id. Links the event to the mosque that is organising it.</td></tr>
+            <tr><td class="col-no">3</td><td class="col-field">title</td><td class="col-type">TEXT</td><td class="col-key"><span class="badge-none">—</span></td><td><span class="ct ct-nn">NOT NULL</span></td><td>Full title/name of the event displayed on the events listing page</td></tr>
+            <tr><td class="col-no">4</td><td class="col-field">description</td><td class="col-type">TEXT</td><td class="col-key"><span class="badge-none">—</span></td><td><span class="ct">NULLABLE</span></td><td>Detailed description of the event shown when the user expands the event card</td></tr>
+            <tr><td class="col-no">5</td><td class="col-field">category</td><td class="col-type">TEXT</td><td class="col-key"><span class="badge-none">—</span></td><td><span class="ct">CHECK</span> (religious / education / community / charity)</td><td>Event classification used for filtering on the Events page</td></tr>
+            <tr><td class="col-no">6</td><td class="col-field">date</td><td class="col-type">DATE</td><td class="col-key"><span class="badge-none">—</span></td><td><span class="ct ct-nn">NOT NULL</span></td><td>Scheduled date of the event in YYYY-MM-DD format</td></tr>
+            <tr><td class="col-no">7</td><td class="col-field">time_range</td><td class="col-type">TEXT</td><td class="col-key"><span class="badge-none">—</span></td><td><span class="ct">NULLABLE</span></td><td>Human-readable event time range (e.g., "08:00 AM – 10:00 AM") displayed on the event card</td></tr>
+            <tr><td class="col-no">8</td><td class="col-field">speaker</td><td class="col-type">TEXT</td><td class="col-key"><span class="badge-none">—</span></td><td><span class="ct">NULLABLE</span></td><td>Name of the speaker, ustaz, or organising committee for the event</td></tr>
+            <tr><td class="col-no">9</td><td class="col-field">location</td><td class="col-type">TEXT</td><td class="col-key"><span class="badge-none">—</span></td><td><span class="ct">NULLABLE</span></td><td>Venue or hall name where the event will be held (e.g., Dewan Solat Utama)</td></tr>
+            <tr><td class="col-no">10</td><td class="col-field">capacity</td><td class="col-type">INTEGER</td><td class="col-key"><span class="badge-none">—</span></td><td><span class="ct ct-def">DEFAULT 100</span></td><td>Maximum number of participants/attendees allowed to register for the event</td></tr>
+            <tr><td class="col-no">11</td><td class="col-field">icon_fa</td><td class="col-type">TEXT</td><td class="col-key"><span class="badge-none">—</span></td><td><span class="ct ct-def">DEFAULT 'fa-calendar-days'</span></td><td>Font Awesome 6 icon class name used to render the event category icon in the UI</td></tr>
+            <tr><td class="col-no">12</td><td class="col-field">image_url</td><td class="col-type">TEXT</td><td class="col-key"><span class="badge-none">—</span></td><td><span class="ct">NULLABLE</span></td><td>URL or relative path to the event banner/thumbnail image shown on the event card</td></tr>
+            <tr><td class="col-no">13</td><td class="col-field">youtube_link</td><td class="col-type">TEXT</td><td class="col-key"><span class="badge-none">—</span></td><td><span class="ct">NULLABLE</span></td><td>YouTube live stream or recording URL for events that are broadcast online</td></tr>
+            <tr><td class="col-no">14</td><td class="col-field">created_at</td><td class="col-type">TIMESTAMPTZ</td><td class="col-key"><span class="badge-none">—</span></td><td><span class="ct ct-def">DEFAULT now()</span></td><td>Timestamp of when the event record was inserted into the database</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ══════════ 5. registrations ══════════ -->
+    <div class="dd-table-block">
+      <div class="dd-table-header" style="background:#e65100;">
+        <span class="tbl-name">Table 5: registrations</span>
+        <span class="tbl-desc">Stores event registration records submitted by users through the Event Registration form.</span>
+      </div>
+      <div style="overflow-x:auto;">
+        <table>
+          <thead><tr>
+            <th class="col-no">No.</th><th class="col-field">Field Name</th>
+            <th class="col-type">Data Type</th><th class="col-key">Key</th>
+            <th class="col-con">Constraint / Default</th><th class="col-desc">Description</th>
+          </tr></thead>
+          <tbody>
+            <tr><td class="col-no">1</td><td class="col-field">id</td><td class="col-type">SERIAL</td><td class="col-key"><span class="badge badge-pk">PK</span></td><td><span class="ct ct-nn">NOT NULL</span><span class="ct ct-def">AUTO INCREMENT</span></td><td>Auto-incrementing unique identifier for each event registration entry</td></tr>
+            <tr><td class="col-no">2</td><td class="col-field">event_id</td><td class="col-type">TEXT</td><td class="col-key"><span class="badge badge-fk">FK</span></td><td><span class="ct">ON DELETE CASCADE</span></td><td>References events.id. If the event is deleted, all its registrations are also deleted automatically.</td></tr>
+            <tr><td class="col-no">3</td><td class="col-field">name</td><td class="col-type">TEXT</td><td class="col-key"><span class="badge-none">—</span></td><td><span class="ct ct-nn">NOT NULL</span></td><td>Full name of the person registering for the event as entered in the registration form</td></tr>
+            <tr><td class="col-no">4</td><td class="col-field">email</td><td class="col-type">TEXT</td><td class="col-key"><span class="badge-none">—</span></td><td><span class="ct ct-nn">NOT NULL</span></td><td>Email address of the registrant. Combined with event_id to enforce one registration per person per event.</td></tr>
+            <tr><td class="col-no">5</td><td class="col-field">phone_number</td><td class="col-type">TEXT</td><td class="col-key"><span class="badge-none">—</span></td><td><span class="ct">NULLABLE</span></td><td>Contact phone number of the registrant for event organiser follow-up</td></tr>
+            <tr><td class="col-no">6</td><td class="col-field">registered_at</td><td class="col-type">TIMESTAMPTZ</td><td class="col-key"><span class="badge-none">—</span></td><td><span class="ct ct-def">DEFAULT now()</span></td><td>Timestamp of when the registration was submitted</td></tr>
+            <tr>
+              <td colspan="6" style="font-size:10px; color:#718096; padding:6px 10px; background:#fffbeb; border-top:1px dashed #e2e8f0;">
+                <strong>Composite Unique Constraint:</strong> UNIQUE(email, event_id) — prevents a user from registering for the same event more than once
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ══════════ 6. announcements ══════════ -->
+    <div class="dd-table-block">
+      <div class="dd-table-header" style="background:#2196A4;">
+        <span class="tbl-name">Table 6: announcements</span>
+        <span class="tbl-desc">Stores mosque announcements displayed on the Announcements page. Supports pinned/featured posts.</span>
+      </div>
+      <div style="overflow-x:auto;">
+        <table>
+          <thead><tr>
+            <th class="col-no">No.</th><th class="col-field">Field Name</th>
+            <th class="col-type">Data Type</th><th class="col-key">Key</th>
+            <th class="col-con">Constraint / Default</th><th class="col-desc">Description</th>
+          </tr></thead>
+          <tbody>
+            <tr><td class="col-no">1</td><td class="col-field">id</td><td class="col-type">UUID</td><td class="col-key"><span class="badge badge-pk">PK</span></td><td><span class="ct ct-def">DEFAULT uuid_generate_v4()</span><span class="ct ct-nn">NOT NULL</span></td><td>Unique auto-generated identifier for each announcement record</td></tr>
+            <tr><td class="col-no">2</td><td class="col-field">mosque_id</td><td class="col-type">UUID</td><td class="col-key"><span class="badge badge-fk">FK</span></td><td><span class="ct">NULLABLE</span></td><td>References mosques.id. Associates the announcement with a specific mosque.</td></tr>
+            <tr><td class="col-no">3</td><td class="col-field">title</td><td class="col-type">TEXT</td><td class="col-key"><span class="badge-none">—</span></td><td><span class="ct ct-nn">NOT NULL</span></td><td>Headline or subject of the announcement shown in the announcements listing</td></tr>
+            <tr><td class="col-no">4</td><td class="col-field">content</td><td class="col-type">TEXT</td><td class="col-key"><span class="badge-none">—</span></td><td><span class="ct">NULLABLE</span></td><td>Full body text of the announcement with detailed information for mosque members</td></tr>
+            <tr><td class="col-no">5</td><td class="col-field">is_pinned</td><td class="col-type">BOOLEAN</td><td class="col-key"><span class="badge-none">—</span></td><td><span class="ct ct-def">DEFAULT false</span></td><td>When true, the announcement is pinned/featured at the top of the announcements list</td></tr>
+            <tr><td class="col-no">6</td><td class="col-field">created_at</td><td class="col-type">TIMESTAMPTZ</td><td class="col-key"><span class="badge-none">—</span></td><td><span class="ct ct-def">DEFAULT now()</span></td><td>Timestamp of when the announcement was posted to the system</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ══════════ 7. korban_campaigns ══════════ -->
+    <div class="dd-table-block">
+      <div class="dd-table-header" style="background:#1a3a6e;">
+        <span class="tbl-name">Table 7: korban_campaigns</span>
+        <span class="tbl-desc">Stores Qurban/Korban animal sacrifice campaigns created by the mosque for a specific year.</span>
+      </div>
+      <div style="overflow-x:auto;">
+        <table>
+          <thead><tr>
+            <th class="col-no">No.</th><th class="col-field">Field Name</th>
+            <th class="col-type">Data Type</th><th class="col-key">Key</th>
+            <th class="col-con">Constraint / Default</th><th class="col-desc">Description</th>
+          </tr></thead>
+          <tbody>
+            <tr><td class="col-no">1</td><td class="col-field">id</td><td class="col-type">SERIAL</td><td class="col-key"><span class="badge badge-pk">PK</span></td><td><span class="ct ct-nn">NOT NULL</span><span class="ct ct-def">AUTO INCREMENT</span></td><td>Auto-incrementing unique identifier for each Korban campaign record</td></tr>
+            <tr><td class="col-no">2</td><td class="col-field">mosque_id</td><td class="col-type">UUID</td><td class="col-key"><span class="badge badge-fk">FK</span></td><td><span class="ct">NULLABLE</span></td><td>References mosques.id. Links the campaign to the mosque managing the sacrifice.</td></tr>
+            <tr><td class="col-no">3</td><td class="col-field">year</td><td class="col-type">INTEGER</td><td class="col-key"><span class="badge-none">—</span></td><td><span class="ct ct-nn">NOT NULL</span></td><td>The Hijri or Gregorian year of the Korban campaign (e.g., 2026). Used to organise campaigns annually.</td></tr>
+            <tr><td class="col-no">4</td><td class="col-field">animal_type</td><td class="col-type">TEXT</td><td class="col-key"><span class="badge-none">—</span></td><td><span class="ct ct-nn">NOT NULL</span></td><td>Type of sacrificial animal for the campaign. Values: 'Lembu (Cow)' (7 parts) or 'Kambing (Goat)' (1 part)</td></tr>
+            <tr><td class="col-no">5</td><td class="col-field">price_per_part</td><td class="col-type">NUMERIC(10,2)</td><td class="col-key"><span class="badge-none">—</span></td><td><span class="ct ct-nn">NOT NULL</span></td><td>Cost per participation share in MYR (e.g., 750.00 for Cow, 950.00 for Goat). Displayed in the Korban form.</td></tr>
+            <tr><td class="col-no">6</td><td class="col-field">total_parts</td><td class="col-type">INTEGER</td><td class="col-key"><span class="badge-none">—</span></td><td><span class="ct ct-nn">NOT NULL</span></td><td>Total number of available participation slots/shares for this campaign (e.g., 35 for Cow, 10 for Goat)</td></tr>
+            <tr><td class="col-no">7</td><td class="col-field">created_at</td><td class="col-type">TIMESTAMPTZ</td><td class="col-key"><span class="badge-none">—</span></td><td><span class="ct ct-def">DEFAULT now()</span></td><td>Timestamp of when the Korban campaign was created in the system by the admin</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ══════════ 8. korban_participants ══════════ -->
+    <div class="dd-table-block">
+      <div class="dd-table-header" style="background:#b7830a;">
+        <span class="tbl-name">Table 8: korban_participants</span>
+        <span class="tbl-desc">Stores individual Qurban participant registrations, payment status, and installment plan details.</span>
+      </div>
+      <div style="overflow-x:auto;">
+        <table>
+          <thead><tr>
+            <th class="col-no">No.</th><th class="col-field">Field Name</th>
+            <th class="col-type">Data Type</th><th class="col-key">Key</th>
+            <th class="col-con">Constraint / Default</th><th class="col-desc">Description</th>
+          </tr></thead>
+          <tbody>
+            <tr><td class="col-no">1</td><td class="col-field">id</td><td class="col-type">UUID</td><td class="col-key"><span class="badge badge-pk">PK</span></td><td><span class="ct ct-def">DEFAULT uuid_generate_v4()</span><span class="ct ct-nn">NOT NULL</span></td><td>Unique auto-generated identifier for each participant registration record</td></tr>
+            <tr><td class="col-no">2</td><td class="col-field">campaign_id</td><td class="col-type">INTEGER</td><td class="col-key"><span class="badge badge-fk">FK</span></td><td><span class="ct">ON DELETE CASCADE</span></td><td>References korban_campaigns.id. Links participant to the campaign. Deleted if campaign is removed.</td></tr>
+            <tr><td class="col-no">3</td><td class="col-field">name</td><td class="col-type">TEXT</td><td class="col-key"><span class="badge-none">—</span></td><td><span class="ct ct-nn">NOT NULL</span></td><td>Full name of the Korban participant as entered in the registration form</td></tr>
+            <tr><td class="col-no">4</td><td class="col-field">phone_number</td><td class="col-type">TEXT</td><td class="col-key"><span class="badge-none">—</span></td><td><span class="ct ct-nn">NOT NULL</span></td><td>Contact phone number of the participant for admin communication and receipt purposes</td></tr>
+            <tr><td class="col-no">5</td><td class="col-field">parts_qty</td><td class="col-type">INTEGER</td><td class="col-key"><span class="badge-none">—</span></td><td><span class="ct ct-nn">NOT NULL</span></td><td>Number of participation shares the user has registered for (1 share minimum; up to available total_parts)</td></tr>
+            <tr><td class="col-no">6</td><td class="col-field">payment_status</td><td class="col-type">TEXT</td><td class="col-key"><span class="badge-none">—</span></td><td><span class="ct ct-def">DEFAULT 'pending'</span></td><td>Current status of the payment lifecycle. Values: <strong>pending</strong> (awaiting admin approval), <strong>paid</strong> (approved by admin), <strong>rejected</strong> (rejected by admin), <strong>cancelled</strong> (cancelled by user)</td></tr>
+            <tr><td class="col-no">7</td><td class="col-field">payment_method</td><td class="col-type">TEXT</td><td class="col-key"><span class="badge-none">—</span></td><td><span class="ct ct-def">DEFAULT 'full'</span></td><td>Payment plan selected by the participant. Values: <strong>full</strong> (single full payment), <strong>installment_3</strong> (3-month plan, no extra charge), <strong>installment_6</strong> (6-month plan, +1.5% charge fee applies)</td></tr>
+            <tr><td class="col-no">8</td><td class="col-field">installment_months</td><td class="col-type">INTEGER</td><td class="col-key"><span class="badge-none">—</span></td><td><span class="ct">NULLABLE</span></td><td>Number of installment months selected. Value is 3 (3-month plan), 6 (6-month plan), or NULL (full payment)</td></tr>
+            <tr><td class="col-no">9</td><td class="col-field">charge_fee</td><td class="col-type">NUMERIC(10,2)</td><td class="col-key"><span class="badge-none">—</span></td><td><span class="ct ct-def">DEFAULT 0.00</span></td><td>Additional service charge in MYR applied for the 6-month installment plan (calculated as 1.5% of total amount). Zero for full payment and 3-month plan.</td></tr>
+            <tr><td class="col-no">10</td><td class="col-field">registered_at</td><td class="col-type">TIMESTAMPTZ</td><td class="col-key"><span class="badge-none">—</span></td><td><span class="ct ct-def">DEFAULT now()</span></td><td>Timestamp of when the participant submitted the Korban registration form</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Footer Note -->
+    <div style="margin-top:16px; padding:10px 14px; background:#f8f9fb; border:1px solid #e2e8f0; border-radius:6px; font-size:10.5px; color:#718096; text-align:center;">
+      <strong style="color:#2d3748;">Abbreviations:</strong>
+      &nbsp;PK = Primary Key &nbsp;·&nbsp; FK = Foreign Key &nbsp;·&nbsp; NN = NOT NULL &nbsp;·&nbsp; UNIQ = UNIQUE &nbsp;·&nbsp; DEF = DEFAULT
+      &nbsp;&nbsp;|&nbsp;&nbsp;
+      <strong style="color:#2d3748;">Database:</strong> Supabase PostgreSQL (Cloud) &nbsp;·&nbsp; RLS Row Level Security enabled on all 8 tables &nbsp;·&nbsp; Schema: public
+    </div>
+
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <!--                 QURBAN PROCESS FLOW SECTION                    -->
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+
+  <style>
+    .qurban-flow-section {
+      margin-top: 50px;
+      padding-top: 36px;
+      border-top: 2px dashed #e0e0e8;
+      page-break-before: always;
+    }
+    .qurban-flow-section h2 {
+      font-size: 16px;
+      font-weight: 700;
+      color: #1a1a2e;
+      text-align: center;
+      margin-bottom: 6px;
+    }
+    .qurban-flow-section .flow-desc {
+      font-size: 11.5px;
+      color: #555;
+      text-align: center;
+      margin-bottom: 22px;
+      line-height: 1.5;
+    }
+    .flow-wrap {
+      background: #fdfdfd;
+      border: 1px solid #dde1ea;
+      border-radius: 8px;
+      padding: 24px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+      max-width: 1000px;
+      margin: 0 auto;
+      overflow-x: auto;
+    }
+    @media print {
+      .qurban-flow-section { border-top: none; }
+    }
+  </style>
+
+  <div class="qurban-flow-section">
+    <h2>Qurban Process Flow Diagram</h2>
+    <p class="flow-desc">i@masjid Mosque Management System — Participant Registration, Payment Gateway Integration &amp; Admin Reconciliation Flowchart.<br>
+      Visualizing swimlanes for Mosque Member (User), ToyyibPay Simulated Gateway, and Mosque Administrator.</p>
+
+    <div class="flow-wrap">
+      <svg viewBox="0 0 960 760" width="100%" xmlns="http://www.w3.org/2000/svg"
+           style="font-family:'Segoe UI',Arial,sans-serif; display:block;">
+        <defs>
+          <filter id="box-shadow" x="-4%" y="-4%" width="108%" height="108%">
+            <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000" flood-opacity="0.05"/>
+          </filter>
+          <marker id="arrow-gray" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#94a3b8"/>
+          </marker>
+          <marker id="arrow-teal" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#0d9488"/>
+          </marker>
+          <marker id="arrow-orange" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#ea580c"/>
+          </marker>
+          <marker id="arrow-indigo" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#4f46e5"/>
+          </marker>
+        </defs>
+
+        <!-- Main Background -->
+        <rect width="960" height="760" fill="#fafafa" rx="10"/>
+
+        <!-- ================= SWIMLANES HEADER ================= -->
+        <!-- User Swimlane Header -->
+        <rect x="20" y="20" width="300" height="36" rx="6" fill="#0d9488" filter="url(#box-shadow)"/>
+        <text x="170" y="43" fill="#ffffff" font-size="12" font-weight="bold" text-anchor="middle">MOSQUE MEMBER (USER / CLIENT)</text>
+
+        <!-- Gateway Swimlane Header -->
+        <rect x="330" y="20" width="300" height="36" rx="6" fill="#ea580c" filter="url(#box-shadow)"/>
+        <text x="480" y="43" fill="#ffffff" font-size="12" font-weight="bold" text-anchor="middle">TOYYIBPAY SIMULATED GATEWAY</text>
+
+        <!-- Admin Swimlane Header -->
+        <rect x="640" y="20" width="300" height="36" rx="6" fill="#4f46e5" filter="url(#box-shadow)"/>
+        <text x="790" y="43" fill="#ffffff" font-size="12" font-weight="bold" text-anchor="middle">MOSQUE ADMINISTRATOR</text>
+
+        <!-- Swimlane Divider Lines -->
+        <line x1="325" y1="20" x2="325" y2="740" stroke="#cbd5e1" stroke-width="1.5" stroke-dasharray="4,4"/>
+        <line x1="635" y1="20" x2="635" y2="740" stroke="#cbd5e1" stroke-width="1.5" stroke-dasharray="4,4"/>
+
+        <!-- ================= SWIMLANE 1: USER BLOCKS ================= -->
+        <!-- 1. Access Dashboard -->
+        <g filter="url(#box-shadow)">
+          <rect x="55" y="75" width="230" height="50" rx="6" fill="#f0fdfa" stroke="#0d9488" stroke-width="1.5"/>
+          <text x="170" y="96" fill="#0f766e" font-size="11" font-weight="bold" text-anchor="middle">1. Access Qurban Dashboard</text>
+          <text x="170" y="112" fill="#134e4a" font-size="9.5" text-anchor="middle">(Verifies local session info)</text>
+        </g>
+
+        <!-- 2. Select Campaign & Portions -->
+        <g filter="url(#box-shadow)">
+          <rect x="55" y="150" width="230" height="55" rx="6" fill="#f0fdfa" stroke="#0d9488" stroke-width="1.5"/>
+          <text x="170" y="171" fill="#0f766e" font-size="11" font-weight="bold" text-anchor="middle">2. Select Qurban Campaign</text>
+          <text x="170" y="187" fill="#134e4a" font-size="9.5" text-anchor="middle">Choose Cow/Goat &amp; portions quantity</text>
+        </g>
+
+        <!-- 3. Choose Payment Method -->
+        <g filter="url(#box-shadow)">
+          <rect x="55" y="230" width="230" height="65" rx="6" fill="#f0fdfa" stroke="#0d9488" stroke-width="1.5"/>
+          <text x="170" y="250" fill="#0f766e" font-size="11" font-weight="bold" text-anchor="middle">3. Choose Payment Method</text>
+          <text x="170" y="266" fill="#134e4a" font-size="9.5" text-anchor="middle">Full payment OR Installments</text>
+          <text x="170" y="280" fill="#134e4a" font-size="9" text-anchor="middle">(3-Month interest-free / 6-Month +1.5%)</text>
+        </g>
+
+        <!-- 4. Submit Registration -->
+        <g filter="url(#box-shadow)">
+          <rect x="55" y="320" width="230" height="55" rx="6" fill="#f0fdfa" stroke="#0d9488" stroke-width="1.5"/>
+          <text x="170" y="340" fill="#0f766e" font-size="11" font-weight="bold" text-anchor="middle">4. Submit Registration</text>
+          <text x="170" y="356" fill="#134e4a" font-size="9" text-anchor="middle">Writes record to korban_participants DB</text>
+          <text x="170" y="367" fill="#64748b" font-size="8.5" font-weight="600" text-anchor="middle">Status: 'pending' (Awaiting gateway response)</text>
+        </g>
+
+        <!-- 8. View Final Receipt / History -->
+        <g filter="url(#box-shadow)">
+          <rect x="55" y="640" width="230" height="85" rx="6" fill="#f8fafc" stroke="#475569" stroke-width="1.5"/>
+          <text x="170" y="660" fill="#1e293b" font-size="11" font-weight="bold" text-anchor="middle">8. View History &amp; Receipt</text>
+          <text x="170" y="676" fill="#334155" font-size="9.5" text-anchor="middle">Updates dashboard history UI:</text>
+          <text x="170" y="692" fill="#16a34a" font-size="9" font-weight="bold" text-anchor="middle">✅ PAID  |  ⏳ PENDING VERIFICATION</text>
+          <text x="170" y="707" fill="#dc2626" font-size="9" font-weight="bold" text-anchor="middle">❌ REJECTED  |  🚫 CANCELLED</text>
+        </g>
+
+        <!-- ================= SWIMLANE 2: GATEWAY BLOCKS ================= -->
+        <!-- 5. Redirect to Simulator -->
+        <g filter="url(#box-shadow)">
+          <rect x="365" y="320" width="230" height="55" rx="6" fill="#fff7ed" stroke="#ea580c" stroke-width="1.5"/>
+          <text x="480" y="341" fill="#c2410c" font-size="11" font-weight="bold" text-anchor="middle">5. Redirect to ToyyibPay</text>
+          <text x="480" y="357" fill="#7c2d12" font-size="9.5" text-anchor="middle">Redirect to mock-toyyibpay.html</text>
+          <text x="480" y="368" fill="#9a3412" font-size="8.5" font-style="italic" text-anchor="middle">(Passes: amount, reg_id, payment method)</text>
+        </g>
+
+        <!-- Decisional Diamond for Gateway Simulation -->
+        <g filter="url(#box-shadow)">
+          <polygon points="480,395 550,445 480,495 410,445" fill="#fff7ed" stroke="#ea580c" stroke-width="1.5"/>
+          <text x="480" y="442" fill="#c2410c" font-size="10.5" font-weight="bold" text-anchor="middle">Simulated</text>
+          <text x="480" y="454" fill="#c2410c" font-size="10.5" font-weight="bold" text-anchor="middle">Payment?</text>
+        </g>
+
+        <!-- Payment Approved -->
+        <g filter="url(#box-shadow)">
+          <rect x="350" y="525" width="115" height="50" rx="6" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.5"/>
+          <text x="407.5" y="546" fill="#166534" font-size="10" font-weight="bold" text-anchor="middle">Pay Approved</text>
+          <text x="407.5" y="562" fill="#14532d" font-size="9" text-anchor="middle">status_id = 1 (pending)</text>
+        </g>
+
+        <!-- Payment Cancelled -->
+        <g filter="url(#box-shadow)">
+          <rect x="495" y="525" width="115" height="50" rx="6" fill="#fef2f2" stroke="#dc2626" stroke-width="1.5"/>
+          <text x="552.5" y="546" fill="#991b1b" font-size="10" font-weight="bold" text-anchor="middle">Cancel Payment</text>
+          <text x="552.5" y="562" fill="#7f1d1d" font-size="9" text-anchor="middle">status_id = 2 (cancelled)</text>
+        </g>
+
+        <!-- ================= SWIMLANE 3: ADMIN BLOCKS ================= -->
+        <!-- 6. Monitor in Dashboard -->
+        <g filter="url(#box-shadow)">
+          <rect x="675" y="320" width="230" height="55" rx="6" fill="#eef2ff" stroke="#4f46e5" stroke-width="1.5"/>
+          <text x="790" y="341" fill="#1d4ed8" font-size="11" font-weight="bold" text-anchor="middle">6. Admin Dashboard Listing</text>
+          <text x="790" y="357" fill="#1e3a8a" font-size="9.5" text-anchor="middle">Queries korban_participants table</text>
+          <text x="790" y="368" fill="#1e3a8a" font-size="8.5" text-anchor="middle">Displays both pending &amp; cancelled records</text>
+        </g>
+
+        <!-- Decisional Diamond for Admin Action -->
+        <g filter="url(#box-shadow)">
+          <polygon points="790,395 860,445 790,495 720,445" fill="#eef2ff" stroke="#4f46e5" stroke-width="1.5"/>
+          <text x="790" y="442" fill="#1d4ed8" font-size="10.5" font-weight="bold" text-anchor="middle">Admin</text>
+          <text x="790" y="454" fill="#1d4ed8" font-size="10.5" font-weight="bold" text-anchor="middle">Verify?</text>
+        </g>
+
+        <!-- Admin Approve -->
+        <g filter="url(#box-shadow)">
+          <rect x="660" y="525" width="115" height="50" rx="6" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.5"/>
+          <text x="717.5" y="546" fill="#166534" font-size="10" font-weight="bold" text-anchor="middle">Approve Share</text>
+          <text x="717.5" y="562" fill="#14532d" font-size="9" text-anchor="middle">Updates status to 'paid'</text>
+        </g>
+
+        <!-- Admin Reject -->
+        <g filter="url(#box-shadow)">
+          <rect x="805" y="525" width="115" height="50" rx="6" fill="#fef2f2" stroke="#dc2626" stroke-width="1.5"/>
+          <text x="862.5" y="546" fill="#991b1b" font-size="10" font-weight="bold" text-anchor="middle">Reject Share</text>
+          <text x="862.5" y="562" fill="#7f1d1d" font-size="9" text-anchor="middle">Updates status to 'rejected'</text>
+        </g>
+
+        <!-- ================= CONNECTORS / ARROWS ================= -->
+        <!-- User Steps flow -->
+        <line x1="170" y1="125" x2="170" y2="144" stroke="#0d9488" stroke-width="1.5" marker-end="url(#arrow-teal)"/>
+        <line x1="170" y1="205" x2="170" y2="224" stroke="#0d9488" stroke-width="1.5" marker-end="url(#arrow-teal)"/>
+        <line x1="170" y1="295" x2="170" y2="314" stroke="#0d9488" stroke-width="1.5" marker-end="url(#arrow-teal)"/>
+
+        <!-- Redirect to Gateway -->
+        <line x1="285" y1="347.5" x2="359" y2="347.5" stroke="#ea580c" stroke-width="1.8" marker-end="url(#arrow-orange)"/>
+        <rect x="294" y="335" width="60" height="14" rx="2" fill="#fff7ed" stroke="#fdba74" stroke-width="0.5"/>
+        <text x="324" y="345" fill="#ea580c" font-size="8" font-weight="bold" text-anchor="middle">Redirect</text>
+
+        <!-- Gateway process -->
+        <line x1="480" y1="375" x2="480" y2="389" stroke="#ea580c" stroke-width="1.5" marker-end="url(#arrow-orange)"/>
+
+        <!-- Diamond Gateway paths -->
+        <!-- Left: Pay -->
+        <polyline points="410,445 385,445 385,519" fill="none" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow-gray)"/>
+        <text x="395" y="440" fill="#475569" font-size="9" font-weight="bold" text-anchor="middle">Yes</text>
+
+        <!-- Right: Cancel -->
+        <polyline points="550,445 575,445 575,519" fill="none" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow-gray)"/>
+        <text x="565" y="440" fill="#475569" font-size="9" font-weight="bold" text-anchor="middle">Cancel</text>
+
+        <!-- Returns back to User receipt / History (From ToyyibPay redirection) -->
+        <!-- From Success Pay (status_id=1) -> receipt pending verification -->
+        <path d="M 407.5,575 L 407.5,600 L 170,600 L 170,634" fill="none" stroke="#16a34a" stroke-dasharray="3,3" stroke-width="1.5" marker-end="url(#arrow-teal)"/>
+        <rect x="230" y="591" width="130" height="14" rx="2" fill="#f0fdf4" stroke="#86efac" stroke-width="0.5"/>
+        <text x="295" y="601" fill="#166534" font-size="8" font-weight="bold" text-anchor="middle">Redirect (pending receipt)</text>
+
+        <!-- From Cancel Pay (status_id=2) -> cancelled history -->
+        <path d="M 552.5,575 L 552.5,615 L 170,615 L 170,634" fill="none" stroke="#dc2626" stroke-width="1.5" marker-end="url(#arrow-teal)"/>
+        <rect x="335" y="608" width="130" height="14" rx="2" fill="#fef2f2" stroke="#fca5a5" stroke-width="0.5"/>
+        <text x="400" y="618" fill="#991b1b" font-size="8" font-weight="bold" text-anchor="middle">Redirect (cancel notification)</text>
+
+        <!-- Sync from Gateway to Admin List (realtime / query) -->
+        <path d="M 407.5,575 L 407.5,590 L 630,590 C 630,590 630,347.5 630,347.5 L 669,347.5" fill="none" stroke="#4f46e5" stroke-dasharray="3,3" stroke-width="1.3" marker-end="url(#arrow-indigo)"/>
+        <path d="M 552.5,575 L 552.5,590 L 630,590" fill="none" stroke="#4f46e5" stroke-dasharray="3,3" stroke-width="1.3"/>
+        <text x="618" y="583" fill="#4f46e5" font-size="8" font-weight="bold" text-anchor="end">Supabase Sync</text>
+
+        <!-- Admin flow inside Swimlane 3 -->
+        <line x1="790" y1="375" x2="790" y2="389" stroke="#4f46e5" stroke-width="1.5" marker-end="url(#arrow-indigo)"/>
+
+        <!-- Diamond Admin decisions -->
+        <!-- Left: Approve -->
+        <polyline points="720,445 695,445 695,519" fill="none" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow-gray)"/>
+        <text x="705" y="440" fill="#475569" font-size="9" font-weight="bold" text-anchor="middle">Approve</text>
+
+        <!-- Right: Reject -->
+        <polyline points="860,445 885,445 885,519" fill="none" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow-gray)"/>
+        <text x="875" y="440" fill="#475569" font-size="9" font-weight="bold" text-anchor="middle">Reject</text>
+
+        <!-- Sync from Admin decisions back to User View -->
+        <!-- Admin Approved (paid) -> updates user history view -->
+        <path d="M 717.5,575 L 717.5,675 L 291,675" fill="none" stroke="#16a34a" stroke-width="1.8" marker-end="url(#arrow-teal)"/>
+        <rect x="420" y="666" width="160" height="14" rx="2" fill="#f0fdf4" stroke="#86efac" stroke-width="0.5"/>
+        <text x="500" y="676" fill="#166534" font-size="8.5" font-weight="bold" text-anchor="middle">Realtime Sync status = 'paid'</text>
+
+        <!-- Admin Rejected -> updates user history view -->
+        <path d="M 862.5,575 L 862.5,705 L 291,705" fill="none" stroke="#dc2626" stroke-width="1.5" marker-end="url(#arrow-teal)"/>
+        <rect x="420" y="696" width="160" height="14" rx="2" fill="#fef2f2" stroke="#fca5a5" stroke-width="0.5"/>
+        <text x="500" y="706" fill="#991b1b" font-size="8.5" font-weight="bold" text-anchor="middle">Sync status = 'rejected'</text>
+
+        <!-- Footer -->
+        <rect x="20" y="730" width="920" height="14" rx="4" fill="#1a1a2e" opacity="0.05"/>
+        <text x="480" y="740" font-size="8.5" text-anchor="middle" fill="#718096">
+          Qurban module payment lifecycle: User Form (local storage check) → Supabase Insert (pending) → ToyyibPay Portal Callback → Admin Panel Reconciliation (manual verification)
+        </text>
+      </svg>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <!--             PHYSICAL DATABASE DESIGN (QURBAN)                   -->
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+
+  <style>
+    .physical-db-section {
+      margin-top: 50px;
+      padding-top: 36px;
+      border-top: 2px dashed #e0e0e8;
+      page-break-before: always;
+    }
+    .physical-db-section h2 {
+      font-size: 16px;
+      font-weight: 700;
+      color: #1a1a2e;
+      text-align: center;
+      margin-bottom: 6px;
+    }
+    .physical-db-section .db-desc {
+      font-size: 11.5px;
+      color: #555;
+      text-align: center;
+      margin-bottom: 22px;
+      line-height: 1.5;
+    }
+    .db-wrap {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 24px;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+      max-width: 1000px;
+      margin: 0 auto;
+      overflow-x: auto;
+    }
+    @media print {
+      .physical-db-section { border-top: none; }
+    }
+  </style>
+
+  <div class="physical-db-section">
+    <h2>Physical Database Schema (Qurban Module)</h2>
+    <p class="db-desc">Detailed physical table structures, PostgreSQL data types, and foreign key constraints for the Qurban subsystem.<br>
+      Optimized for Supabase Cloud infrastructure with Row Level Security (RLS).</p>
+
+    <div class="db-wrap">
+      <svg viewBox="0 0 960 420" width="100%" xmlns="http://www.w3.org/2000/svg" style="font-family: 'Segoe UI', system-ui, sans-serif; display:block;">
+        <defs>
+          <filter id="table-shadow" x="-5%" y="-5%" width="110%" height="110%">
+            <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#0f172a" flood-opacity="0.08"/>
+          </filter>
+          <marker id="fk-arrow" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#64748b"/>
+          </marker>
+          <marker id="fk-dot" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="5" markerHeight="5">
+            <circle cx="5" cy="5" r="5" fill="#64748b"/>
+          </marker>
+        </defs>
+
+        <!-- Background grid pattern -->
+        <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+          <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#e2e8f0" stroke-width="0.5"/>
+        </pattern>
+        <rect width="100%" height="100%" fill="url(#grid)" rx="8"/>
+
+        <!-- Metadata Box -->
+        <rect x="20" y="20" width="240" height="50" rx="4" fill="#ffffff" stroke="#cbd5e1" stroke-width="1"/>
+        <path d="M 20 20 L 26 20 L 26 70 L 20 70 Z" fill="#0ea5e9"/>
+        <text x="35" y="38" fill="#334155" font-size="11" font-weight="bold">Supabase PostgreSQL 15.x</text>
+        <text x="35" y="55" fill="#64748b" font-size="9">Encoding: UTF8 | RLS: Active</text>
+
+        <!-- Connections (Paths drawn under tables) -->
+        <!-- korban_campaigns.mosque_id -> mosques.id -->
+        <path d="M 340 182 L 310 182 L 310 157 L 280 157" fill="none" stroke="#64748b" stroke-width="2" marker-start="url(#fk-dot)" marker-end="url(#fk-arrow)"/>
+        
+        <!-- korban_participants.campaign_id -> korban_campaigns.id -->
+        <path d="M 640 122 L 610 122 L 610 157 L 580 157" fill="none" stroke="#64748b" stroke-width="2" marker-start="url(#fk-dot)" marker-end="url(#fk-arrow)"/>
+
+        <!-- TABLE: mosques -->
+        <g transform="translate(40, 110)" filter="url(#table-shadow)">
+          <rect width="240" height="185" rx="6" fill="#ffffff" stroke="#cbd5e1" stroke-width="1"/>
+          <!-- Header -->
+          <path d="M 0 6 A 6 6 0 0 1 6 0 L 234 0 A 6 6 0 0 1 240 6 L 240 35 L 0 35 Z" fill="#0f172a"/>
+          <text x="12" y="22" fill="#f8fafc" font-size="13" font-weight="bold">public.mosques</text>
+          
+          <!-- Column: id -->
+          <rect y="35" width="240" height="25" fill="#fef9c3"/>
+          <text x="12" y="52" fill="#854d0e" font-size="11" font-weight="600">id</text>
+          <text x="100" y="52" fill="#a16207" font-size="9" font-weight="bold">[PK]</text>
+          <text x="228" y="52" fill="#a16207" font-size="10" text-anchor="end" font-family="monospace">uuid</text>
+          
+          <!-- Column: name -->
+          <rect y="60" width="240" height="25" fill="#ffffff"/>
+          <text x="12" y="77" fill="#334155" font-size="11">name</text>
+          <text x="228" y="77" fill="#64748b" font-size="10" text-anchor="end" font-family="monospace">text NN</text>
+          
+          <!-- Column: zone_code -->
+          <rect y="85" width="240" height="25" fill="#f8fafc"/>
+          <text x="12" y="102" fill="#334155" font-size="11">zone_code</text>
+          <text x="228" y="102" fill="#64748b" font-size="10" text-anchor="end" font-family="monospace">text</text>
+          
+          <!-- Column: address -->
+          <rect y="110" width="240" height="25" fill="#ffffff"/>
+          <text x="12" y="127" fill="#334155" font-size="11">address</text>
+          <text x="228" y="127" fill="#64748b" font-size="10" text-anchor="end" font-family="monospace">text</text>
+          
+          <!-- Column: state -->
+          <rect y="135" width="240" height="25" fill="#f8fafc"/>
+          <text x="12" y="152" fill="#334155" font-size="11">state</text>
+          <text x="228" y="152" fill="#64748b" font-size="10" text-anchor="end" font-family="monospace">text</text>
+          
+          <!-- Column: created_at -->
+          <rect y="160" width="240" height="25" fill="#ffffff"/>
+          <text x="12" y="177" fill="#334155" font-size="11">created_at</text>
+          <text x="228" y="177" fill="#64748b" font-size="10" text-anchor="end" font-family="monospace">timestamptz</text>
+
+          <line x1="0" y1="35" x2="240" y2="35" stroke="#cbd5e1" stroke-width="1"/>
+        </g>
+
+        <!-- TABLE: korban_campaigns -->
+        <g transform="translate(340, 110)" filter="url(#table-shadow)">
+          <rect width="240" height="210" rx="6" fill="#ffffff" stroke="#cbd5e1" stroke-width="1"/>
+          <!-- Header -->
+          <path d="M 0 6 A 6 6 0 0 1 6 0 L 234 0 A 6 6 0 0 1 240 6 L 240 35 L 0 35 Z" fill="#1e3a8a"/>
+          <text x="12" y="22" fill="#f8fafc" font-size="13" font-weight="bold">public.korban_campaigns</text>
+          
+          <!-- Column: id -->
+          <rect y="35" width="240" height="25" fill="#fef9c3"/>
+          <text x="12" y="52" fill="#854d0e" font-size="11" font-weight="600">id</text>
+          <text x="100" y="52" fill="#a16207" font-size="9" font-weight="bold">[PK]</text>
+          <text x="228" y="52" fill="#a16207" font-size="10" text-anchor="end" font-family="monospace">serial4</text>
+          
+          <!-- Column: mosque_id -->
+          <rect y="60" width="240" height="25" fill="#e0f2fe"/>
+          <text x="12" y="77" fill="#0369a1" font-size="11" font-weight="600">mosque_id</text>
+          <text x="100" y="77" fill="#0ea5e9" font-size="9" font-weight="bold">[FK]</text>
+          <text x="228" y="77" fill="#0ea5e9" font-size="10" text-anchor="end" font-family="monospace">uuid</text>
+          
+          <!-- Column: year -->
+          <rect y="85" width="240" height="25" fill="#ffffff"/>
+          <text x="12" y="102" fill="#334155" font-size="11">year</text>
+          <text x="228" y="102" fill="#64748b" font-size="10" text-anchor="end" font-family="monospace">int4 NN</text>
+          
+          <!-- Column: animal_type -->
+          <rect y="110" width="240" height="25" fill="#f8fafc"/>
+          <text x="12" y="127" fill="#334155" font-size="11">animal_type</text>
+          <text x="228" y="127" fill="#64748b" font-size="10" text-anchor="end" font-family="monospace">text NN</text>
+          
+          <!-- Column: price_per_part -->
+          <rect y="135" width="240" height="25" fill="#ffffff"/>
+          <text x="12" y="152" fill="#334155" font-size="11">price_per_part</text>
+          <text x="228" y="152" fill="#64748b" font-size="10" text-anchor="end" font-family="monospace">numeric(10,2) NN</text>
+          
+          <!-- Column: total_parts -->
+          <rect y="160" width="240" height="25" fill="#f8fafc"/>
+          <text x="12" y="177" fill="#334155" font-size="11">total_parts</text>
+          <text x="228" y="177" fill="#64748b" font-size="10" text-anchor="end" font-family="monospace">int4 NN</text>
+
+          <!-- Column: created_at -->
+          <rect y="185" width="240" height="25" fill="#ffffff"/>
+          <text x="12" y="202" fill="#334155" font-size="11">created_at</text>
+          <text x="228" y="202" fill="#64748b" font-size="10" text-anchor="end" font-family="monospace">timestamptz</text>
+
+          <line x1="0" y1="35" x2="240" y2="35" stroke="#cbd5e1" stroke-width="1"/>
+        </g>
+
+        <!-- TABLE: korban_participants -->
+        <g transform="translate(640, 50)" filter="url(#table-shadow)">
+          <rect width="280" height="285" rx="6" fill="#ffffff" stroke="#cbd5e1" stroke-width="1"/>
+          <!-- Header -->
+          <path d="M 0 6 A 6 6 0 0 1 6 0 L 274 0 A 6 6 0 0 1 280 6 L 280 35 L 0 35 Z" fill="#b45309"/>
+          <text x="12" y="22" fill="#f8fafc" font-size="13" font-weight="bold">public.korban_participants</text>
+          
+          <!-- Column: id -->
+          <rect y="35" width="280" height="25" fill="#fef9c3"/>
+          <text x="12" y="52" fill="#854d0e" font-size="11" font-weight="600">id</text>
+          <text x="130" y="52" fill="#a16207" font-size="9" font-weight="bold">[PK]</text>
+          <text x="268" y="52" fill="#a16207" font-size="10" text-anchor="end" font-family="monospace">uuid</text>
+          
+          <!-- Column: campaign_id -->
+          <rect y="60" width="280" height="25" fill="#e0f2fe"/>
+          <text x="12" y="77" fill="#0369a1" font-size="11" font-weight="600">campaign_id</text>
+          <text x="130" y="77" fill="#0ea5e9" font-size="9" font-weight="bold">[FK]</text>
+          <text x="268" y="77" fill="#0ea5e9" font-size="10" text-anchor="end" font-family="monospace">int4</text>
+          
+          <!-- Column: name -->
+          <rect y="85" width="280" height="25" fill="#ffffff"/>
+          <text x="12" y="102" fill="#334155" font-size="11">name</text>
+          <text x="268" y="102" fill="#64748b" font-size="10" text-anchor="end" font-family="monospace">text NN</text>
+          
+          <!-- Column: phone_number -->
+          <rect y="110" width="280" height="25" fill="#f8fafc"/>
+          <text x="12" y="127" fill="#334155" font-size="11">phone_number</text>
+          <text x="268" y="127" fill="#64748b" font-size="10" text-anchor="end" font-family="monospace">text NN</text>
+          
+          <!-- Column: parts_qty -->
+          <rect y="135" width="280" height="25" fill="#ffffff"/>
+          <text x="12" y="152" fill="#334155" font-size="11">parts_qty</text>
+          <text x="268" y="152" fill="#64748b" font-size="10" text-anchor="end" font-family="monospace">int4 NN</text>
+          
+          <!-- Column: payment_status -->
+          <rect y="160" width="280" height="25" fill="#f8fafc"/>
+          <text x="12" y="177" fill="#334155" font-size="11">payment_status</text>
+          <text x="268" y="177" fill="#64748b" font-size="10" text-anchor="end" font-family="monospace">text (def: 'pending')</text>
+
+          <!-- Column: payment_method -->
+          <rect y="185" width="280" height="25" fill="#ffffff"/>
+          <text x="12" y="202" fill="#334155" font-size="11">payment_method</text>
+          <text x="268" y="202" fill="#64748b" font-size="10" text-anchor="end" font-family="monospace">text (def: 'full')</text>
+
+          <!-- Column: installment_months -->
+          <rect y="210" width="280" height="25" fill="#f8fafc"/>
+          <text x="12" y="227" fill="#334155" font-size="11">installment_months</text>
+          <text x="268" y="227" fill="#64748b" font-size="10" text-anchor="end" font-family="monospace">int4</text>
+
+          <!-- Column: charge_fee -->
+          <rect y="235" width="280" height="25" fill="#ffffff"/>
+          <text x="12" y="252" fill="#334155" font-size="11">charge_fee</text>
+          <text x="268" y="252" fill="#64748b" font-size="10" text-anchor="end" font-family="monospace">numeric(10,2)</text>
+
+          <!-- Column: registered_at -->
+          <rect y="260" width="280" height="25" fill="#f8fafc"/>
+          <text x="12" y="277" fill="#334155" font-size="11">registered_at</text>
+          <text x="268" y="277" fill="#64748b" font-size="10" text-anchor="end" font-family="monospace">timestamptz</text>
+
+          <line x1="0" y1="35" x2="280" y2="35" stroke="#cbd5e1" stroke-width="1"/>
+        </g>
+        
+        <!-- Legend / Info Box -->
+        <rect x="640" y="350" width="280" height="50" rx="4" fill="#ffffff" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="4,4"/>
+        <text x="650" y="368" fill="#475569" font-size="10" font-weight="bold">Storage Engine Details:</text>
+        <text x="650" y="382" fill="#64748b" font-size="9">• B-Tree Indexes on PKs and FKs</text>
+        <text x="650" y="394" fill="#64748b" font-size="9">• ON DELETE CASCADE on campaign_id</text>
+
+      </svg>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <!--                      FYP PROGRESS REPORTS                       -->
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+
+  <style>
+    .progress-reports-section {
+      margin-top: 50px;
+      padding-top: 36px;
+      border-top: 2px dashed #e0e0e8;
+      page-break-before: always;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      max-width: 1000px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .progress-reports-section h2 {
+      font-size: 16px;
+      font-weight: 700;
+      color: #1a1a2e;
+      text-align: center;
+      margin-bottom: 6px;
+    }
+    .progress-reports-section .report-desc {
+      font-size: 11.5px;
+      color: #555;
+      text-align: center;
+      margin-bottom: 30px;
+      line-height: 1.5;
+    }
+    .report-card {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+    }
+    .report-card h3 {
+      font-size: 14px;
+      color: #0f172a;
+      margin-top: 0;
+      margin-bottom: 12px;
+      border-bottom: 1px solid #e2e8f0;
+      padding-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .status-badge {
+      font-size: 10px;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .status-completed {
+      background: #dcfce7;
+      color: #166534;
+    }
+    .report-content {
+      font-size: 12px;
+      color: #334155;
+      line-height: 1.6;
+    }
+    .report-content strong {
+      color: #1e293b;
+    }
+    .report-list {
+      margin-top: 8px;
+      margin-bottom: 16px;
+      padding-left: 20px;
+    }
+    .report-list li {
+      margin-bottom: 4px;
+    }
+    .milestone-section {
+      background: #f8fafc;
+      padding: 12px;
+      border-radius: 6px;
+      border-left: 3px solid #3b82f6;
+      margin-top: 16px;
+    }
+    .milestone-section h4 {
+      margin: 0 0 6px 0;
+      font-size: 11px;
+      color: #1d4ed8;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    @media print {
+      .progress-reports-section { border-top: none; }
+      .report-card { page-break-inside: avoid; }
+    }
+  </style>
+
+  <div class="progress-reports-section">
+    <h2>Project Progress Reports</h2>
+    <p class="report-desc">Formal progress documentation for the i@masjid (Mosque Management System) FYP.<br>Summarizing achievements, milestones, and deliverables per development phase.</p>
+
+    <!-- PROGRESS REPORT 1 -->
+    <div class="report-card">
+      <h3>
+        Progress Report 1: Phase 1 (Project Initiation &amp; Planning)
+        <span class="status-badge status-completed">Completed</span>
+      </h3>
+      <div class="report-content">
+        <p><strong>Objective:</strong> To establish the project scope, gather core requirements, and define the overall architecture for the Mosque Management System.</p>
+        
+        <p><strong>Key Activities Completed:</strong></p>
+        <ul class="report-list">
+          <li>Conducted initial requirement elicitation to identify key problems in current manual mosque management processes.</li>
+          <li>Defined the primary modules: User Authentication, Mosque Event Management, Tabung Registration, and the Qurban Campaign System.</li>
+          <li>Drafted the initial 14-week project Gantt chart to ensure structured timeline adherence.</li>
+          <li>Identified the technology stack: HTML/CSS/JS for the frontend coordination layer, and Supabase PostgreSQL for the backend Database-as-a-Service (DBaaS).</li>
+        </ul>
+
+        <div class="milestone-section">
+          <h4>Phase 1 Deliverables Achieved</h4>
+          <ul class="report-list" style="margin-bottom: 0;">
+            <li>Project Proposal and Requirement Specification Document.</li>
+            <li>Approved 14-week Project Schedule (Gantt Chart).</li>
+            <li>Initial 3-Tier System Architecture blueprint.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROGRESS REPORT 2 -->
+    <div class="report-card">
+      <h3>
+        Progress Report 2: Phase 2 (System Design &amp; Prototyping)
+        <span class="status-badge status-completed">Completed</span>
+      </h3>
+      <div class="report-content">
+        <p><strong>Objective:</strong> To translate system requirements into structural designs, visual models, and initial functional prototypes.</p>
+        
+        <p><strong>Key Activities Completed:</strong></p>
+        <ul class="report-list">
+          <li>Constructed the comprehensive Entity Relationship Diagram (ERD) defining the relational mappings between 8 core entities.</li>
+          <li>Developed a detailed Data Dictionary specifying data types, constraints (Primary Keys, Foreign Keys, NOT NULL), and default values.</li>
+          <li>Mapped the complex Qurban Process Flow Diagram, illustrating the swimlane interactions between the Mosque Member, ToyyibPay Simulated Gateway, and the Admin Verification Panel.</li>
+          <li>Designed the Physical Database Schema highlighting Supabase PostgreSQL optimization and B-Tree indexing constraints.</li>
+          <li>Developed structural HTML UI prototypes for the main dashboards.</li>
+        </ul>
+
+        <div class="milestone-section" style="border-left-color: #8b5cf6;">
+          <h4 style="color: #6d28d9;">Phase 2 Deliverables Achieved</h4>
+          <ul class="report-list" style="margin-bottom: 0;">
+            <li>Complete ERD and Data Dictionary documentation.</li>
+            <li>Visual Process Flow Diagrams (SVG format) integrated into the project report.</li>
+            <li>Physical Database Schema mapping documentation.</li>
+            <li>Configured Supabase backend initialization with Row Level Security (RLS) policies.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <!--                      PRESENTATION SLIDES                        -->
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+
+  <style>
+    .presentation-slides-section {
+      margin-top: 60px;
+      padding-top: 36px;
+      border-top: 2px dashed #e0e0e8;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: #f8fafc;
+      padding-bottom: 60px;
+    }
+    .presentation-slides-section > h2 {
+      text-align: center;
+      font-size: 22px;
+      color: #0f172a;
+      margin-bottom: 40px;
+    }
+    .slide-deck {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 40px;
+    }
+    .slide-card {
+      width: 960px;
+      height: 540px; /* 16:9 Aspect Ratio */
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 4px;
+      box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1);
+      padding: 50px 60px;
+      box-sizing: border-box;
+      position: relative;
+      overflow: hidden;
+      page-break-inside: avoid;
+    }
+    /* Slide decorative bar */
+    .slide-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 10px;
+      height: 100%;
+      background: linear-gradient(180deg, #1e3a8a 0%, #3b82f6 100%);
+    }
+    .slide-card::after {
+      content: 'i@masjid Mosque Management System';
+      position: absolute;
+      bottom: 20px;
+      left: 60px;
+      font-size: 12px;
+      color: #94a3b8;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+    .slide-number {
+      position: absolute;
+      bottom: 20px;
+      right: 40px;
+      font-size: 14px;
+      color: #64748b;
+      font-weight: bold;
+    }
+    .slide-header {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1e3a8a;
+      border-bottom: 3px solid #f59e0b; /* Amber accent */
+      padding-bottom: 12px;
+      margin-top: 0;
+      margin-bottom: 30px;
+    }
+    .slide-content {
+      font-size: 20px;
+      color: #334155;
+      line-height: 1.6;
+    }
+    .slide-content ul {
+      margin-top: 15px;
+      padding-left: 30px;
+    }
+    .slide-content li {
+      margin-bottom: 15px;
+    }
+    .slide-content strong {
+      color: #0f172a;
+    }
+    /* Table styles for slides */
+    .slide-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      font-size: 18px;
+    }
+    .slide-table th, .slide-table td {
+      box-sizing: border-box;
+      padding: 12px 16px;
+    }
+    .slide-table th {
+      background: #f1f5f9;
+      color: #1e3a8a;
+      font-weight: bold;
+      text-align: left;
+      border-bottom: 2px solid #cbd5e1;
+    }
+    .slide-table td {
+      border-bottom: 1px solid #e2e8f0;
+      vertical-align: top;
+    }
+    .diagram-placeholder {
+      background: #f8fafc;
+      border: 2px dashed #94a3b8;
+      border-radius: 8px;
+      height: 250px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #64748b;
+      font-weight: bold;
+      margin-top: 20px;
+      text-align: center;
+      flex-direction: column;
+    }
+    .diagram-placeholder i {
+      font-size: 14px;
+      font-weight: normal;
+      margin-top: 8px;
+    }
+    .highlight-box {
+      background: #eff6ff;
+      border-left: 4px solid #3b82f6;
+      padding: 15px 20px;
+      margin-top: 20px;
+      border-radius: 0 8px 8px 0;
+    }
+  </style>
+
+  <div class="presentation-slides-section">
+    <h2>Presentation Slides (Ready for Screenshot)</h2>
+    
+    <div class="slide-deck">
+
+      <!-- Slide 1: Introduction -->
+      <div class="slide-card" id="slide-1">
+        <h2 class="slide-header">1. Introduction</h2>
+        <div class="slide-content">
+          <p><strong>i@masjid (Mosque Management System)</strong> is a centralized web-based platform designed to digitalize daily mosque administration.</p>
+          <ul>
+            <li>Transitions traditional manual operations into a seamless digital ecosystem.</li>
+            <li>Targets core administrative burdens: <strong>Tabung Collections, Event Registrations, and Qurban Campaigns.</strong></li>
+            <li>Empowers mosque administrators (AJK) with real-time data and tracking capabilities.</li>
+            <li>Provides the local Muslim community (Kariah) with accessible, transparent digital interaction.</li>
+          </ul>
+        </div>
+        <div class="slide-number">Slide 1</div>
+      </div>
+
+      <!-- Slide 2: Problem Statements -->
+      <div class="slide-card" id="slide-2">
+        <h2 class="slide-header">2. Problem Statements</h2>
+        <div class="slide-content">
+          <ul>
+            <li><strong>Manual Data Loss:</strong> Paper-based tracking of participant quotas and donations leads to data redundancy and human errors.</li>
+            <li><strong>Payment Inefficiencies:</strong> Manual bank transfer verification requires heavy administrative workload and delays confirmation.</li>
+            <li><strong>Communication Gap:</strong> Lack of a centralized platform for the local Kariah to receive instant mosque announcements and event updates.</li>
+          </ul>
+          <div class="highlight-box">
+            <strong>Result Survey Analysis:</strong> Over 85% of mosque administrators reported difficulty in tracking manual receipts and managing large-scale events like Qurban.
+          </div>
+        </div>
+        <div class="slide-number">Slide 2</div>
+      </div>
+
+      <!-- Slide 3: Comparison Analysis -->
+      <div class="slide-card" id="slide-3">
+        <h2 class="slide-header">Comparison Analysis (Existing Work)</h2>
+        <div class="slide-content">
+          <div style="overflow-x: auto; width: 100%; padding-bottom: 15px;">
+            <table class="slide-table" style="min-width: 1100px;">
+              <thead>
+                <tr>
+                  <th style="width: 20%">Feature</th>
+                  <th style="width: 40%">Existing Generic Systems (Google Forms / Paper)</th>
+                  <th style="width: 40%">Proposed System: i@masjid</th>
+                </tr>
+              </thead>
+            <tbody>
+              <tr>
+                <td><strong>Platform</strong></td>
+                <td>Disconnected, difficult to trace back.</td>
+                <td>Centralized web portal with User & Admin Dashboards.</td>
+              </tr>
+              <tr>
+                <td><strong>Payment Gateway</strong></td>
+                <td>Manual upload of transfer receipts.</td>
+                <td>Automated Gateway Integration (ToyyibPay).</td>
+              </tr>
+              <tr>
+                <td><strong>Qurban Tracking</strong></td>
+                <td>Manual calculation of available animal parts.</td>
+                <td>Real-time quota tracking and auto-closure.</td>
+              </tr>
+              <tr>
+                <td><strong>Data Security</strong></td>
+                <td>Local Excel files or physical logbooks.</td>
+                <td>Cloud Database (Supabase) with Row Level Security.</td>
+              </tr>
+            </tbody>
+          </table>
+          </div>
+        </div>
+        <div class="slide-number">Slide 3</div>
+      </div>
+
+      <!-- Slide 4: Objective -->
+      <div class="slide-card" id="slide-4">
+        <h2 class="slide-header">3. Objectives</h2>
+        <div class="slide-content">
+          <p>To overcome the identified problems, the objectives of this project are:</p>
+          <ul>
+            <li><strong>To Develop:</strong> A centralized Mosque Management System (i@masjid) for structured and efficient administration.</li>
+            <li><strong>To Integrate:</strong> An automated payment gateway (ToyyibPay) to process secure online Tabung donations and Qurban registrations.</li>
+            <li><strong>To Provide:</strong> Real-time analytical dashboards for administrators to monitor campaign progress, generate reports, and track community engagement.</li>
+          </ul>
+        </div>
+        <div class="slide-number">Slide 4</div>
+      </div>
+
+      <!-- Slide 5: Scopes -->
+      <div class="slide-card" id="slide-5">
+        <h2 class="slide-header">4. Project Scopes</h2>
+        <div class="slide-content">
+          <ul>
+            <li><strong>Target Audience:</strong> Mosque Administrators (AJK) and Mosque Community Members (Kariah).</li>
+            <li><strong>System Modules:</strong> 
+              <ul>
+                <li>User Authentication & Profiling</li>
+                <li>Event Management & Announcements</li>
+                <li>Tabung E-Donation System</li>
+                <li>Qurban Campaign Management & Quota Tracking</li>
+              </ul>
+            </li>
+            <li><strong>Technology Stack:</strong>
+              <ul>
+                <li><strong>Frontend:</strong> HTML, CSS, JavaScript (Vanilla Web Technologies)</li>
+                <li><strong>Backend:</strong> Supabase PostgreSQL (Cloud Database-as-a-Service)</li>
+                <li><strong>API:</strong> ToyyibPay Simulated Environment</li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+        <div class="slide-number">Slide 5</div>
+      </div>
+
+      <!-- Slide 6: ERD -->
+      <div class="slide-card" id="slide-6">
+        <h2 class="slide-header">5. Entity Relationship Diagram (ERD)</h2>
+        <div class="slide-content">
+          <p>The database architecture comprises <strong>8 Relational Entities</strong> ensuring data integrity and enforcing referential constraints.</p>
+          <div class="diagram-placeholder">
+            [ SCREENSHOT ERD DIAGRAM HERE ]
+            <i>(Please refer to the detailed ERD diagram generated earlier in this document and paste the screenshot over this box for your slide)</i>
+          </div>
+        </div>
+        <div class="slide-number">Slide 6</div>
+      </div>
+
+      <!-- Slide 7: Methodology -->
+      <div class="slide-card" id="slide-7">
+        <h2 class="slide-header">6. Methodology</h2>
+        <div class="slide-content">
+          <p>This project implements the <strong>Agile Software Development Life Cycle (SDLC)</strong> to ensure flexibility and iterative refinement.</p>
+          <ul>
+            <li><strong>Phase 1 (Planning & Requirements):</strong> Elicitation of mosque operational pain points.</li>
+            <li><strong>Phase 2 (Design):</strong> ERD formulation, Architecture mapping, UI wireframes.</li>
+            <li><strong>Phase 3 (Development):</strong> Supabase backend initialization, Gateway integration.</li>
+            <li><strong>Phase 4 (Testing):</strong> Unit testing of Qurban limits, ToyyibPay status simulation.</li>
+            <li><strong>Phase 5 (Deployment):</strong> Cloud hosting and final evaluation.</li>
+          </ul>
+        </div>
+        <div class="slide-number">Slide 7</div>
+      </div>
+
+      <!-- Slide 8: Architecture Design -->
+      <div class="slide-card" id="slide-8">
+        <h2 class="slide-header">7. Architecture Design</h2>
+        <div class="slide-content">
+          <p>The system utilizes a modern <strong>3-Tier Cloud Architecture</strong>:</p>
+          <ul>
+            <li><strong>Client Tier:</strong> Web Browser executing native JavaScript.</li>
+            <li><strong>Application/Coordination Tier:</strong> JS API Coordinators managing ToyyibPay callbacks and Supabase fetch logic.</li>
+            <li><strong>Data Tier:</strong> Supabase PostgreSQL Database with active Row Level Security (RLS) ensuring strict access controls.</li>
+          </ul>
+          <div class="diagram-placeholder" style="height: 120px;">
+            [ SCREENSHOT SYSTEM ARCHITECTURE DIAGRAM HERE ]
+            <i>(Refer to the System Architecture Section above)</i>
+          </div>
+        </div>
+        <div class="slide-number">Slide 8</div>
+      </div>
+
+      <!-- Slide 9: Conclusion -->
+      <div class="slide-card" id="slide-9">
+        <h2 class="slide-header">8. Conclusion</h2>
+        <div class="slide-content">
+          <ul>
+            <li>The <strong>i@masjid</strong> system directly addresses the inefficiencies of manual mosque management.</li>
+            <li>By integrating modern web technologies (Supabase) and automated payment solutions (ToyyibPay), administrative bottlenecks are eliminated.</li>
+            <li>The successful implementation of this system will foster greater transparency, trust, and engagement between the mosque committee and the local Muslim community.</li>
+          </ul>
+          <div class="highlight-box" style="border-left-color: #10b981; background: #ecfdf5; margin-top:40px; text-align:center;">
+            <strong>Thank You for Your Attention</strong><br>
+            <span style="font-size: 16px; color: #047857;">Ready for Q&A Session</span>
+          </div>
+        </div>
+        <div class="slide-number">Slide 9</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Standalone Full Comparison Table -->
+  <div style="padding: 80px 20px; background: #f8fafc; border-top: 2px dashed #e0e0e8; display: flex; justify-content: center;">
+    <div style="width: 1200px; max-width: 95%; box-shadow: 0 10px 25px rgba(0,0,0,0.05); border-radius: 8px; overflow: hidden; font-family: 'Segoe UI', system-ui, sans-serif; background: white; border: 1px solid #e2e8f0;">
+      <table style="width: 100%; border-collapse: collapse; font-size: 16px; table-layout: fixed;">
+        <thead>
+          <tr>
+            <th style="width: 20%; background: #1e3a8a; color: white; padding: 20px; text-align: left; border-bottom: 3px solid #f59e0b; font-size: 18px;">Feature</th>
+            <th style="width: 40%; background: #1e3a8a; color: white; padding: 20px; text-align: left; border-bottom: 3px solid #f59e0b; font-size: 18px;">Existing Generic Systems (Google Forms / Paper)</th>
+            <th style="width: 40%; background: #1e3a8a; color: white; padding: 20px; text-align: left; border-bottom: 3px solid #f59e0b; font-size: 18px;">Proposed System: i@masjid</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="padding: 24px; border-bottom: 1px solid #e2e8f0; font-weight: bold; color: #1e293b; background: #f1f5f9; border-right: 1px solid #e2e8f0; font-size: 18px;">Platform</td>
+            <td style="padding: 24px; border-bottom: 1px solid #e2e8f0; color: #334155; border-right: 1px solid #e2e8f0; line-height: 1.6;">Disconnected, difficult to trace back.</td>
+            <td style="padding: 24px; border-bottom: 1px solid #e2e8f0; color: #334155; line-height: 1.6;">Centralized web portal with User & Admin Dashboards.</td>
+          </tr>
+          <tr>
+            <td style="padding: 24px; border-bottom: 1px solid #e2e8f0; font-weight: bold; color: #1e293b; background: #f1f5f9; border-right: 1px solid #e2e8f0; font-size: 18px;">Payment Gateway</td>
+            <td style="padding: 24px; border-bottom: 1px solid #e2e8f0; color: #334155; border-right: 1px solid #e2e8f0; line-height: 1.6;">Manual upload of transfer receipts.</td>
+            <td style="padding: 24px; border-bottom: 1px solid #e2e8f0; color: #334155; line-height: 1.6;">Automated Gateway Integration (ToyyibPay).</td>
+          </tr>
+          <tr>
+            <td style="padding: 24px; border-bottom: 1px solid #e2e8f0; font-weight: bold; color: #1e293b; background: #f1f5f9; border-right: 1px solid #e2e8f0; font-size: 18px;">Qurban Tracking</td>
+            <td style="padding: 24px; border-bottom: 1px solid #e2e8f0; color: #334155; border-right: 1px solid #e2e8f0; line-height: 1.6;">Manual calculation of available animal parts.</td>
+            <td style="padding: 24px; border-bottom: 1px solid #e2e8f0; color: #334155; line-height: 1.6;">Real-time quota tracking and auto-closure.</td>
+          </tr>
+          <tr>
+            <td style="padding: 24px; border-bottom: 1px solid #e2e8f0; font-weight: bold; color: #1e293b; background: #f1f5f9; border-right: 1px solid #e2e8f0; font-size: 18px;">Data Security</td>
+            <td style="padding: 24px; border-bottom: 1px solid #e2e8f0; color: #334155; border-right: 1px solid #e2e8f0; line-height: 1.6;">Local Excel files or physical logbooks.</td>
+            <td style="padding: 24px; border-bottom: 1px solid #e2e8f0; color: #334155; line-height: 1.6;">Cloud Database (Supabase) with Row Level Security.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Standalone Full Project Scopes Table -->
+  <div style="padding: 80px 20px; background: #f8fafc; border-top: 2px dashed #e0e0e8; display: flex; justify-content: center;">
+    <div style="width: 1200px; max-width: 95%; box-shadow: 0 10px 25px rgba(0,0,0,0.05); border-radius: 8px; overflow: hidden; font-family: 'Segoe UI', system-ui, sans-serif; background: white; border: 1px solid #e2e8f0;">
+      <table style="width: 100%; border-collapse: collapse; font-size: 16px; table-layout: fixed;">
+        <thead>
+          <tr>
+            <th style="width: 30%; background: #1e3a8a; color: white; padding: 20px; text-align: left; border-bottom: 3px solid #f59e0b; font-size: 18px;">Project Scope Category</th>
+            <th style="width: 70%; background: #1e3a8a; color: white; padding: 20px; text-align: left; border-bottom: 3px solid #f59e0b; font-size: 18px;">Description &amp; Components</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="padding: 24px; border-bottom: 1px solid #e2e8f0; font-weight: bold; color: #1e293b; background: #f1f5f9; border-right: 1px solid #e2e8f0; font-size: 18px;">Target Audience</td>
+            <td style="padding: 24px; border-bottom: 1px solid #e2e8f0; color: #334155; line-height: 1.6;">
+              Mosque Administrators (AJK) and Mosque Community Members (Kariah).
+            </td>
+          </tr>
+          <tr>
+            <td style="padding: 24px; border-bottom: 1px solid #e2e8f0; font-weight: bold; color: #1e293b; background: #f1f5f9; border-right: 1px solid #e2e8f0; font-size: 18px;">System Modules</td>
+            <td style="padding: 24px; border-bottom: 1px solid #e2e8f0; color: #334155; line-height: 1.6;">
+              <ul style="margin: 0; padding-left: 20px;">
+                <li style="margin-bottom: 8px;">User Authentication &amp; Profiling</li>
+                <li style="margin-bottom: 8px;">Event Management &amp; Announcements</li>
+                <li style="margin-bottom: 8px;">Tabung E-Donation System</li>
+                <li>Qurban Campaign Management &amp; Quota Tracking</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding: 24px; font-weight: bold; color: #1e293b; background: #f1f5f9; border-right: 1px solid #e2e8f0; font-size: 18px;">Technology Stack</td>
+            <td style="padding: 24px; color: #334155; line-height: 1.6;">
+              <ul style="margin: 0; padding-left: 20px;">
+                <li style="margin-bottom: 8px;"><strong>Frontend:</strong> HTML, CSS, JavaScript (Vanilla Web Technologies)</li>
+                <li style="margin-bottom: 8px;"><strong>Backend:</strong> Supabase PostgreSQL (Cloud Database-as-a-Service)</li>
+                <li><strong>API Gateway:</strong> ToyyibPay Simulated Environment</li>
+              </ul>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</body>
+</html>

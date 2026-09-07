@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Donate to Tabung Masjid Abu Bakar via Malaysia National QR — i@masjid" />
+  <title>Tabung Masjid Abu Bakar – i@masjid Donation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    /* ── Reset & Base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        var(--bg-app, #F8F9FA);
+      --card:      #FFFFFF;
+      --border:    #EFEFEF;
+      --primary:   var(--primary-yellow, #FEBC2F);
+      --primary-d: var(--primary-yellow-hover, #EABP32);
+      --accent:    var(--primary-yellow, #FEBC2F);
+      --text:      var(--text-main, #111111);
+      --muted:     var(--text-muted, #555555);
+      --radius:    14px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* ── Top bar ── */
+    .topbar {
+      width: 100%;
+      padding: 0.85rem 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: rgba(11, 26, 19, 0.97);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .back-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      background: var(--card);
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 0.45rem 1rem;
+      border-radius: 50px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .back-btn:hover {
+      background: var(--primary-d);
+      border-color: var(--primary);
+      color: #ffffff;
+    }
+    .back-btn i { color: var(--primary); font-size: 0.8rem; }
+    .back-btn:hover i { color: #ffffff; }
+
+    .topbar-brand {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .topbar-brand span { color: var(--primary); }
+
+    /* ── Page wrapper ── */
+    .page-wrap {
+      width: 100%;
+      max-width: 560px;
+      padding: 2.5rem 1.5rem 4rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    /* ── Header ── */
+    .page-header {
+      text-align: center;
+    }
+    .mosque-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: var(--primary);
+      padding: 0.35rem 1rem;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+    .page-title {
+      font-size: clamp(1.6rem, 5vw, 2.2rem);
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 0.5rem;
+    }
+    .page-title .highlight { color: var(--primary); }
+    .page-subtitle {
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.6;
+      max-width: 420px;
+      margin: 0 auto;
+    }
+
+    /* ── QR Card ── */
+    .qr-card {
+      width: 100%;
+      background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: var(--radius);
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(255, 255, 255, 0.08);
+      position: relative;
+      overflow: hidden;
+    }
+    .qr-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top right, rgba(255, 255, 255, 0.08) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .qr-header {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .qr-title-block h2 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #ffffff;
+    }
+    .qr-title-block p {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+    .qr-live-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: var(--primary);
+      padding: 0.3rem 0.75rem;
+      border-radius: 50px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .live-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--primary);
+      animation: pulse 1.5s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: 0.5; transform: scale(0.8); }
+    }
+
+    /* ── QR Image wrapper ── */
+    .qr-img-wrap {
+      position: relative;
+      width: 100%;
+      max-width: 320px;
+      aspect-ratio: 1;
+    }
+
+    /* Corner glow accents */
+    .qr-img-wrap::before,
+    .qr-img-wrap::after {
+      content: '';
+      position: absolute;
+      width: 40px; height: 40px;
+      border-radius: 6px;
+    }
+    .qr-img-wrap::before {
+      top: -4px; left: -4px;
+      border-top: 3px solid var(--pink);
+      border-left: 3px solid var(--pink);
+    }
+    .qr-img-wrap::after {
+      bottom: -4px; right: -4px;
+      border-bottom: 3px solid var(--pink);
+      border-right: 3px solid var(--pink);
+    }
+
+    .corner-tr, .corner-bl {
+      position: absolute;
+      width: 40px; height: 40px;
+      border-radius: 6px;
+    }
+    .corner-tr {
+      top: -4px; right: -4px;
+      border-top: 3px solid var(--pink);
+      border-right: 3px solid var(--pink);
+    }
+    .corner-bl {
+      bottom: -4px; left: -4px;
+      border-bottom: 3px solid var(--pink);
+      border-left: 3px solid var(--pink);
+    }
+
+    .qr-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      border-radius: 12px;
+      display: block;
+    }
+
+    .qr-footer-label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+    .qr-footer-label i { color: var(--pink); }
+
+    /* ── How to donate steps ── */
+    .steps-card {
+      width: 100%;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+    }
+    .steps-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .steps-title i { color: var(--primary); }
+    .step-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .step-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+    .step-num {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: var(--primary);
+      font-size: 0.85rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .step-text strong {
+      display: block;
+      font-size: 0.9rem;
+      color: #ffffff;
+      margin-bottom: 2px;
+    }
+    .step-text span {
+      font-size: 0.82rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    /* ── Info strip ── */
+    .info-strip {
+      width: 100%;
+      background: rgba(245, 158, 11, 0.08);
+      border: 1px solid rgba(245, 158, 11, 0.25);
+      border-radius: 14px;
+      padding: 1rem 1.25rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+    }
+    .info-strip i {
+      color: var(--accent);
+      margin-top: 2px;
+      flex-shrink: 0;
+    }
+    .info-strip p {
+      font-size: 0.82rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .info-strip p strong { color: var(--accent); }
+
+    /* ── Action buttons ── */
+    .action-row {
+      width: 100%;
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .btn {
+      flex: 1;
+      min-width: 140px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.85rem 1.5rem;
+      border-radius: 12px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), var(--primary-d));
+      color: #ffffff;
+      box-shadow: 0 4px 20px rgba(255, 255, 255, 0.25);
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(255, 255, 255, 0.35);
+    }
+    .btn-outline {
+      background: var(--card);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-outline:hover {
+      border-color: var(--primary);
+      background: rgba(255, 255, 255, 0.07);
+    }
+
+    /* ── Dua quote ── */
+    .dua-box {
+      width: 100%;
+      text-align: center;
+      padding: 1.5rem;
+      border-top: 1px solid var(--border);
+    }
+    .dua-arabic {
+      font-family: 'Amiri', serif;
+      font-size: 1.4rem;
+      color: var(--primary);
+      line-height: 1.8;
+      margin-bottom: 0.5rem;
+      direction: rtl;
+    }
+    .dua-trans {
+      font-size: 0.82rem;
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 480px) {
+      .page-wrap { padding: 2rem 1rem 3rem; }
+      .qr-card   { padding: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Top Bar ── -->
+<div class="topbar">
+  <a href="index.html" class="back-btn" id="back-btn">
+    <i class="fa-solid fa-arrow-left"></i> Back
+  </a>
+  <span class="topbar-brand">i<span>@</span>masjid</span>
+</div>
+
+<!-- ── Main Content ── -->
+<div class="page-wrap">
+
+  <!-- Header -->
+  <div class="page-header">
+    <div class="mosque-badge">
+      <i class="fa-solid fa-mosque"></i>
+      Tabung Masjid Abu Bakar
+    </div>
+    <h1 class="page-title">
+      Infaq &amp; <span class="highlight">Donations</span>
+    </h1>
+    <p class="page-subtitle">
+      Scan the QR code below using any Malaysian banking app or e-wallet to
+      contribute to <strong style="color:#f9fafb;">Tabung Masjid Abu Bakar</strong>.
+      May Allah accept your sadaqah.
+    </p>
+  </div>
+
+  <!-- QR Card -->
+  <div class="qr-card">
+    <!-- Card header -->
+    <div class="qr-header">
+      <div class="qr-title-block">
+        <h2>Tabung Masjid Abu Bakar</h2>
+        <p>Scan to donate securely</p>
+      </div>
+      <div class="qr-live-badge">
+        <div class="live-dot"></div>
+        Active
+      </div>
+    </div>
+
+    <!-- QR Image -->
+    <div class="qr-img-wrap">
+      <div class="corner-tr"></div>
+      <div class="corner-bl"></div>
+      <img
+        src="assets/images/qr-tabung-masjid.png"
+        alt="Malaysia National QR Code – Tabung Masjid Abu Bakar"
+        id="qr-img"
+        onerror="this.style.display='none';document.getElementById('qr-fallback').style.display='flex';"
+      />
+      <!-- Fallback if image missing -->
+      <div id="qr-fallback" style="display:none;width:100%;height:100%;background:#1a1a2e;border-radius:12px;align-items:center;justify-content:center;flex-direction:column;gap:1rem;border:2px dashed #ffffff;">
+        <i class="fa-solid fa-qrcode" style="font-size:4rem;color:#ffffff;"></i>
+        <p style="color:#cbd5e1;font-size:0.85rem;text-align:center;padding:0 1rem;">
+          Place your QR image at:<br>
+          <code style="color:#ffffff;">assets/images/qr-tabung-masjid.png</code>
+        </p>
+      </div>
+    </div>
+
+    <!-- Label -->
+    <div class="qr-footer-label">
+      <i class="fa-solid fa-shield-halved"></i>
+      MALAYSIA NATIONAL QR &nbsp;·&nbsp;
+      <i class="fa-solid fa-lock"></i>
+      Secure &amp; Verified
+    </div>
+  </div>
+
+  <!-- How to Donate -->
+  <div class="steps-card">
+    <div class="steps-title">
+      <i class="fa-solid fa-circle-info"></i>
+      How to Donate
+    </div>
+    <ul class="step-list">
+      <li class="step-item">
+        <div class="step-num">1</div>
+        <div class="step-text">
+          <strong>Open your banking app or e-wallet</strong>
+          <span>Maybank, CIMB, RHB, Touch 'n Go, Boost, GrabPay and all DuitNow-supported apps</span>
+        </div>
+      </li>
+      <li class="step-item">
+        <div class="step-num">2</div>
+        <div class="step-text">
+          <strong>Tap "Scan QR" or "Pay"</strong>
+          <span>Look for the QR scanner icon in your app's home screen or payment section</span>
+        </div>
+      </li>
+      <li class="step-item">
+        <div class="step-num">3</div>
+        <div class="step-text">
+          <strong>Scan the QR code above</strong>
+          <span>Point your camera at the QR code or screenshot it and upload from gallery</span>
+        </div>
+      </li>
+      <li class="step-item">
+        <div class="step-num">4</div>
+        <div class="step-text">
+          <strong>Enter your donation amount</strong>
+          <span>Any amount is welcome — every contribution helps the mosque community</span>
+        </div>
+      </li>
+      <li class="step-item">
+        <div class="step-num">5</div>
+        <div class="step-text">
+          <strong>Confirm &amp; receive receipt</strong>
+          <span>Your payment is processed instantly. May Allah reward you abundantly.</span>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Info notice -->
+  <div class="info-strip">
+    <i class="fa-solid fa-circle-exclamation"></i>
+    <p>
+      This donation QR is valid for all Malaysian banking apps and e-wallets that support
+      <strong>DuitNow QR</strong> (Malaysia National QR standard).
+      No account required — both members and guests may donate freely.
+    </p>
+  </div>
+
+  <!-- Action Buttons -->
+  <div class="action-row">
+    <a href="qr-save.html" class="btn btn-primary">
+      <i class="fa-solid fa-download"></i>
+      Save QR Code
+    </a>
+    <button class="btn btn-outline" onclick="window.print()">
+      <i class="fa-solid fa-print"></i>
+      Print QR
+    </button>
+    <a href="index.html" class="btn btn-outline">
+      <i class="fa-solid fa-arrow-left"></i>
+      Back to Home
+    </a>
+  </div>
+
+  <!-- Dua -->
+  <div class="dua-box">
+    <div class="dua-arabic">مَن ذَا الَّذِي يُقْرِضُ اللَّهَ قَرْضًا حَسَنًا</div>
+    <p class="dua-trans">
+      "Who is it that would loan Allah a goodly loan so He may multiply it for him many times over?"
+      <br>— Al-Baqarah 2:245
+    </p>
+  </div>
+
+</div><!-- /page-wrap -->
+
+<script>
+  // ── Download QR image ──────────────────────────────────────────
+  function downloadQR() {
+    var img = document.getElementById('qr-img');
+    if (!img || img.style.display === 'none') {
+      alert('QR image not found. Please place your QR at assets/images/qr-tabung-masjid.png');
+      return;
+    }
+    var link      = document.createElement('a');
+    link.href     = img.src;
+    link.download = 'tabung-masjid-abu-bakar-qr.png';
+    link.click();
+  }
+
+  // ── Back button: smart history or fallback to index.html ───────
+  document.getElementById('back-btn').addEventListener('click', function(e) {
+    e.preventDefault();
+    if (window.history.length > 1 && document.referrer) {
+      window.history.back();
+    } else {
+      window.location.href = 'index.html';
+    }
+  });
+</script>
+
+</body>
+</html>

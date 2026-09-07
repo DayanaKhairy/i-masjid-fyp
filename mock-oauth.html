@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sign in - OAuth</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Roboto', sans-serif; background: #fff; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+    .card { border: 1px solid #dadce0; border-radius: 8px; width: 448px; padding: 48px 40px 36px; box-sizing: border-box; text-align: center; }
+    .logo { width: 75px; margin-bottom: 16px; }
+    h1 { font-size: 24px; font-weight: 400; margin: 0 0 10px; }
+    p { font-size: 16px; margin: 0 0 30px; color: #202124; }
+    .account-btn { display: flex; align-items: center; border: 1px solid #dadce0; border-radius: 24px; padding: 5px 15px 5px 5px; cursor: pointer; text-align: left; margin-bottom: 15px; transition: background 0.2s; }
+    .account-btn:hover { background: #f8f9fa; }
+    .account-btn img { width: 32px; height: 32px; border-radius: 50%; margin-right: 12px; }
+    .account-btn .details { flex: 1; }
+    .account-btn .name { font-size: 14px; font-weight: 500; color: #3c4043; }
+    .account-btn .email { font-size: 12px; color: #5f6368; }
+    .loader { display: none; width: 24px; height: 24px; border: 3px solid #f3f3f3; border-top: 3px solid #1a73e8; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto; }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+  <div class="card" id="card-google" style="display:none;">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google" class="logo">
+    <h1>Sign in</h1>
+    <p>to continue to <strong>i@masjid</strong></p>
+    
+    <div class="account-btn" onclick="authorize('Ahmad bin Ali', 'ahmad@example.com')">
+      <img src="https://ui-avatars.com/api/?name=Ahmad&background=1a73e8&color=fff" alt="User">
+      <div class="details">
+        <div class="name">Ahmad bin Ali</div>
+        <div class="email">ahmad@example.com</div>
+      </div>
+    </div>
+    
+    <div class="account-btn" onclick="authorize('Siti Aminah', 'siti@example.com')">
+      <img src="https://ui-avatars.com/api/?name=Siti&background=c5221f&color=fff" alt="User">
+      <div class="details">
+        <div class="name">Siti Aminah</div>
+        <div class="email">siti@example.com</div>
+      </div>
+    </div>
+    <div class="loader" id="loader-g"></div>
+  </div>
+
+  <div class="card" id="card-fb" style="display:none; border:none; box-shadow: 0 2px 8px rgba(0,0,0,.15); width: 400px; padding: 30px;">
+    <h1 style="color: #1877F2; font-family: Helvetica, Arial, sans-serif; font-weight: bold; margin-bottom: 20px; font-size: 32px;">facebook</h1>
+    <p style="font-family: Helvetica, Arial, sans-serif; font-size: 15px; margin-bottom: 25px;">Log in to use your Facebook account with <strong>i@masjid</strong>.</p>
+    <button onclick="authorize('Ahmad bin Ali', 'ahmad@example.com')" style="background: #1877F2; color: #fff; border: none; padding: 12px; width: 100%; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; margin-bottom: 12px;">Continue as Ahmad</button>
+    <button onclick="authorize('Siti Aminah', 'siti@example.com')" style="background: #e4e6eb; color: #050505; border: none; padding: 12px; width: 100%; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer;">Continue as Siti</button>
+    <div class="loader" id="loader-f" style="margin-top: 20px; border-top-color: #1877F2;"></div>
+  </div>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const provider = urlParams.get('provider') || 'google';
+
+    if (provider === 'facebook') {
+      document.title = 'Log in with Facebook';
+      document.getElementById('card-fb').style.display = 'block';
+    } else {
+      document.getElementById('card-google').style.display = 'block';
+    }
+
+    function authorize(name, email) {
+      document.querySelectorAll('.account-btn, button').forEach(b => b.style.display = 'none');
+      document.getElementById('loader-g').style.display = 'block';
+      document.getElementById('loader-f').style.display = 'block';
+      
+      setTimeout(() => {
+        window.location.href = `index.html?oauth_success=1&provider=${provider}&email=${encodeURIComponent(email)}&name=${encodeURIComponent(name)}`;
+      }, 1500);
+    }
+  </script>
+</body>
+</html>

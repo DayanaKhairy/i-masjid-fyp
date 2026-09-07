@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>i@masjid — Portal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg:      #0f172a;
+            --card:    #0f172a;
+            --border:  #ffffff;
+            --primary: #ffffff;
+            --primary-d: #1e293b;
+            --text:    #f9fafb;
+            --muted:   #cbd5e1;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* ── Top Bar ── */
+        .topbar {
+            width: 100%;
+            padding: 0.85rem 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: rgba(11, 26, 19, 0.97);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.45rem;
+            background: var(--card);
+            color: var(--text);
+            border: 1px solid var(--border);
+            padding: 0.45rem 1rem;
+            border-radius: 50px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        .back-btn:hover {
+            background: var(--primary-d);
+            border-color: var(--primary);
+            color: #ffffff;
+        }
+        .back-btn i { color: var(--primary); font-size: 0.8rem; }
+        .back-btn:hover i { color: #ffffff; }
+
+        .topbar-brand {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text);
+            flex: 1;
+        }
+        .topbar-brand .at { color: var(--primary); }
+
+        /* ── Main content ── */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem 1.5rem;
+            text-align: center;
+            gap: 2rem;
+        }
+
+        .headline {
+            font-size: clamp(2.5rem, 8vw, 4rem);
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+        .headline .at { color: var(--primary); }
+
+        .motifs-container {
+            width: 220px;
+            height: 220px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 2px dashed rgba(255, 255, 255, 0.4);
+            border-radius: 20px;
+            color: var(--muted);
+            font-size: 0.9rem;
+            background: var(--card);
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        .motifs-container i {
+            font-size: 3rem;
+            color: var(--primary);
+            opacity: 0.4;
+        }
+        .motifs-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 18px;
+        }
+
+        .go-home-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--primary-d));
+            color: #ffffff;
+            border: none;
+            padding: 0.75rem 1.75rem;
+            border-radius: 50px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 20px rgba(255, 255, 255, 0.25);
+        }
+        .go-home-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 28px rgba(255, 255, 255, 0.4);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ── Top Bar ── -->
+    <div class="topbar">
+        <a href="index.html" class="back-btn" id="back-btn">
+            <i class="fa-solid fa-arrow-left"></i> Back
+        </a>
+        <span class="topbar-brand">i<span class="at">@</span>masjid</span>
+    </div>
+
+    <!-- ── Main Content ── -->
+    <div class="main-content">
+        <div class="headline">i<span class="at">@</span>masjid</div>
+
+        <!-- Moon & Stars image placeholder -->
+        <div class="motifs-container">
+            <!--
+              To add your image:
+              1. Put your moon/stars image in the same folder.
+              2. Remove the icon & paragraph below.
+              3. Uncomment the <img> tag and update the filename.
+            -->
+            <i class="fa-solid fa-moon"></i>
+            <p style="font-size:0.8rem;color:var(--muted);padding:0 1rem;">[Moon &amp; Stars Image Here]</p>
+            <!-- <img src="your-image-name.png" alt="Islamic Motifs"> -->
+        </div>
+
+        <a href="index.html" class="go-home-btn">
+            <i class="fa-solid fa-house"></i> Go to Portal
+        </a>
+    </div>
+
+    <script>
+        document.getElementById('back-btn').addEventListener('click', function(e) {
+            e.preventDefault();
+            if (window.history.length > 1 && document.referrer) {
+                window.history.back();
+            } else {
+                window.location.href = 'index.html';
+            }
+        });
+    </script>
+
+</body>
+</html>
