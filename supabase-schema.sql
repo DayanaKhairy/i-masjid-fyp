@@ -114,6 +114,21 @@ alter table public.korban_participants add column if not exists payment_method  
 alter table public.korban_participants add column if not exists installment_months integer default null;
 alter table public.korban_participants add column if not exists charge_fee       numeric(10,2) default 0.00;
 
+-- Khairat Kematian registrations and payment verification
+create table if not exists public.khairat_members (
+  id               text primary key,
+  name             text not null,
+  ic_number        text not null,
+  phone_number     text not null,
+  email            text,
+  address          text not null,
+  members_count    integer not null,
+  amount           numeric(10,2) not null,
+  payment_method   text default 'toyyibpay',
+  payment_status   text default 'pending',
+  registered_at    timestamptz default now()
+);
+
 
 -- ═══ ROW LEVEL SECURITY & POLICIES ═══
 -- Re-enable RLS but add explicit public allow-all policies
@@ -127,6 +142,7 @@ alter table public.registrations enable row level security;
 alter table public.announcements enable row level security;
 alter table public.korban_campaigns enable row level security;
 alter table public.korban_participants enable row level security;
+alter table public.khairat_members enable row level security;
 
 -- Drop existing policies if any
 drop policy if exists "Allow public everything on mosques" on public.mosques;
@@ -137,6 +153,7 @@ drop policy if exists "Allow public everything on registrations" on public.regis
 drop policy if exists "Allow public everything on announcements" on public.announcements;
 drop policy if exists "Allow public everything on korban_campaigns" on public.korban_campaigns;
 drop policy if exists "Allow public everything on korban_participants" on public.korban_participants;
+drop policy if exists "Allow public everything on khairat_members" on public.khairat_members;
 
 -- Create ALL access policies for anon/authenticated (public access)
 create policy "Allow public everything on mosques" on public.mosques for all using (true) with check (true);
@@ -147,6 +164,7 @@ create policy "Allow public everything on registrations" on public.registrations
 create policy "Allow public everything on announcements" on public.announcements for all using (true) with check (true);
 create policy "Allow public everything on korban_campaigns" on public.korban_campaigns for all using (true) with check (true);
 create policy "Allow public everything on korban_participants" on public.korban_participants for all using (true) with check (true);
+create policy "Allow public everything on khairat_members" on public.khairat_members for all using (true) with check (true);
 
 -- ═══ SEED DATA ════════════════════════════════════
 

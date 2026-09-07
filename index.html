@@ -196,6 +196,32 @@
           </tbody>
         </table>
       </div>
+
+      <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1);">
+        <h3 style="color:#fff; margin-bottom:0.35rem;">Khairat Kematian Transactions</h3>
+        <p style="color:var(--color-text-secondary); margin-top:0;">Review and verify Khairat membership payments below.</p>
+        <button onclick="loadAdminKhairatData()" class="btn-primary" style="margin-top: 0.5rem; background: #eab308; color: #000; border: none; padding: 0.5rem 1rem; border-radius: 6px; font-weight: bold; cursor: pointer;"><i class="fa-solid fa-rotate"></i> Refresh Khairat</button>
+
+        <div style="margin-top: 1rem; background: rgba(0,0,0,0.4); border-radius: 12px; overflow-x: auto; overflow-y: auto; max-height: 500px; border: 1px solid rgba(255,255,255,0.05);">
+          <table style="width: 100%; border-collapse: collapse; text-align: left; color: #fff; min-width: 900px;">
+            <thead style="position: sticky; top: 0; z-index: 10;">
+              <tr>
+                <th style="padding: 1rem; background: #1a1a2e; border-bottom: 1px solid rgba(255,255,255,0.1);">ID/Ref</th>
+                <th style="padding: 1rem; background: #1a1a2e; border-bottom: 1px solid rgba(255,255,255,0.1);">Applicant</th>
+                <th style="padding: 1rem; background: #1a1a2e; border-bottom: 1px solid rgba(255,255,255,0.1);">IC / Phone</th>
+                <th style="padding: 1rem; background: #1a1a2e; border-bottom: 1px solid rgba(255,255,255,0.1);">Members</th>
+                <th style="padding: 1rem; background: #1a1a2e; border-bottom: 1px solid rgba(255,255,255,0.1);">Amount</th>
+                <th style="padding: 1rem; background: #1a1a2e; border-bottom: 1px solid rgba(255,255,255,0.1);">Payment</th>
+                <th style="padding: 1rem; background: #1a1a2e; border-bottom: 1px solid rgba(255,255,255,0.1);">Status</th>
+                <th style="padding: 1rem; background: #1a1a2e; border-bottom: 1px solid rgba(255,255,255,0.1);">Action</th>
+              </tr>
+            </thead>
+            <tbody id="admin-khairat-tbody">
+              <tr><td colspan="8" style="padding: 1rem; text-align:center;">Loading...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   </div>
 

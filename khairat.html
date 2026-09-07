@@ -1202,6 +1202,8 @@
   </div>
 
   <!-- ═══ Scripts ═══ -->
+  <script src="js/supabase.js"></script>
+  <script src="js/supabase-client.js"></script>
   <script>
     /* ─── Dark mode ─── */
     (function () {
@@ -1213,6 +1215,41 @@
         if (label) label.textContent = 'Light';
       }
     })();
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const paymentStatus = urlParams.get('status_id');
+
+    if (paymentStatus === '1') {
+      const billcode = urlParams.get('billcode') || '';
+      const displayRef = billcode.replace(/^SIM-/, '') || 'KK-2026-0001';
+
+      const registrationWrap = document.getElementById('registration-form-wrap');
+      const successBox = document.getElementById('success-box');
+      const successRef = document.getElementById('success-ref');
+
+      if (successRef) successRef.textContent = 'No. Rujukan: ' + displayRef;
+      if (registrationWrap) registrationWrap.style.display = 'none';
+      if (successBox) successBox.style.display = 'block';
+
+      if (window.sb && displayRef !== 'KK-2026-0001') {
+        window.sb.from('khairat_members')
+          .update({ payment_status: 'pending' })
+          .eq('id', displayRef)
+          .then(({ error }) => { if (error) console.error('Khairat payment update failed:', error); });
+      }
+
+      window.history.replaceState({}, document.title, window.location.pathname);
+    } else if (paymentStatus === '3') {
+      const billcode = urlParams.get('billcode') || '';
+      const displayRef = billcode.replace(/^SIM-/, '');
+      if (window.sb && displayRef) {
+        window.sb.from('khairat_members')
+          .update({ payment_status: 'cancelled' })
+          .eq('id', displayRef)
+          .then(() => {});
+      }
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
 
     function toggleDarkMode() {
       const isDark = document.body.classList.toggle('dark-mode');
@@ -1274,23 +1311,71 @@
 
       setTimeout(() => {
         if (activePayTab === 'toyyibpay') {
-          // Redirect to ToyyibPay — use your actual ToyyibPay bill code here
+          // Send Khairat through the same simulated gateway flow used by Qurban
           const ref = 'KK-2026-' + String(Math.floor(Math.random() * 9000) + 1000);
           const name = encodeURIComponent(document.getElementById('kh-name').value);
           const email = encodeURIComponent(document.getElementById('kh-email').value || 'guest@imasjid.my');
           const phone = encodeURIComponent(document.getElementById('kh-phone').value.replace(/\D/g, ''));
-          // Replace BILL_CODE with your actual ToyyibPay bill code:
-          const toyyibUrl =
-            `https://toyyibpay.com/KHAIRAT_BILL_CODE?billExternalReferenceNo=${ref}` +
-            `&billTo=${name}&billEmail=${email}&billPhone=${phone}&billAmt=${(total * 100).toFixed(0)}`;
-          window.location.href = toyyibUrl;
+          const returnUrl = encodeURIComponent(window.location.href);
+          const saveRegistration = window.sb
+            ? window.sb.from('khairat_members').insert([{
+              id: ref,
+              name: document.getElementById('kh-name').value,
+              ic_number: document.getElementById('kh-ic').value,
+              phone_number: document.getElementById('kh-phone').value,
+              email: document.getElementById('kh-email').value || null,
+              address: document.getElementById('kh-address').value,
+              members_count: personCount,
+              amount: total,
+              payment_method: 'toyyibpay',
+              payment_status: 'pending'
+            }])
+            : Promise.reject(new Error('Database connection unavailable.'));
+
+          saveRegistration.then(({ error }) => {
+            if (error) throw error;
+            const mockGatewayUrl =
+              `mock-toyyibpay.html?amount=${total.toFixed(2)}` +
+              `&reg_id=${encodeURIComponent(ref)}` +
+              `&return_url=${returnUrl}` +
+              `&billTo=${name}&billEmail=${email}&billPhone=${phone}`;
+            window.location.href = mockGatewayUrl;
+          }).catch(err => {
+            console.error('Khairat registration failed:', err);
+            alert('Pendaftaran gagal disimpan. Sila cuba lagi.');
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Hantar & Bayar Sekarang';
+          });
         } else {
           // QR flow — show success (payment confirmed separately by admin)
           const ref = 'KK-2026-' + String(Math.floor(Math.random() * 9000) + 1000);
-          document.getElementById('success-ref').textContent = 'No. Rujukan: ' + ref;
-          document.getElementById('registration-form-wrap').style.display = 'none';
-          document.getElementById('success-box').style.display = 'block';
-          window.scrollTo({ top: 0, behavior: 'smooth' });
+          const saveRegistration = window.sb
+            ? window.sb.from('khairat_members').insert([{
+              id: ref,
+              name: document.getElementById('kh-name').value,
+              ic_number: document.getElementById('kh-ic').value,
+              phone_number: document.getElementById('kh-phone').value,
+              email: document.getElementById('kh-email').value || null,
+              address: document.getElementById('kh-address').value,
+              members_count: personCount,
+              amount: total,
+              payment_method: 'qr',
+              payment_status: 'pending'
+            }])
+            : Promise.reject(new Error('Database connection unavailable.'));
+
+          saveRegistration.then(({ error }) => {
+            if (error) throw error;
+            document.getElementById('success-ref').textContent = 'No. Rujukan: ' + ref;
+            document.getElementById('registration-form-wrap').style.display = 'none';
+            document.getElementById('success-box').style.display = 'block';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }).catch(err => {
+            console.error('Khairat registration failed:', err);
+            alert('Pendaftaran gagal disimpan. Sila cuba lagi.');
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Hantar & Bayar Sekarang';
+          });
         }
       }, 1500);
     }

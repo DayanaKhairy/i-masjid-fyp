@@ -421,6 +421,7 @@ function updateAuthStateUI(profile) {
       if (adminDashboard) {
         adminDashboard.style.display = 'block';
         loadAdminQurbanData();
+        loadAdminKhairatData();
       }
     } else {
       if (adminDashboard) adminDashboard.style.display = 'none';
@@ -574,6 +575,73 @@ window.loadAdminQurbanData = async function() {
     tbody.innerHTML = '<tr><td colspan="6" style="padding: 1rem; text-align:center; color:#ef4444;">Failed to load data.</td></tr>';
   }
 }
+
+window.loadAdminKhairatData = async function() {
+  const tbody = document.getElementById('admin-khairat-tbody');
+  if (!tbody) return;
+
+  tbody.innerHTML = '<tr><td colspan="8" style="padding: 1rem; text-align:center;">Loading...</td></tr>';
+  try {
+    if (!window.sb) throw new Error('Database connection unavailable.');
+    const { data, error } = await window.sb.from('khairat_members')
+      .select('id, name, ic_number, phone_number, email, members_count, amount, payment_method, payment_status, registered_at')
+      .order('registered_at', { ascending: false });
+
+    if (error) throw error;
+    if (!data || data.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="8" style="padding: 1rem; text-align:center;">No Khairat transactions found.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = '';
+    data.forEach(row => {
+      const status = row.payment_status || 'pending';
+      const statusStyles = {
+        paid: ['PAID', '#22c55e'],
+        rejected: ['REJECTED', '#ef4444'],
+        cancelled: ['CANCELLED', '#94a3b8'],
+        pending: ['PENDING', '#eab308']
+      };
+      const [statusLabel, statusColor] = statusStyles[status] || statusStyles.pending;
+      const badge = `<span style="background:${statusColor}1a;color:${statusColor};padding:0.3rem 0.6rem;border-radius:4px;font-size:0.8rem;font-weight:bold;">${statusLabel}</span>`;
+      const locked = ['paid', 'rejected', 'cancelled'].includes(status);
+      const action = locked
+        ? '<span style="color:var(--color-text-muted);">-</span>'
+        : `<div style="display:flex;gap:0.4rem;flex-wrap:wrap;">
+             <button onclick="markAdminKhairat('${row.id}','paid')" style="background:#22c55e;color:#fff;border:none;padding:0.4rem 0.75rem;border-radius:6px;cursor:pointer;font-weight:700;font-size:0.82rem;">Approve</button>
+             <button onclick="markAdminKhairat('${row.id}','rejected')" style="background:#ef4444;color:#fff;border:none;padding:0.4rem 0.75rem;border-radius:6px;cursor:pointer;font-weight:700;font-size:0.82rem;">Reject</button>
+           </div>`;
+
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td style="padding:1rem;border-bottom:1px solid rgba(255,255,255,0.05);"><small>${row.id}</small></td>
+        <td style="padding:1rem;border-bottom:1px solid rgba(255,255,255,0.05);"><strong>${row.name}</strong><br><small style="color:var(--color-text-secondary);">${row.email || '-'}</small></td>
+        <td style="padding:1rem;border-bottom:1px solid rgba(255,255,255,0.05);"><small>${row.ic_number}</small><br><small style="color:var(--color-text-secondary);">${row.phone_number}</small></td>
+        <td style="padding:1rem;border-bottom:1px solid rgba(255,255,255,0.05);">${row.members_count}</td>
+        <td style="padding:1rem;border-bottom:1px solid rgba(255,255,255,0.05);color:var(--color-primary);font-weight:bold;">RM ${Number(row.amount || 0).toFixed(2)}</td>
+        <td style="padding:1rem;border-bottom:1px solid rgba(255,255,255,0.05);">${row.payment_method === 'qr' ? 'QR Code' : 'ToyyibPay'}</td>
+        <td style="padding:1rem;border-bottom:1px solid rgba(255,255,255,0.05);">${badge}</td>
+        <td style="padding:1rem;border-bottom:1px solid rgba(255,255,255,0.05);">${action}</td>`;
+      tbody.appendChild(tr);
+    });
+  } catch (err) {
+    console.error(err);
+    tbody.innerHTML = '<tr><td colspan="8" style="padding:1rem;text-align:center;color:#ef4444;">Failed to load Khairat data. Run the updated Supabase schema first.</td></tr>';
+  }
+};
+
+window.markAdminKhairat = async function(id, status) {
+  const label = status === 'paid' ? 'approve' : 'reject';
+  if (!confirm(`Are you sure you want to ${label} this Khairat payment?`)) return;
+  try {
+    const { error } = await window.sb.from('khairat_members').update({ payment_status: status }).eq('id', id);
+    if (error) throw error;
+    showToast(status === 'paid' ? 'Payment Approved successfully!' : 'Payment Rejected.');
+    loadAdminKhairatData();
+  } catch (err) {
+    showToast('Error updating Khairat payment: ' + err.message);
+  }
+};
 
 window.markAdminAsPaid = async function(id) {
   if (!confirm("Approve this payment? The user's receipt will update to PAID.")) return;
