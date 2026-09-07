@@ -1,3 +1,4 @@
+// Root forwarder to js/dark-mode.js
 (function () {
   function syncDarkModeUI(isDark) {
     var icon = document.getElementById('dm-icon');

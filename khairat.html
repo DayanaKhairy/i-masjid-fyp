@@ -917,6 +917,11 @@
 </head>
 
 <body class="standalone-shell">
+  <script>
+    if (localStorage.getItem('imasjid-dark-mode') === 'true') {
+      document.body.classList.add('dark-mode');
+    }
+  </script>
   <input class="standalone-sidebar-toggle" id="standalone-sidebar-toggle" type="checkbox"
     aria-label="Toggle navigation menu">
   <label class="menu-btn standalone-menu-btn" for="standalone-sidebar-toggle"
@@ -1290,7 +1295,8 @@
       }, 1500);
     }
   </script>
-  <script src="sidebar-state.js"></script>
+  <script src="js/dark-mode.js"></script>
+  <script src="js/sidebar-state.js"></script>
 </body>
 
 </html>

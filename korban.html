@@ -315,6 +315,11 @@
 </head>
 
 <body class="standalone-shell">
+  <script>
+    if (localStorage.getItem('imasjid-dark-mode') === 'true') {
+      document.body.classList.add('dark-mode');
+    }
+  </script>
   <button class="dark-mode-toggle" id="dark-mode-toggle" onclick="toggleDarkMode()" aria-label="Toggle dark mode">
     <div class="dm-track">
       <div class="dm-thumb"></div>

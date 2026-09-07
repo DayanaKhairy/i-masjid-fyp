@@ -6,6 +6,9 @@
 
 // ── Bootstrap on DOM ready ────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', async () => {
+  // Restore the visual theme immediately before async data initialization
+  initDarkMode();
+
   // 1. Navigation routing
   handleHashRouting();
   window.addEventListener('hashchange', handleHashRouting);
@@ -23,10 +26,16 @@ document.addEventListener('DOMContentLoaded', async () => {
   document.querySelectorAll('.nav-link').forEach(link => {
     link.addEventListener('click', closeSidebar);
   });
-
-  // 6. Restore dark mode preference
-  initDarkMode();
 });
+
+window.addEventListener('storage', e => {
+  if (e.key === 'imasjid-dark-mode') {
+    const isDark = e.newValue === 'true';
+    document.body.classList.toggle('dark-mode', isDark);
+    updateDarkModeUI(isDark);
+  }
+});
+
 
 // ═══ NAVIGATION ══════════════════════════════════════════════════
 

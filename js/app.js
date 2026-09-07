@@ -29,6 +29,15 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 });
 
+window.addEventListener('storage', e => {
+    if (e.key === 'imasjid-dark-mode') {
+        const isDark = e.newValue === 'true';
+        document.body.classList.toggle('dark-mode', isDark);
+        updateDarkModeUI(isDark);
+    }
+});
+
+
 // ═══ NAVIGATION ══════════════════════════════════════════════════
 
 function handleHashRouting() {

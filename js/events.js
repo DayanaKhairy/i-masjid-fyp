@@ -410,11 +410,11 @@ async function openEventDetails(eventId) {
       '<i class="fa-solid ' + iconCls + '"></i> ' + ev.title +
     '</h2>' +
     '<div style="display:flex;flex-direction:column;gap:.75rem;margin-bottom:1.5rem;">' +
-      '<p><i class="fa-solid fa-microphone" style="color:#ffffff;margin-right:6px;"></i><strong>Speaker / Host:</strong> ' + (ev.speaker || '-') + '</p>' +
-      '<p><i class="fa-solid fa-calendar-days" style="color:#ffffff;margin-right:6px;"></i><strong>Date:</strong> ' + formatEventDate(ev.date) + '</p>' +
-      '<p><i class="fa-solid fa-clock" style="color:#ffffff;margin-right:6px;"></i><strong>Time:</strong> ' + (ev.time_range || '-') + '</p>' +
-      '<p><i class="fa-solid fa-location-dot" style="color:#ffffff;margin-right:6px;"></i><strong>Location:</strong> ' + (ev.location || '-') + '</p>' +
-      '<p><i class="fa-solid fa-tag" style="color:#ffffff;margin-right:6px;"></i><strong>Category:</strong> <span style="text-transform:capitalize;">' + ev.category + '</span></p>' +
+      '<p><i class="fa-solid fa-microphone" style="color:var(--primary-yellow, #FEBC2F);margin-right:6px;"></i><strong>Speaker / Host:</strong> ' + (ev.speaker || '-') + '</p>' +
+      '<p><i class="fa-solid fa-calendar-days" style="color:var(--primary-yellow, #FEBC2F);margin-right:6px;"></i><strong>Date:</strong> ' + formatEventDate(ev.date) + '</p>' +
+      '<p><i class="fa-solid fa-clock" style="color:var(--primary-yellow, #FEBC2F);margin-right:6px;"></i><strong>Time:</strong> ' + (ev.time_range || '-') + '</p>' +
+      '<p><i class="fa-solid fa-location-dot" style="color:var(--primary-yellow, #FEBC2F);margin-right:6px;"></i><strong>Location:</strong> ' + (ev.location || '-') + '</p>' +
+      '<p><i class="fa-solid fa-tag" style="color:var(--primary-yellow, #FEBC2F);margin-right:6px;"></i><strong>Category:</strong> <span style="text-transform:capitalize;">' + ev.category + '</span></p>' +
       ytBox +
       '<p style="color:var(--color-text-secondary);line-height:1.7;margin-top:.5rem;">' + (ev.description || '') + '</p>' +
     '</div>' +

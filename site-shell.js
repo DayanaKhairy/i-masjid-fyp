@@ -1,3 +1,4 @@
+// Root forwarder to js/site-shell.js
 (function () {
   var body = document.body;
   if (!body) return;
