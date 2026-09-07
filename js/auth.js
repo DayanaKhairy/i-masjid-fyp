@@ -181,6 +181,7 @@ async function handleLogin(event) {
     
     await loadUserRegistrations(profileData.email);
     await loadUserQurbanHistory(profileData.phone_number || profileData.email);
+    await loadUserKhairatHistory(profileData.phone_number, profileData.email);
     renderEvents(allEvents);
     updateAuthStateUI(profileData);
 
@@ -246,6 +247,7 @@ async function handleRegister(event) {
     
     await loadUserRegistrations(data.email);
     await loadUserQurbanHistory(data.phone_number || data.email);
+    await loadUserKhairatHistory(data.phone_number, data.email);
     renderEvents(allEvents);
     updateAuthStateUI(data);
 
@@ -296,6 +298,7 @@ async function checkAuthSession() {
     updateAuthStateUI(profile);
     await loadUserRegistrations(profile.email);
     await loadUserQurbanHistory(profile.phone_number || profile.email);
+    await loadUserKhairatHistory(profile.phone_number, profile.email);
     renderEvents(allEvents);
   } else {
     updateAuthStateUI(null);
@@ -380,6 +383,55 @@ async function loadUserQurbanHistory(identifier) {
 }
 
 // ── Update UI based on auth state ────────────────────────────────
+async function loadUserKhairatHistory(phone, email) {
+  if (!phone && !email) return;
+  try {
+    let query = window.sb.from('khairat_members')
+      .select('id, name, members_count, amount, payment_method, payment_status, registered_at, phone_number, email')
+      .order('registered_at', { ascending: false });
+    if (phone) query = query.eq('phone_number', phone);
+    else query = query.eq('email', email);
+
+    let { data, error } = await query;
+    if (error) throw error;
+    if ((!data || data.length === 0) && email && phone) {
+      const fallback = await window.sb.from('khairat_members')
+        .select('id, name, members_count, amount, payment_method, payment_status, registered_at, phone_number, email')
+        .eq('email', email).order('registered_at', { ascending: false });
+      if (fallback.error) throw fallback.error;
+      data = fallback.data;
+    }
+
+    const section = document.getElementById('ud-khairat-receipts');
+    const list = document.getElementById('ud-khairat-list');
+    if (!section || !list) return;
+    if (!data || data.length === 0) { section.style.display = 'none'; return; }
+
+    section.style.display = 'block';
+    list.innerHTML = data.map(reg => {
+      const status = reg.payment_status || 'pending';
+      const isPaid = status === 'paid';
+      const isRejected = status === 'rejected';
+      const isCancelled = status === 'cancelled';
+      const color = isPaid ? '#22c55e' : isRejected ? '#ef4444' : isCancelled ? '#94a3b8' : '#eab308';
+      const bg = isPaid ? 'rgba(34,197,94,0.12)' : isRejected ? 'rgba(239,68,68,0.12)' : isCancelled ? 'rgba(148,163,184,0.12)' : 'rgba(234,179,8,0.12)';
+      const border = isPaid ? 'rgba(34,197,94,0.35)' : isRejected ? 'rgba(239,68,68,0.35)' : isCancelled ? 'rgba(148,163,184,0.35)' : 'rgba(234,179,8,0.35)';
+      const label = isPaid ? 'PAID' : isRejected ? 'REJECTED' : isCancelled ? 'CANCELLED' : 'PENDING VERIFICATION';
+      const note = isPaid ? 'Your Khairat membership payment has been approved.' : isRejected ? 'Your payment was rejected by the admin. Please contact the mosque.' : isCancelled ? 'This payment was cancelled. You may register again to proceed.' : 'Awaiting admin payment verification. Your registration is confirmed.';
+      const date = new Date(reg.registered_at).toLocaleDateString('en-MY', { day: '2-digit', month: 'short', year: 'numeric' });
+
+      return `<div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:1.2rem;position:relative;">
+        <div style="position:absolute;top:1rem;right:1rem;color:${color};font-weight:bold;font-size:0.75rem;background:${bg};border:1px solid ${border};padding:0.3rem 0.6rem;border-radius:4px;">${label}</div>
+        <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1rem;"><div style="background:rgba(6,182,212,0.1);width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--color-primary);"><i class="fa-solid fa-heart-pulse"></i></div><div><div style="font-weight:700;color:#fff;">Khairat Kematian</div><div style="font-size:0.8rem;color:var(--color-text-secondary);">${date}</div></div></div>
+        <div style="font-size:0.9rem;color:#fff;"><div style="display:flex;justify-content:space-between;margin-bottom:0.3rem;"><span style="color:var(--color-text-muted);">Members:</span><span>${reg.members_count} Person(s)</span></div><div style="display:flex;justify-content:space-between;"><span style="color:var(--color-text-muted);">Total:</span><strong style="color:var(--color-primary);">RM ${Number(reg.amount || 0).toFixed(2)}</strong></div></div>
+        <p style="font-size:0.78rem;color:${color};margin-top:0.6rem;background:${bg};border-radius:6px;padding:0.4rem 0.7rem;">${note}</p>
+      </div>`;
+    }).join('');
+  } catch (err) {
+    console.error('Could not fetch Khairat history:', err);
+  }
+}
+
 function updateAuthStateUI(profile) {
   const formLogin    = document.getElementById('form-login');
   const formRegister = document.getElementById('form-register');
@@ -769,6 +821,7 @@ async function handleOAuthSuccess(email, name, provider) {
     updateAuthStateUI(profileData);
     if (typeof loadUserRegistrations === 'function') loadUserRegistrations(profileData.email);
     if (typeof loadUserQurbanHistory === 'function') loadUserQurbanHistory(profileData.phone_number || profileData.email);
+    if (typeof loadUserKhairatHistory === 'function') loadUserKhairatHistory(profileData.phone_number, profileData.email);
     
     setTimeout(() => {
       showToast(`✅ Successfully logged in via ${provider === 'google' ? 'Google' : 'Facebook'}!`);

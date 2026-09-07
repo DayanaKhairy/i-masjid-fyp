@@ -1128,8 +1128,8 @@
             <div class="qr-box">
               <div class="qr-code-wrap">
                 <div class="qr-placeholder">
-                  <!-- Simulated QR placeholder — replace src with actual QR image -->
-                  <i class="fa-solid fa-qrcode" style="font-size:5rem;color:#111;"></i>
+                  <img src="assets/images/qr-tabung-masjid.png" alt="QR Code Tabung Masjid"
+                    style="width:100%;height:100%;object-fit:contain;display:block;" />
                 </div>
                 <div class="qr-label">DuitNow QR</div>
                 <div class="qr-code-amount" id="qr-amount-display">RM 80.00</div>
@@ -1190,6 +1190,8 @@
       <p>Terima kasih! Pendaftaran Khairat Kematian anda telah diterima. Sila lengkapkan pembayaran untuk mengaktifkan
         perlindungan.</p>
       <div class="success-ref" id="success-ref">No. Rujukan: KK-2026-0001</div>
+      <div id="khairat-receipt-status" style="display:inline-block;margin:0.5rem 0 1rem;"></div>
+      <p id="khairat-receipt-note" style="font-size:0.85rem;margin:0.75rem 0 0;"></p>
       <p style="font-size:0.85rem;">Resit dan maklumat lanjut akan dihantar ke e-mel anda dalam masa 1–2 hari bekerja.
       </p>
       <button class="btn-submit-khairat" style="max-width:280px;margin:1rem auto 0;"
@@ -1219,17 +1221,50 @@
     const urlParams = new URLSearchParams(window.location.search);
     const paymentStatus = urlParams.get('status_id');
 
+    let khairatStatusTimer;
+
+    function renderKhairatReceipt(status) {
+      const config = {
+        paid: ['PAID', '#22c55e', 'Bayaran anda telah diluluskan oleh admin.', 'Perlindungan Khairat Kematian anda kini aktif.'],
+        rejected: ['REJECTED', '#ef4444', 'Bayaran anda telah ditolak oleh admin.', 'Sila hubungi pejabat masjid untuk maklumat lanjut.'],
+        cancelled: ['CANCELLED', '#94a3b8', 'Bayaran ini telah dibatalkan.', 'Anda boleh membuat pendaftaran baharu untuk mencuba lagi.'],
+        pending: ['PENDING VERIFICATION', '#eab308', 'Pendaftaran anda telah diterima.', 'Menunggu pengesahan bayaran oleh admin masjid.']
+      }[status] || ['PENDING VERIFICATION', '#eab308', 'Pendaftaran anda telah diterima.', 'Menunggu pengesahan bayaran oleh admin masjid.'];
+      const badge = document.getElementById('khairat-receipt-status');
+      const note = document.getElementById('khairat-receipt-note');
+      if (badge) {
+        badge.textContent = config[0];
+        badge.style.cssText = `display:inline-block;background:${config[1]}1f;color:${config[1]};border:1px solid ${config[1]}59;padding:0.4rem 0.8rem;border-radius:6px;font-weight:700;font-size:0.82rem;`;
+      }
+      if (note) {
+        note.textContent = config[2] + ' ' + config[3];
+        note.style.color = config[1];
+      }
+    }
+
+    async function loadKhairatReceipt(ref) {
+      if (!ref || !window.sb) return;
+      const { data, error } = await window.sb.from('khairat_members')
+        .select('payment_status').eq('id', ref).maybeSingle();
+      if (!error && data) renderKhairatReceipt(data.payment_status || 'pending');
+    }
+
+    function showKhairatReceipt(ref) {
+      document.getElementById('success-ref').textContent = 'No. Rujukan: ' + ref;
+      document.getElementById('registration-form-wrap').style.display = 'none';
+      document.getElementById('success-box').style.display = 'block';
+      renderKhairatReceipt('pending');
+      localStorage.setItem('khairat_last_ref', ref);
+      loadKhairatReceipt(ref);
+      clearInterval(khairatStatusTimer);
+      khairatStatusTimer = setInterval(() => loadKhairatReceipt(ref), 10000);
+    }
+
     if (paymentStatus === '1') {
       const billcode = urlParams.get('billcode') || '';
       const displayRef = billcode.replace(/^SIM-/, '') || 'KK-2026-0001';
 
-      const registrationWrap = document.getElementById('registration-form-wrap');
-      const successBox = document.getElementById('success-box');
-      const successRef = document.getElementById('success-ref');
-
-      if (successRef) successRef.textContent = 'No. Rujukan: ' + displayRef;
-      if (registrationWrap) registrationWrap.style.display = 'none';
-      if (successBox) successBox.style.display = 'block';
+      showKhairatReceipt(displayRef);
 
       if (window.sb && displayRef !== 'KK-2026-0001') {
         window.sb.from('khairat_members')
@@ -1366,9 +1401,7 @@
 
           saveRegistration.then(({ error }) => {
             if (error) throw error;
-            document.getElementById('success-ref').textContent = 'No. Rujukan: ' + ref;
-            document.getElementById('registration-form-wrap').style.display = 'none';
-            document.getElementById('success-box').style.display = 'block';
+            showKhairatReceipt(ref);
             window.scrollTo({ top: 0, behavior: 'smooth' });
           }).catch(err => {
             console.error('Khairat registration failed:', err);
