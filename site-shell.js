@@ -24,7 +24,7 @@
           <li><a href="donate.html" class="nav-link w2-nav-item"><span class="sl-icon"><i class="fa-solid fa-hand-holding-dollar"></i></span> Infaq &amp; Donate</a></li>
           <li><a href="index.html#about" class="nav-link w2-nav-item"><span class="sl-icon"><i class="fa-solid fa-mosque"></i></span> About</a></li>
         </ul>
-        <div class="sidebar-divider"></div><a href="index.html#login" class="nav-link btn-gold-w2 sidebar-login">Login Portal</a><p class="sidebar-tagline">Figma Workshop 2 Design</p>
+        <div class="sidebar-divider"></div><a href="index.html#login" class="nav-link btn-gold-w2 sidebar-login">Login Portal</a>
       </aside>`);
   }
 
