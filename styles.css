@@ -4,7 +4,7 @@
 :root {
   /* Strict Palette Tokens */
   --primary-yellow: #FEBC2F;
-  --primary-yellow-hover: #EABP32;
+  --primary-yellow-hover: #EABF32;
   --color-black: #111111;
   --color-dark-gray: #222222;
   --color-muted-gray: #555555;
@@ -19,10 +19,10 @@
 
   /* Global Color Mappings */
   --color-primary: #FEBC2F; 
-  --color-primary-dark: #EABP32; 
+  --color-primary-dark: #EABF32;
   --color-primary-light: #FFF0C2; 
   --color-accent: #FEBC2F; 
-  --color-accent-dark: #EABP32;
+  --color-accent-dark: #EABF32;
   --color-bg-dark: #FFFFFF; 
   --color-card-dark: #FFFFFF; 
   --color-card-border: #E5E7EB; 
@@ -297,6 +297,19 @@ a:hover {
   background: var(--primary-yellow-hover);
   color: #111111 !important;
   box-shadow: 0 0 15px rgba(254, 188, 47, 0.35);
+}
+
+body.dark-mode .sidebar-login {
+  background: var(--primary-yellow);
+  color: #111111 !important;
+  border-color: var(--primary-yellow);
+  box-shadow: 0 0 16px rgba(254, 188, 47, 0.28);
+}
+
+body.dark-mode .sidebar-login:hover {
+  background: var(--primary-yellow-hover);
+  color: #111111 !important;
+  box-shadow: 0 0 18px rgba(254, 188, 47, 0.42);
 }
 
 .sidebar-tagline {
@@ -1793,6 +1806,16 @@ body:not(.dark-mode) .ud-badge {
   border-color: rgba(15, 60, 40, 0.25);
 }
 
+body:not(.dark-mode) .ud-badge i,
+body:not(.dark-mode) .ud-header h2 i,
+body:not(.dark-mode) .uda-icon i {
+  color: #166534 !important;
+}
+
+body.dark-mode .uda-icon i {
+  color: #ffffff !important;
+}
+
 body:not(.dark-mode) .ud-header h2,
 body:not(.dark-mode) .ud-action-card h4,
 body:not(.dark-mode) #ud-qurban-receipts h3,
@@ -1911,7 +1934,7 @@ body:not(.dark-mode) .ud-receipt-content {
   top: 15%;
   height: 70%;
   width: 5px;
-  background-color: var(--primary-gold);
+  background-color: var(--primary-yellow);
   border-radius: 0 4px 4px 0;
 }
 
@@ -1919,6 +1942,11 @@ body:not(.dark-mode) .ud-receipt-content {
   font-size: 1.1rem;
   width: 20px;
   text-align: center;
+  color: var(--text-main);
+}
+
+body.dark-mode .w2-nav-item i {
+  color: #f0f0f0;
 }
 
 .w2-user-profile {
@@ -1998,7 +2026,7 @@ body:not(.dark-mode) .ud-receipt-content {
 }
 
 .w2-search-box input:focus {
-  border-color: var(--primary-gold);
+  border-color: var(--primary-yellow);
   background-color: #FFFFFF;
   box-shadow: 0 0 0 3px rgba(254, 188, 47, 0.15);
 }
@@ -2055,7 +2083,7 @@ body:not(.dark-mode) .ud-receipt-content {
 }
 
 .w2-count-badge {
-  background-color: var(--primary-gold);
+  background-color: var(--primary-yellow);
   color: var(--text-main);
   font-weight: 700;
   font-size: 0.85rem;
@@ -2065,7 +2093,7 @@ body:not(.dark-mode) .ud-receipt-content {
 
 /* Workshop 2 Action Buttons */
 .btn-gold-w2 {
-  background-color: var(--primary-gold);
+  background-color: var(--primary-yellow);
   color: var(--text-main);
   font-family: 'Poppins', sans-serif;
   font-weight: 600;
@@ -2082,7 +2110,7 @@ body:not(.dark-mode) .ud-receipt-content {
 }
 
 .btn-gold-w2:hover {
-  background-color: var(--primary-gold-hover);
+  background-color: var(--primary-yellow-hover);
   transform: translateY(-1px);
   box-shadow: 0 6px 16px rgba(254, 188, 47, 0.35);
 }
@@ -2633,7 +2661,7 @@ body.standalone-shell:has(.qr-display) {
   --card: #FFFFFF;
   --border: #EFEFEF;
   --primary: #FEBC2F;
-  --primary-d: #EABP32;
+  --primary-d: #EABF32;
   --text: #111111;
   --muted: #555555;
   background: #F8F9FA !important;
