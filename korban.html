@@ -1,13 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Ibadah Qurban Registration | i@masjid</title>
-  
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="styles.css">
 
@@ -18,6 +21,7 @@
       font-family: 'Poppins', 'Inter', sans-serif;
       padding-bottom: 5rem;
     }
+
     .page-header {
       background: #FFFFFF;
       border-bottom: 1px solid #EFEFEF;
@@ -25,25 +29,48 @@
       text-align: center;
       position: relative;
     }
+
     .btn-back {
       position: absolute;
-      top: 1.5rem; left: 1.5rem;
+      top: 1.5rem;
+      left: 1.5rem;
       background: #F8F9FA;
       border: 1px solid #E0E0E0;
-      width: 40px; height: 40px;
+      width: 40px;
+      height: 40px;
       border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      color: var(--text-main); text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-main);
+      text-decoration: none;
       transition: all 0.3s ease;
       z-index: 10;
     }
-    .btn-back:hover { background: var(--primary-gold); color: var(--text-main); }
-    
-    .page-header i.header-icon {
-      font-size: 3rem; color: var(--primary-gold); margin-bottom: 1rem;
+
+    .btn-back:hover {
+      background: var(--primary-gold);
+      color: var(--text-main);
     }
-    .page-header h1 { font-size: 2.2rem; margin-bottom: 0.5rem; color: var(--text-main); font-weight: 700; }
-    .page-header p { color: var(--text-muted); max-width: 600px; margin: 0 auto; }
+
+    .page-header i.header-icon {
+      font-size: 3rem;
+      color: var(--primary-gold);
+      margin-bottom: 1rem;
+    }
+
+    .page-header h1 {
+      font-size: 2.2rem;
+      margin-bottom: 0.5rem;
+      color: var(--text-main);
+      font-weight: 700;
+    }
+
+    .page-header p {
+      color: var(--text-muted);
+      max-width: 600px;
+      margin: 0 auto;
+    }
 
     .qurban-container {
       max-width: 800px;
@@ -58,6 +85,7 @@
       gap: 1.5rem;
       margin-bottom: 2rem;
     }
+
     .campaign-card {
       background: var(--color-card-dark);
       border: 1px solid var(--color-card-border);
@@ -69,28 +97,53 @@
       position: relative;
       overflow: hidden;
     }
+
     .campaign-card:hover {
       transform: translateY(-5px);
       border-color: var(--color-primary);
       box-shadow: 0 10px 30px rgba(6, 182, 212, 0.1);
     }
+
     .campaign-card.selected {
       border-color: var(--color-primary);
       background: linear-gradient(135deg, rgba(6, 182, 212, 0.1) 0%, transparent 100%);
     }
+
     .campaign-card.selected::before {
-      content: '\f058'; /* fa-circle-check */
+      content: '\f058';
+      /* fa-circle-check */
       font-family: 'Font Awesome 6 Free';
       font-weight: 900;
       position: absolute;
-      top: 1rem; right: 1rem;
+      top: 1rem;
+      right: 1rem;
       color: var(--color-primary);
       font-size: 1.2rem;
     }
-    .c-icon { font-size: 2.5rem; color: #ffffff; margin-bottom: 1rem; }
-    .c-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 0.5rem; }
-    .c-price { font-size: 1.5rem; color: var(--color-primary); font-weight: 800; margin-bottom: 0.5rem; }
-    .c-info { font-size: 0.85rem; color: var(--color-text-muted); }
+
+    .c-icon {
+      font-size: 2.5rem;
+      color: #ffffff;
+      margin-bottom: 1rem;
+    }
+
+    .c-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .c-price {
+      font-size: 1.5rem;
+      color: var(--color-primary);
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+    }
+
+    .c-info {
+      font-size: 0.85rem;
+      color: var(--color-text-muted);
+    }
 
     /* Registration Form */
     .reg-form-card {
@@ -98,61 +151,96 @@
       border: 1px solid var(--color-card-border);
       border-radius: 16px;
       padding: 2rem;
-      display: none; /* hidden until campaign selected */
+      display: none;
+      /* hidden until campaign selected */
       animation: fadeInUp 0.4s ease forwards;
     }
+
     .reg-form-card h3 {
-      font-size: 1.5rem; margin-bottom: 1.5rem;
-      padding-bottom: 1rem; border-bottom: 1px solid rgba(255,255,255,0.05);
+      font-size: 1.5rem;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     }
-    .form-group { margin-bottom: 1.25rem; }
+
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+
     .form-group label {
-      display: block; margin-bottom: 0.5rem;
-      font-size: 0.9rem; font-weight: 600; color: var(--color-text-secondary);
+      display: block;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--color-text-secondary);
     }
-    .form-group input, .form-group select {
-      width: 100%; padding: 0.8rem 1rem;
-      background: rgba(255,255,255,0.03);
+
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 0.8rem 1rem;
+      background: rgba(255, 255, 255, 0.03);
       border: 1px solid var(--color-card-border);
-      border-radius: 8px; color: var(--color-text-primary);
-      outline: none; font-family: inherit; font-size: 1rem;
+      border-radius: 8px;
+      color: var(--color-text-primary);
+      outline: none;
+      font-family: inherit;
+      font-size: 1rem;
       transition: all 0.2s;
     }
-    .form-group input:focus, .form-group select:focus {
+
+    .form-group input:focus,
+    .form-group select:focus {
       border-color: var(--color-primary);
-      background: rgba(255,255,255,0.06);
+      background: rgba(255, 255, 255, 0.06);
     }
-    
+
     .form-group select option {
       background: var(--color-bg-dark);
       color: var(--color-text-primary);
     }
-    
+
     .summary-box {
       background: rgba(6, 182, 212, 0.05);
       border: 1px dashed var(--color-primary);
-      padding: 1.5rem; border-radius: 12px;
-      margin-top: 2rem; margin-bottom: 1.5rem;
+      padding: 1.5rem;
+      border-radius: 12px;
+      margin-top: 2rem;
+      margin-bottom: 1.5rem;
     }
+
     .summary-row {
-      display: flex; justify-content: space-between;
-      margin-bottom: 0.5rem; font-size: 0.95rem;
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+      font-size: 0.95rem;
     }
+
     .summary-total {
-      display: flex; justify-content: space-between;
-      margin-top: 1rem; padding-top: 1rem;
-      border-top: 1px solid rgba(255,255,255,0.1);
-      font-size: 1.2rem; font-weight: 700; color: var(--color-primary);
+      display: flex;
+      justify-content: space-between;
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--color-primary);
     }
 
     .btn-submit {
-      width: 100%; padding: 1rem;
+      width: 100%;
+      padding: 1rem;
       background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
-      color: #ffffff; font-weight: 700; font-size: 1.1rem;
-      border: none; border-radius: 8px; cursor: pointer;
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 1.1rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
       transition: all 0.3s;
       box-shadow: 0 4px 15px rgba(6, 182, 212, 0.3);
     }
+
     .btn-submit:hover {
       transform: translateY(-2px);
       box-shadow: 0 6px 20px rgba(6, 182, 212, 0.5);
@@ -160,30 +248,110 @@
 
     /* Modals */
     .modal-overlay {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(5px);
-      display: none; align-items: center; justify-content: center; z-index: 1000;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(15, 23, 42, 0.8);
+      backdrop-filter: blur(5px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
     }
+
     .modal-content {
-      background: var(--color-card-dark); border: 1px solid var(--color-card-border);
-      padding: 2.5rem; border-radius: 16px; text-align: center; max-width: 400px; width: 90%;
+      background: var(--color-card-dark);
+      border: 1px solid var(--color-card-border);
+      padding: 2.5rem;
+      border-radius: 16px;
+      text-align: center;
+      max-width: 400px;
+      width: 90%;
       animation: zoomIn 0.3s ease;
     }
-    .modal-icon { font-size: 3.5rem; color: var(--color-primary); margin-bottom: 1rem; }
-    .modal-content h3 { font-size: 1.5rem; margin-bottom: 1rem; }
-    .modal-content p { color: var(--color-text-secondary); margin-bottom: 1.5rem; }
-    
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
+
+    .modal-icon {
+      font-size: 3.5rem;
+      color: var(--color-primary);
+      margin-bottom: 1rem;
     }
+
+    .modal-content h3 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .modal-content p {
+      color: var(--color-text-secondary);
+      margin-bottom: 1.5rem;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
     @keyframes zoomIn {
-      from { opacity: 0; transform: scale(0.95); }
-      to { opacity: 1; transform: scale(1); }
+      from {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
     }
   </style>
 </head>
-<body>
+
+<body class="standalone-shell">
+  <button class="dark-mode-toggle" id="dark-mode-toggle" onclick="toggleDarkMode()" aria-label="Toggle dark mode">
+    <div class="dm-track">
+      <div class="dm-thumb"></div>
+    </div><span class="dm-icon" id="dm-icon">🌙</span><span id="dm-label">Dark</span>
+  </button>
+  <input class="standalone-sidebar-toggle" id="standalone-sidebar-toggle" type="checkbox"
+    aria-label="Toggle navigation menu">
+  <label class="menu-btn standalone-menu-btn" for="standalone-sidebar-toggle"
+    aria-label="Toggle navigation menu"><span></span><span></span><span></span></label>
+  <aside class="sidebar w2-sidebar standalone-sidebar" role="navigation" aria-label="Main navigation">
+    <div class="w2-sidebar-header"><a href="index.html" class="sidebar-logo"><img src="logo.png" alt="i@masjid logo"
+          class="sidebar-logo-img w2-sidebar-logo"><span class="sidebar-brand w2-sidebar-title">i<span
+            class="brand-at">@</span>masjid</span></a></div>
+    <div class="sidebar-divider"></div>
+    <ul class="sidebar-links w2-nav-list">
+      <li><a href="index.html" class="nav-link w2-nav-item"><span class="sl-icon"><i
+              class="fa-solid fa-house"></i></span> Home</a></li>
+      <li><a href="index.html#prayer" class="nav-link w2-nav-item"><span class="sl-icon"><i
+              class="fa-solid fa-clock"></i></span> Prayer Times</a></li>
+      <li><a href="index.html#events" class="nav-link w2-nav-item"><span class="sl-icon"><i
+              class="fa-solid fa-calendar-days"></i></span> Events</a></li>
+      <li><a href="korban.html" class="nav-link w2-nav-item active"><span class="sl-icon"><i
+              class="fa-solid fa-cow"></i></span> Ibadah Qurban</a></li>
+      <li><a href="khairat.html" class="nav-link w2-nav-item"><span class="sl-icon"><i
+              class="fa-solid fa-heart-pulse"></i></span> Khairat Kematian</a></li>
+      <li><a href="announcements.html" class="nav-link w2-nav-item"><span class="sl-icon"><i
+              class="fa-solid fa-tower-broadcast"></i></span> Announcements</a></li>
+      <li><a href="donate.html" class="nav-link w2-nav-item"><span class="sl-icon"><i
+              class="fa-solid fa-hand-holding-dollar"></i></span> Infaq &amp; Donate</a></li>
+      <li><a href="index.html#about" class="nav-link w2-nav-item"><span class="sl-icon"><i
+              class="fa-solid fa-mosque"></i></span> About</a></li>
+    </ul>
+    <div class="sidebar-divider"></div>
+    <a href="index.html#login" class="nav-link btn-gold-w2 sidebar-login">Login Portal</a>
+    <p class="sidebar-tagline">Figma Workshop 2 Design</p>
+  </aside>
+
 
   <header class="page-header">
     <a href="index.html" class="btn-back"><i class="fa-solid fa-arrow-left"></i></a>
@@ -193,7 +361,7 @@
   </header>
 
   <div class="qurban-container">
-    
+
     <!-- Loader -->
     <div id="loader" style="text-align:center; padding: 2rem;">
       <i class="fa-solid fa-circle-notch fa-spin fa-2x" style="color:var(--color-primary);"></i>
@@ -202,18 +370,23 @@
 
     <!-- User History (Hidden by default) -->
     <div id="history-section" style="display:none; margin-bottom: 2.5rem;">
-      <h3 style="margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid rgba(255,255,255,0.1);"><i class="fa-solid fa-clock-rotate-left"></i> My Qurban Receipts</h3>
-      <div id="history-list" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem;">
+      <h3 style="margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid rgba(255,255,255,0.1);"><i
+          class="fa-solid fa-clock-rotate-left"></i> My Qurban Receipts</h3>
+      <div id="history-list"
+        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem;">
         <!-- Dynamic History Cards -->
       </div>
     </div>
 
     <!-- Login Required Message (Hidden by default) -->
-    <div id="login-required" style="display:none; text-align:center; padding: 4rem 1.5rem; background: var(--color-card-dark); border: 1px solid var(--color-card-border); border-radius: 16px; margin-bottom: 2rem;">
+    <div id="login-required"
+      style="display:none; text-align:center; padding: 4rem 1.5rem; background: var(--color-card-dark); border: 1px solid var(--color-card-border); border-radius: 16px; margin-bottom: 2rem;">
       <i class="fa-solid fa-lock" style="font-size: 3rem; color: var(--color-primary); margin-bottom: 1rem;"></i>
       <h3 style="margin-bottom: 1rem;">Authentication Required</h3>
-      <p style="color: var(--color-text-secondary); margin-bottom: 2rem;">You must be a registered member and logged in to book a Qurban slot.</p>
-      <button class="btn-submit" style="max-width: 250px; margin: 0 auto;" onclick="window.location.href='index.html#login'">Login / Register Now</button>
+      <p style="color: var(--color-text-secondary); margin-bottom: 2rem;">You must be a registered member and logged in
+        to book a Qurban slot.</p>
+      <button class="btn-submit" style="max-width: 250px; margin: 0 auto;"
+        onclick="window.location.href='index.html#login'">Login / Register Now</button>
     </div>
 
     <!-- Campaigns List -->
@@ -226,17 +399,17 @@
       <form id="korbanForm">
         <input type="hidden" id="selectedCampaignId" value="">
         <input type="hidden" id="pricePerPart" value="0">
-        
+
         <div class="form-group">
           <label>Full Name (Participant)</label>
           <input type="text" id="kName" placeholder="Enter full name for Niat" required>
         </div>
-        
+
         <div class="form-group">
           <label>Phone Number</label>
           <input type="tel" id="kPhone" placeholder="e.g. 0123456789" required>
         </div>
-        
+
         <div class="form-group">
           <label>Number of Portions (Bahagian)</label>
           <select id="kParts" required>
@@ -254,7 +427,7 @@
         <div class="form-group">
           <label>Payment Method</label>
           <div style="display:flex; flex-direction:column; gap:0.75rem; margin-top:0.5rem;">
-            
+
             <!-- Full Payment -->
             <label id="pm-full-label" onclick="selectPaymentMethod('full')" style="
               display:flex; align-items:center; gap:1rem; padding:0.85rem 1rem;
@@ -268,7 +441,8 @@
               </div>
               <div style="flex:1;">
                 <div style="font-weight:700;color:#fff;">💳 Full Payment</div>
-                <div style="font-size:0.82rem;color:var(--color-text-secondary);">Pay the full amount now. No extra charges.</div>
+                <div style="font-size:0.82rem;color:var(--color-text-secondary);">Pay the full amount now. No extra
+                  charges.</div>
               </div>
               <strong style="color:var(--color-primary);white-space:nowrap;" id="pm-full-price">RM 0.00</strong>
             </label>
@@ -282,10 +456,14 @@
               <div style="width:20px;height:20px;border-radius:50%;border:2px solid rgba(255,255,255,0.3);
                 background:transparent;flex-shrink:0;" id="pm-3-dot"></div>
               <div style="flex:1;">
-                <div style="font-weight:700;color:#fff;">📅 3-Month Instalment <span style="font-size:0.72rem;color:#22c55e;background:rgba(34,197,94,0.1);padding:0.15rem 0.5rem;border-radius:4px;margin-left:4px;">NO EXTRA FEE</span></div>
-                <div style="font-size:0.82rem;color:var(--color-text-secondary);">Pay in 3 equal monthly instalments. No processing fee.</div>
+                <div style="font-weight:700;color:#fff;">📅 3-Month Instalment <span
+                    style="font-size:0.72rem;color:#22c55e;background:rgba(34,197,94,0.1);padding:0.15rem 0.5rem;border-radius:4px;margin-left:4px;">NO
+                    EXTRA FEE</span></div>
+                <div style="font-size:0.82rem;color:var(--color-text-secondary);">Pay in 3 equal monthly instalments. No
+                  processing fee.</div>
               </div>
-              <strong style="color:#22c55e;white-space:nowrap;text-align:right;" id="pm-3-price">RM 0.00<br><span style="font-size:0.75rem;font-weight:400;">/month</span></strong>
+              <strong style="color:#22c55e;white-space:nowrap;text-align:right;" id="pm-3-price">RM 0.00<br><span
+                  style="font-size:0.75rem;font-weight:400;">/month</span></strong>
             </label>
 
             <!-- 6-Month Installment -->
@@ -297,10 +475,14 @@
               <div style="width:20px;height:20px;border-radius:50%;border:2px solid rgba(255,255,255,0.3);
                 background:transparent;flex-shrink:0;" id="pm-6-dot"></div>
               <div style="flex:1;">
-                <div style="font-weight:700;color:#fff;">🗓️ 6-Month Instalment <span style="font-size:0.72rem;color:#f59e0b;background:rgba(245,158,11,0.1);padding:0.15rem 0.5rem;border-radius:4px;margin-left:4px;">+1.5% FEE</span></div>
-                <div style="font-size:0.82rem;color:var(--color-text-secondary);">Pay in 6 equal monthly instalments. 1.5% processing fee applies.</div>
+                <div style="font-weight:700;color:#fff;">🗓️ 6-Month Instalment <span
+                    style="font-size:0.72rem;color:#f59e0b;background:rgba(245,158,11,0.1);padding:0.15rem 0.5rem;border-radius:4px;margin-left:4px;">+1.5%
+                    FEE</span></div>
+                <div style="font-size:0.82rem;color:var(--color-text-secondary);">Pay in 6 equal monthly instalments.
+                  1.5% processing fee applies.</div>
               </div>
-              <strong style="color:#f59e0b;white-space:nowrap;text-align:right;" id="pm-6-price">RM 0.00<br><span style="font-size:0.75rem;font-weight:400;">/month</span></strong>
+              <strong style="color:#f59e0b;white-space:nowrap;text-align:right;" id="pm-6-price">RM 0.00<br><span
+                  style="font-size:0.75rem;font-weight:400;">/month</span></strong>
             </label>
 
           </div>
@@ -323,7 +505,8 @@
             <span id="sum-total-label">Total Payable</span>
             <span id="sum-total">RM 0.00</span>
           </div>
-          <div id="sum-monthly-row" style="display:none; margin-top:0.5rem; padding-top:0.5rem; border-top:1px dashed rgba(255,255,255,0.1); color:var(--color-primary); font-size:0.9rem; display:none; justify-content:space-between;">
+          <div id="sum-monthly-row"
+            style="display:none; margin-top:0.5rem; padding-top:0.5rem; border-top:1px dashed rgba(255,255,255,0.1); color:var(--color-primary); font-size:0.9rem; display:none; justify-content:space-between;">
             <span>Monthly Instalment</span>
             <strong id="sum-monthly">RM 0.00 / month</strong>
           </div>
@@ -356,7 +539,8 @@
       <!-- Dynamic Payment Status Badge -->
       <div id="receipt-status" style="display:inline-block; margin-bottom: 1rem;"></div>
 
-      <div style="background: rgba(255,255,255,0.03); border: 1px dashed var(--color-card-border); padding: 1.5rem; text-align: left; margin-bottom: 1rem; border-radius: 8px;">
+      <div
+        style="background: rgba(255,255,255,0.03); border: 1px dashed var(--color-card-border); padding: 1.5rem; text-align: left; margin-bottom: 1rem; border-radius: 8px;">
         <div style="display:flex; justify-content:space-between; margin-bottom:0.5rem;">
           <span style="color:var(--color-text-secondary);">Ref No:</span>
           <strong id="receipt-ref" style="color:#fff;">-</strong>
@@ -365,15 +549,18 @@
           <span style="color:var(--color-text-secondary);">Payment:</span>
           <strong style="color:#eab308;">⏳ Pending Admin Approval</strong>
         </div>
-        <div style="display:flex; justify-content:space-between; margin-top:1rem; padding-top:1rem; border-top:1px solid rgba(255,255,255,0.1);">
+        <div
+          style="display:flex; justify-content:space-between; margin-top:1rem; padding-top:1rem; border-top:1px solid rgba(255,255,255,0.1);">
           <span style="color:var(--color-text-secondary);">Total Submitted:</span>
           <strong id="receipt-amount" style="color:var(--color-primary); font-size:1.2rem;">-</strong>
         </div>
       </div>
 
       <!-- Admin note shown while pending -->
-      <p id="receipt-status-note" style="display:none; font-size:0.83rem; color:#eab308; background:rgba(234,179,8,0.08); border:1px solid rgba(234,179,8,0.25); border-radius:8px; padding:0.75rem; margin-bottom:1rem; text-align:left;">
-        ⚠️ <strong>Awaiting verification.</strong> The mosque admin will approve your payment. Your receipt will update to <strong>PAID</strong> once confirmed. You can track this in your User Portal.
+      <p id="receipt-status-note"
+        style="display:none; font-size:0.83rem; color:#eab308; background:rgba(234,179,8,0.08); border:1px solid rgba(234,179,8,0.25); border-radius:8px; padding:0.75rem; margin-bottom:1rem; text-align:left;">
+        ⚠️ <strong>Awaiting verification.</strong> The mosque admin will approve your payment. Your receipt will update
+        to <strong>PAID</strong> once confirmed. You can track this in your User Portal.
       </p>
 
       <button class="btn-submit" onclick="window.location.href='index.html'">Go to User Portal</button>
@@ -387,7 +574,8 @@
       <div class="modal-icon" style="color: #ef4444;"><i class="fa-solid fa-circle-xmark"></i></div>
       <h3>Payment Failed</h3>
       <p>Unfortunately, your payment could not be processed or was cancelled.</p>
-      <button class="btn-submit" style="background: transparent; border: 1px solid #ef4444; color: #ef4444;" onclick="document.getElementById('failedModal').style.display='none'">Try Again</button>
+      <button class="btn-submit" style="background: transparent; border: 1px solid #ef4444; color: #ef4444;"
+        onclick="document.getElementById('failedModal').style.display='none'">Try Again</button>
     </div>
   </div>
 
@@ -395,5 +583,8 @@
   <script src="js/supabase.js"></script>
   <script src="js/supabase-client.js"></script>
   <script src="js/korban.js"></script>
+  <script src="dark-mode.js"></script>
+  <script src="sidebar-state.js"></script>
 </body>
+
 </html>

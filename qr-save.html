@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -8,23 +9,31 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --bg:      #0f172a;
-      --card:    #0f172a;
-      --border:  #ffffff;
-      --primary: #ffffff;
-      --primary-d: #1e293b;
-      --pink:    #ffffff;
-      --pink-d:  #b03057;
-      --text:    #f9fafb;
-      --muted:   #cbd5e1;
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
-    html, body {
+    :root {
+      --bg: #0f172a;
+      --card: #0f172a;
+      --border: #ffffff;
+      --primary: #ffffff;
+      --primary-d: #1e293b;
+      --pink: #ffffff;
+      --pink-d: #b03057;
+      --text: #f9fafb;
+      --muted: #cbd5e1;
+    }
+
+    html,
+    body {
       height: 100%;
       font-family: 'Outfit', sans-serif;
       background: var(--bg);
@@ -72,13 +81,21 @@
       white-space: nowrap;
       flex-shrink: 0;
     }
+
     .back-btn:hover {
       background: var(--primary-d);
       border-color: var(--primary);
       color: #ffffff;
     }
-    .back-btn i { color: var(--primary); font-size: 0.8rem; }
-    .back-btn:hover i { color: #ffffff; }
+
+    .back-btn i {
+      color: var(--primary);
+      font-size: 0.8rem;
+    }
+
+    .back-btn:hover i {
+      color: #ffffff;
+    }
 
     .topbar-title {
       font-size: 0.95rem;
@@ -86,7 +103,10 @@
       color: var(--text);
       flex: 1;
     }
-    .topbar-title span { color: var(--primary); }
+
+    .topbar-title span {
+      color: var(--primary);
+    }
 
     /* ── Main ── */
     .main {
@@ -125,7 +145,7 @@
       flex-direction: column;
       align-items: center;
       gap: 1.25rem;
-      box-shadow: 0 16px 50px rgba(0,0,0,0.5);
+      box-shadow: 0 16px 50px rgba(0, 0, 0, 0.5);
     }
 
     .qr-display img {
@@ -148,8 +168,18 @@
       border-radius: 12px;
       border: 2px dashed var(--pink);
     }
-    .qr-display .qr-fallback i { font-size: 4rem; color: var(--pink); }
-    .qr-display .qr-fallback p { font-size: 0.85rem; color: #1e293b; text-align: center; padding: 0 1rem; }
+
+    .qr-display .qr-fallback i {
+      font-size: 4rem;
+      color: var(--pink);
+    }
+
+    .qr-display .qr-fallback p {
+      font-size: 0.85rem;
+      color: #1e293b;
+      text-align: center;
+      padding: 0 1rem;
+    }
 
     .qr-label {
       font-size: 1rem;
@@ -190,23 +220,27 @@
       text-decoration: none;
       transition: all 0.2s ease;
     }
+
     .btn-pink {
       background: linear-gradient(135deg, var(--pink), var(--pink-d));
       color: #ffffff;
-      box-shadow: 0 4px 20px rgba(255, 255, 255,0.35);
+      box-shadow: 0 4px 20px rgba(255, 255, 255, 0.35);
     }
+
     .btn-pink:hover {
       transform: translateY(-2px);
-      box-shadow: 0 8px 28px rgba(255, 255, 255,0.5);
+      box-shadow: 0 8px 28px rgba(255, 255, 255, 0.5);
     }
+
     .btn-outline {
       background: var(--card);
       color: var(--text);
       border: 1px solid var(--border);
     }
+
     .btn-outline:hover {
       border-color: var(--primary);
-      background: rgba(255, 255, 255,0.07);
+      background: rgba(255, 255, 255, 0.07);
     }
 
     /* hint text */
@@ -216,93 +250,98 @@
       text-align: center;
       line-height: 1.6;
     }
-    .hint i { color: var(--primary); }
+
+    .hint i {
+      color: var(--primary);
+    }
 
     @media (max-width: 480px) {
-      .main { padding: 2rem 1rem 3rem; }
+      .main {
+        padding: 2rem 1rem 3rem;
+      }
     }
   </style>
+  <link rel="stylesheet" href="styles.css" />
 </head>
-<body>
 
-<!-- ── Topbar ── -->
-<div class="topbar">
-  <a href="donate.html" class="back-btn" id="back-btn">
-    <i class="fa-solid fa-arrow-left"></i> Back
-  </a>
-  <span class="topbar-title">i<span>@</span>masjid &nbsp;·&nbsp; Save QR</span>
-</div>
+<body class="standalone-shell">
 
-<!-- ── Main ── -->
-<div class="main">
-
-  <!-- Instruction pill -->
-  <div class="instruction">
-    <i class="fa-solid fa-hand-pointer"></i>
-    Screenshot or download the QR below to pay
-  </div>
-
-  <!-- QR card (white background for easy screenshot) -->
-  <div class="qr-display" id="qr-display-card">
-    <img
-      src="assets/images/qr-tabung-masjid.png"
-      alt="Tabung Masjid Abu Bakar – Malaysia National QR"
-      id="qr-img"
-      onerror="this.style.display='none';document.getElementById('qr-fallback').style.display='flex';"
-    />
-    <div class="qr-fallback" id="qr-fallback">
-      <i class="fa-solid fa-qrcode"></i>
-      <p>Place QR image at:<br><code>assets/images/qr-tabung-masjid.png</code></p>
-    </div>
-    <div class="qr-label">MALAYSIA NATIONAL QR</div>
-    <div class="qr-sub">Tabung Masjid Abu Bakar</div>
-  </div>
-
-  <!-- Action buttons -->
-  <div class="btn-row">
-    <button class="btn btn-pink" onclick="downloadQR()">
-      <i class="fa-solid fa-download"></i>
-      Download QR to Device
-    </button>
-    <a href="donate.html" class="btn btn-outline">
-      <i class="fa-solid fa-arrow-left"></i>
-      Back to Infaq &amp; Donations
+  <!-- ── Topbar ── -->
+  <div class="topbar">
+    <a href="donate.html" class="back-btn" id="back-btn">
+      <i class="fa-solid fa-arrow-left"></i> Back
     </a>
+    <span class="topbar-title">i<span>@</span>masjid &nbsp;·&nbsp; Save QR</span>
   </div>
 
-  <!-- Hint -->
-  <p class="hint">
-    <i class="fa-solid fa-circle-info"></i>
-    You can also <strong>long-press / screenshot</strong> the white QR card above
-    to save it directly to your gallery — then scan it using any banking app or e-wallet.
-  </p>
+  <!-- ── Main ── -->
+  <div class="main">
 
-</div>
+    <!-- Instruction pill -->
+    <div class="instruction">
+      <i class="fa-solid fa-hand-pointer"></i>
+      Screenshot or download the QR below to pay
+    </div>
 
-<script>
-  // ── Download QR image ────────────────────────────────────────────
-  function downloadQR() {
-    var img = document.getElementById('qr-img');
-    if (!img || img.style.display === 'none') {
-      alert('QR image not found. Please place your QR at assets/images/qr-tabung-masjid.png');
-      return;
+    <!-- QR card (white background for easy screenshot) -->
+    <div class="qr-display" id="qr-display-card">
+      <img src="assets/images/qr-tabung-masjid.png" alt="Tabung Masjid Abu Bakar – Malaysia National QR" id="qr-img"
+        onerror="this.style.display='none';document.getElementById('qr-fallback').style.display='flex';" />
+      <div class="qr-fallback" id="qr-fallback">
+        <i class="fa-solid fa-qrcode"></i>
+        <p>Place QR image at:<br><code>assets/images/qr-tabung-masjid.png</code></p>
+      </div>
+      <div class="qr-label">MALAYSIA NATIONAL QR</div>
+      <div class="qr-sub">Tabung Masjid Abu Bakar</div>
+    </div>
+
+    <!-- Action buttons -->
+    <div class="btn-row">
+      <button class="btn btn-pink" onclick="downloadQR()">
+        <i class="fa-solid fa-download"></i>
+        Download QR to Device
+      </button>
+      <a href="donate.html" class="btn btn-outline">
+        <i class="fa-solid fa-arrow-left"></i>
+        Back to Infaq &amp; Donations
+      </a>
+    </div>
+
+    <!-- Hint -->
+    <p class="hint">
+      <i class="fa-solid fa-circle-info"></i>
+      You can also <strong>long-press / screenshot</strong> the white QR card above
+      to save it directly to your gallery — then scan it using any banking app or e-wallet.
+    </p>
+
+  </div>
+
+  <script>
+    // ── Download QR image ────────────────────────────────────────────
+    function downloadQR() {
+      var img = document.getElementById('qr-img');
+      if (!img || img.style.display === 'none') {
+        alert('QR image not found. Please place your QR at assets/images/qr-tabung-masjid.png');
+        return;
+      }
+      var link = document.createElement('a');
+      link.href = img.src;
+      link.download = 'tabung-masjid-abu-bakar-qr.png';
+      link.click();
     }
-    var link      = document.createElement('a');
-    link.href     = img.src;
-    link.download = 'tabung-masjid-abu-bakar-qr.png';
-    link.click();
-  }
 
-  // ── Back button: go back to donate.html ─────────────────────────
-  document.getElementById('back-btn').addEventListener('click', function(e) {
-    e.preventDefault();
-    if (window.history.length > 1 && document.referrer) {
-      window.history.back();
-    } else {
-      window.location.href = 'donate.html';
-    }
-  });
-</script>
+    // ── Back button: go back to donate.html ─────────────────────────
+    document.getElementById('back-btn').addEventListener('click', function (e) {
+      e.preventDefault();
+      if (window.history.length > 1 && document.referrer) {
+        window.history.back();
+      } else {
+        window.location.href = 'donate.html';
+      }
+    });
+  </script>
+  <script src="site-shell.js"></script>
 
 </body>
+
 </html>

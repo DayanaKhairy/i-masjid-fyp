@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,18 +8,25 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
         :root {
-            --bg:      #0f172a;
-            --card:    #0f172a;
-            --border:  #ffffff;
+            --bg: #0f172a;
+            --card: #0f172a;
+            --border: #ffffff;
             --primary: #ffffff;
             --primary-d: #1e293b;
-            --text:    #f9fafb;
-            --muted:   #cbd5e1;
+            --text: #f9fafb;
+            --muted: #cbd5e1;
         }
 
         body {
@@ -65,13 +73,21 @@
             white-space: nowrap;
             flex-shrink: 0;
         }
+
         .back-btn:hover {
             background: var(--primary-d);
             border-color: var(--primary);
             color: #ffffff;
         }
-        .back-btn i { color: var(--primary); font-size: 0.8rem; }
-        .back-btn:hover i { color: #ffffff; }
+
+        .back-btn i {
+            color: var(--primary);
+            font-size: 0.8rem;
+        }
+
+        .back-btn:hover i {
+            color: #ffffff;
+        }
 
         .topbar-brand {
             font-size: 1rem;
@@ -79,7 +95,10 @@
             color: var(--text);
             flex: 1;
         }
-        .topbar-brand .at { color: var(--primary); }
+
+        .topbar-brand .at {
+            color: var(--primary);
+        }
 
         /* ── Main content ── */
         .main-content {
@@ -98,7 +117,10 @@
             font-weight: 800;
             letter-spacing: -1px;
         }
-        .headline .at { color: var(--primary); }
+
+        .headline .at {
+            color: var(--primary);
+        }
 
         .motifs-container {
             width: 220px;
@@ -114,11 +136,13 @@
             flex-direction: column;
             gap: 0.75rem;
         }
+
         .motifs-container i {
             font-size: 3rem;
             color: var(--primary);
             opacity: 0.4;
         }
+
         .motifs-container img {
             width: 100%;
             height: 100%;
@@ -143,13 +167,16 @@
             transition: all 0.2s ease;
             box-shadow: 0 4px 20px rgba(255, 255, 255, 0.25);
         }
+
         .go-home-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 28px rgba(255, 255, 255, 0.4);
         }
     </style>
+    <link rel="stylesheet" href="styles.css" />
 </head>
-<body>
+
+<body class="standalone-shell">
 
     <!-- ── Top Bar ── -->
     <div class="topbar">
@@ -182,7 +209,7 @@
     </div>
 
     <script>
-        document.getElementById('back-btn').addEventListener('click', function(e) {
+        document.getElementById('back-btn').addEventListener('click', function (e) {
             e.preventDefault();
             if (window.history.length > 1 && document.referrer) {
                 window.history.back();
@@ -191,6 +218,8 @@
             }
         });
     </script>
+    <script src="site-shell.js"></script>
 
 </body>
+
 </html>
