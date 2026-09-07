@@ -1780,6 +1780,49 @@ a:hover {
   line-height: 1.4;
 }
 
+/* Keep the member portal readable on the light theme. */
+body:not(.dark-mode) .user-dashboard-banner {
+  background: linear-gradient(135deg, #ffffff 0%, #eef5f1 100%);
+  border-color: #b8c9c0;
+  box-shadow: 0 10px 30px rgba(20, 50, 35, 0.08);
+}
+
+body:not(.dark-mode) .ud-badge {
+  background: rgba(15, 60, 40, 0.08);
+  color: #164e36;
+  border-color: rgba(15, 60, 40, 0.25);
+}
+
+body:not(.dark-mode) .ud-header h2,
+body:not(.dark-mode) .ud-action-card h4,
+body:not(.dark-mode) #ud-qurban-receipts h3,
+body:not(.dark-mode) #ud-khairat-receipts h3 {
+  color: #14231c !important;
+}
+
+body:not(.dark-mode) .ud-header p,
+body:not(.dark-mode) .ud-action-card p {
+  color: #4b5d54 !important;
+}
+
+body:not(.dark-mode) .ud-action-card {
+  background: #ffffff;
+  border-color: #c8d8cf;
+  box-shadow: 0 4px 14px rgba(20, 50, 35, 0.06);
+}
+
+body:not(.dark-mode) #ud-qurban-list > div,
+body:not(.dark-mode) #ud-khairat-list > div {
+  background: #ffffff !important;
+  border-color: #c8d8cf !important;
+  box-shadow: 0 4px 14px rgba(20, 50, 35, 0.06);
+}
+
+body:not(.dark-mode) .ud-receipt-title,
+body:not(.dark-mode) .ud-receipt-content {
+  color: #14231c !important;
+}
+
 /* ══════════════════════════════════════════════════════
    FIGMA WORKSHOP 2 SPECIFIC COMPONENTS & LAYOUT STYLES
    ══════════════════════════════════════════════════════ */

@@ -355,12 +355,12 @@ async function loadUserQurbanHistory(identifier) {
               <div style="background: rgba(6,182,212,0.1); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--color-primary);">
                 <i class="fa-solid ${icon}"></i>
               </div>
-              <div>
-                <div style="font-weight: 700; color:#fff;">${c.animal_type} ${c.year}</div>
+                <div>
+                  <div class="ud-receipt-title" style="font-weight: 700; color:#fff;">${c.animal_type} ${c.year}</div>
                 <div style="font-size: 0.8rem; color: var(--color-text-secondary);">${new Date(reg.registered_at).toLocaleDateString('en-MY', {day:'2-digit',month:'short',year:'numeric'})}</div>
               </div>
             </div>
-            <div style="font-size: 0.9rem; color:#fff;">
+            <div class="ud-receipt-content" style="font-size: 0.9rem; color:#fff;">
               <div style="display:flex; justify-content:space-between; margin-bottom: 0.3rem;">
                 <span style="color:var(--color-text-muted);">Portions:</span>
                 <span>${reg.parts_qty} Bahagian</span>
@@ -422,8 +422,8 @@ async function loadUserKhairatHistory(phone, email) {
 
       return `<div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:1.2rem;position:relative;">
         <div style="position:absolute;top:1rem;right:1rem;color:${color};font-weight:bold;font-size:0.75rem;background:${bg};border:1px solid ${border};padding:0.3rem 0.6rem;border-radius:4px;">${label}</div>
-        <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1rem;"><div style="background:rgba(6,182,212,0.1);width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--color-primary);"><i class="fa-solid fa-heart-pulse"></i></div><div><div style="font-weight:700;color:#fff;">Khairat Kematian</div><div style="font-size:0.8rem;color:var(--color-text-secondary);">${date}</div></div></div>
-        <div style="font-size:0.9rem;color:#fff;"><div style="display:flex;justify-content:space-between;margin-bottom:0.3rem;"><span style="color:var(--color-text-muted);">Members:</span><span>${reg.members_count} Person(s)</span></div><div style="display:flex;justify-content:space-between;"><span style="color:var(--color-text-muted);">Total:</span><strong style="color:var(--color-primary);">RM ${Number(reg.amount || 0).toFixed(2)}</strong></div></div>
+        <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1rem;"><div style="background:rgba(6,182,212,0.1);width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--color-primary);"><i class="fa-solid fa-heart-pulse"></i></div><div><div class="ud-receipt-title" style="font-weight:700;color:#fff;">Khairat Kematian</div><div style="font-size:0.8rem;color:var(--color-text-secondary);">${date}</div></div></div>
+        <div class="ud-receipt-content" style="font-size:0.9rem;color:#fff;"><div style="display:flex;justify-content:space-between;margin-bottom:0.3rem;"><span style="color:var(--color-text-muted);">Members:</span><span>${reg.members_count} Person(s)</span></div><div style="display:flex;justify-content:space-between;"><span style="color:var(--color-text-muted);">Total:</span><strong style="color:var(--color-primary);">RM ${Number(reg.amount || 0).toFixed(2)}</strong></div></div>
         <p style="font-size:0.78rem;color:${color};margin-top:0.6rem;background:${bg};border-radius:6px;padding:0.4rem 0.7rem;">${note}</p>
       </div>`;
     }).join('');
