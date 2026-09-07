@@ -2550,20 +2550,20 @@ body:has(.page-wrap) .page-wrap {
   border-radius: 50px !important;
 }
 
-body.dark-mode .standalone-shell .topbar {
+body.dark-mode.standalone-shell .topbar {
   background: #141414;
   color: #f0f0f0;
   border-bottom-color: #2a2a2a;
 }
 
-body.dark-mode .standalone-shell .page-header {
+body.dark-mode.standalone-shell .page-header {
   background: #141414;
   border-bottom-color: #2a2a2a;
 }
 
-body.dark-mode .standalone-shell .page-header h1,
-body.dark-mode .standalone-shell .page-header p,
-body.dark-mode .standalone-shell .topbar-brand {
+body.dark-mode.standalone-shell .page-header h1,
+body.dark-mode.standalone-shell .page-header p,
+body.dark-mode.standalone-shell .topbar-brand {
   color: #f0f0f0;
 }
 
